@@ -61,7 +61,7 @@
         overflow: hidden;
         background-color: transparent;
         display: flex;
-        padding: 10px;
+        padding: 8px;
         align-items: center;
         justify-content: center;
         width: 100%;
@@ -70,7 +70,7 @@
     .navbar ul li a {
         color: #cccccc;
         text-align: center;
-        padding: 10px 40px;
+        padding: 10px 30px;
         text-decoration: none;
         text-transform: uppercase;
         font-weight: bold;
@@ -171,32 +171,35 @@
         <div class="navbar">
             <ul>
                 <li>
-                    <a class="active" href="#home" id="home">Trang chủ</a>
+                    <a class="active" href="#home">Trang chủ</a>
                 </li>
                 <li>
-                    <a href="#customer" id="customer">Khách hàng</a>
+                    <a asp-area="" asp-controller="Users" asp-action="Index">Khách hàng</a>
                 </li>
                 <li>
-                    <a href="#">Nhân viên</a>
+                    <a asp-area="" asp-controller="Users" asp-action="Index">Nhân viên</a>
                 </li>
                 <li>
-                    <a href="#">Tài xế</a>
+                    <a asp-area="" asp-controller="Users" asp-action="Index">Tài xế</a>
                 </li>
                 <li>
-                    <a href="#">Xe</a>
+                    <a asp-area="" asp-controller="Coaches" asp-action="Index">Xe</a>
                 </li>
                 <li>
-                    <a href="#">Địa điểm</a>
+                    <a asp-area="" asp-controller="Locations" asp-action="Index">Địa điểm</a>
                 </li>
                 <li>
-                    <a href="#">Điểm đón</a>
+                    <a asp-area="" asp-controller="PickLocations" asp-action="Index">Điểm đón</a>
                 </li>
                 <li>
-                    <a href="#">Đặt Vé</a>
+                    <a asp-area="" asp-controller="Routes" asp-action="Index">Tuyến xe</a>
+                </li>
+               @*  <li>
+                    <a asp-area="" asp-controller="Tickets" asp-action="Index">Đặt Vé</a>
                 </li>
                 <li>
-                    <a href="#">Hóa đơn</a>
-                </li>                
+                    <a asp-area="" asp-controller="Invoices" asp-action="Index">Hóa đơn</a>
+                </li>         *@        
             </ul>
         </div>
     </header>
