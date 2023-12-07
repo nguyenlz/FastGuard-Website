@@ -60,7 +60,7 @@ namespace FastGuard.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RouteId,CoachId,LocationId1,LocationId2,StartDate,EndDate,Price")] Data.Route route)
+        public async Task<IActionResult> Create([Bind("RouteId,CoachId,LocationId1,LocationId2,StartDate,EndDate,Price")] Models.Route route)
         {
             if (ModelState.IsValid)
             {
@@ -98,7 +98,7 @@ namespace FastGuard.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RouteId,CoachId,LocationId1,LocationId2,StartDate,EndDate,Price")] Data.Route route)
+        public async Task<IActionResult> Edit(int id, [Bind("RouteId,CoachId,LocationId1,LocationId2,StartDate,EndDate,Price")] Models.Route route)
         {
             if (id != route.RouteId)
             {

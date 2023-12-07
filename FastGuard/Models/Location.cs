@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FastGuard.Data
+namespace FastGuard.Models
 {
     public partial class Location
     {

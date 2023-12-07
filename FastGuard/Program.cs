@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using FastGuard.Data;
 using Microsoft.AspNetCore.Identity;
+using FastGuard.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-builder.Services.AddDefaultIdentity<IdentityUser>().AddDefaultTokenProviders()
+builder.Services.AddDefaultIdentity<ApplicationUser>().AddDefaultTokenProviders()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 

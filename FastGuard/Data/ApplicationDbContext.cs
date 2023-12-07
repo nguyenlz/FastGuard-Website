@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using FastGuard.Data;
 using FastGuard.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -11,7 +10,7 @@ using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 
 namespace FastGuard.Data
 {
-	public partial class ApplicationDbContext : IdentityDbContext
+    public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{
         public string ConnectionString { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -42,39 +41,12 @@ namespace FastGuard.Data
 
             return rowsAffected;
         }
-
-        //public int GetUser(string Id)
-        //{
-        //    string connectionString = "server=localhost;user id=root;port=3307;database=test_fastguard";
-        //    List <ApplicationUser> list = new List<ApplicationUser>();
-
-        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
-        //    {
-        //        connection.Open();
-
-        //        string sql = "select * from aspnetusers where Id = @Id";
-        //        MySqlCommand cmd = new MySqlCommand(sql, connection);
-        //        using (var reader = cmd.ExecuteReader())
-        //        {
-        //            while (reader.Read())
-        //            {
-        //                list.Add(new ApplicationUser()
-        //                {
-                            
-        //                });
-        //            }
-        //            reader.Close();
-        //        }
-        //    }
-
-        //    return list;
-        //}
-
-        public virtual DbSet<Coach> Coaches { get; set; } = null!;
+		public virtual DbSet<ApplicationUser> Users { get; set; } = null!;
+		public virtual DbSet<Coach> Coaches { get; set; } = null!;
 		public virtual DbSet<Invoice> Invoices { get; set; } = null!;
 		public virtual DbSet<Location> Locations { get; set; } = null!;
 		public virtual DbSet<PickLocation> PickLocations { get; set; } = null!;
-		public virtual DbSet<FastGuard.Data.Route> Routes { get; set; } = null!;
+		public virtual DbSet<Models.Route> Routes { get; set; } = null!;
 		public virtual DbSet<Ticket> Tickets { get; set; } = null!;
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -228,7 +200,7 @@ namespace FastGuard.Data
 					.HasConstraintName("pick_locations_ibfk_1");
 			});
 
-			modelBuilder.Entity<FastGuard.Data.Route>(entity =>
+			modelBuilder.Entity<Models.Route>(entity =>
 			{
 				entity.ToTable("routes");
 

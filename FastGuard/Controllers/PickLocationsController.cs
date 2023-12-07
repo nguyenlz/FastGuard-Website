@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FastGuard.Data;
+using FastGuard.Models;
 
 namespace FastGuard.Controllers
 {

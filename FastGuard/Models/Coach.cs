@@ -1,8 +1,7 @@
-﻿using FastGuard.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace FastGuard.Data
+namespace FastGuard.Models
 {
     public partial class Coach
     {
