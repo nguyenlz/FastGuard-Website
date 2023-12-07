@@ -6,12 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FastGuard.Data;
+using FastGuard.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace FastGuard.Controllers
 {
+
     public class CoachesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public CoachesController(ApplicationDbContext context)
         {
@@ -47,7 +51,7 @@ namespace FastGuard.Controllers
         // GET: Coaches/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
+            ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
             return View();
         }
 
@@ -64,7 +68,7 @@ namespace FastGuard.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", coach.UserId);
+            ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", coach.UserId);
             return View(coach);
         }
 
@@ -81,7 +85,7 @@ namespace FastGuard.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", coach.UserId);
+            ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", coach.UserId);
             return View(coach);
         }
 
@@ -117,7 +121,7 @@ namespace FastGuard.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", coach.UserId);
+            ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", coach.UserId);
             return View(coach);
         }
 

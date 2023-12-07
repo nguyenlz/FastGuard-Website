@@ -158,20 +158,21 @@
         </nav>
     </header> *@
     <header>
-        <div style="display: flex; align-items: center; justify-content: space-between; margin: 10px 100px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin: 10px 70px;">
             <div style="display: flex; align-items: center;">
                 <span class="fa-solid fa-bus appLogo" style="color: black; font-size: 50px;"></span>
                 <a class="appName" asp-area="" asp-controller="Home" asp-action="Index">FastGuard</a>
             </div>
-            <div class="SignInUp">
+            <div><partial name="_LoginPartial" /></div>
+            @* <div class="SignInUp">
                 <i class="fa-solid fa-circle-user"></i>
                 <button class="btnSignInUp">Đăng nhập/Đăng ký</button>
-            </div>
+            </div> *@
         </div>
         <div class="navbar">
             <ul>
                 <li>
-                    <a class="active" href="#home">Trang chủ</a>
+                    <a class="active" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
                 </li>
                 <li>
                     <a asp-area="" asp-controller="Users" asp-action="Index">Khách hàng</a>
@@ -201,6 +202,7 @@
                     <a asp-area="" asp-controller="Invoices" asp-action="Index">Hóa đơn</a>
                 </li>         *@        
             </ul>
+            
         </div>
     </header>
     <div class="container">

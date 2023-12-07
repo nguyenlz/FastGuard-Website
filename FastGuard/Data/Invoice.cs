@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastGuard.Models;
+using System;
 using System.Collections.Generic;
 
 namespace FastGuard.Data
@@ -7,7 +8,7 @@ namespace FastGuard.Data
     {
         public int InvoiceId { get; set; }
         public int? TicketId { get; set; }
-        public int? UserId { get; set; }
+        public string? UserId { get; set; }
         public int? SeatNo { get; set; }
         public DateTime? InvoiceDate { get; set; }
         public int? PickLocationId1 { get; set; }
@@ -16,6 +17,6 @@ namespace FastGuard.Data
         public virtual PickLocation? PickLocationId1Navigation { get; set; }
         public virtual PickLocation? PickLocationId2Navigation { get; set; }
         public virtual Ticket? Ticket { get; set; }
-        public virtual User? User { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }
