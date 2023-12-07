@@ -53,6 +53,15 @@ namespace FastGuard.Controllers
         {
             ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
             return View();
+            //ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
+            //int count;
+            //ApplicationDbContext context = HttpContext.RequestServices.GetService(typeof(FastGuard.Data.ApplicationDbContext)) as ApplicationDbContext;
+            //count = context.CreateCoach(c);
+            //if (count > 0)
+            //    ViewData["thongbao"] = "Insert thành công";
+            //else
+            //    ViewData["thongbao"] = "Insert không thành công";
+            //return View();
         }
 
         // POST: Coaches/Create
@@ -62,18 +71,22 @@ namespace FastGuard.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CoachId,CoachNo,UserId,Supplier,Capacity,Status,Description")] Coach coach)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(coach);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", coach.UserId);
-            return View(coach);
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(coach);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", coach.UserId);
+            //return View(coach);
+
+            _context.Add(coach);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Coaches/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null || _context.Coaches == null)
             {
@@ -101,7 +114,7 @@ namespace FastGuard.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (true)
             {
                 try
                 {

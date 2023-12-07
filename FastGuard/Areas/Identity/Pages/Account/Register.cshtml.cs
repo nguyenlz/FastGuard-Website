@@ -147,8 +147,6 @@ namespace FastGuard.Areas.Identity.Pages.Account
 				user.Name = Input.Name;
 				user.DateOfBirth = Input.DateOfBirth;
 
-
-
 				var result = await _userManager.CreateAsync(user, Input.Password);
 
 				if (result.Succeeded)

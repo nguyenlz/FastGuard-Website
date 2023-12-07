@@ -1,22 +1,76 @@
 ﻿using System;
 using System.Collections.Generic;
 using FastGuard.Data;
+using FastGuard.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using MySqlConnector;
+using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 
 namespace FastGuard.Data
 {
 	public partial class ApplicationDbContext : IdentityDbContext
 	{
+        public string ConnectionString { get; set; }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+        }
+        public int CreateCoach(Coach c)
+        {
+            string connectionString = "server=localhost;user id=root;port=3307;database=test_fastguard";
+            int rowsAffected = 0;
 
-		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-			: base(options)
-		{
-		}
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
 
-		public virtual DbSet<Coach> Coaches { get; set; } = null!;
+                string sql = "insert into coaches(coach_no, user_id, supplier,capacity,description) values(@no, @userid,@supplier,@capacity,@des)";
+                using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("no", c.CoachNo);
+                    cmd.Parameters.AddWithValue("userid", c.UserId);
+                    cmd.Parameters.AddWithValue("supplier", c.Supplier);
+                    cmd.Parameters.AddWithValue("capacity", c.Capacity);
+                    //cmd.Parameters.AddWithValue("status", c.Status);
+                    cmd.Parameters.AddWithValue("des", c.Description);
+
+                    rowsAffected = cmd.ExecuteNonQuery();
+                }
+            }
+
+            return rowsAffected;
+        }
+
+        //public int GetUser(string Id)
+        //{
+        //    string connectionString = "server=localhost;user id=root;port=3307;database=test_fastguard";
+        //    List <ApplicationUser> list = new List<ApplicationUser>();
+
+        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+
+        //        string sql = "select * from aspnetusers where Id = @Id";
+        //        MySqlCommand cmd = new MySqlCommand(sql, connection);
+        //        using (var reader = cmd.ExecuteReader())
+        //        {
+        //            while (reader.Read())
+        //            {
+        //                list.Add(new ApplicationUser()
+        //                {
+                            
+        //                });
+        //            }
+        //            reader.Close();
+        //        }
+        //    }
+
+        //    return list;
+        //}
+
+        public virtual DbSet<Coach> Coaches { get; set; } = null!;
 		public virtual DbSet<Invoice> Invoices { get; set; } = null!;
 		public virtual DbSet<Location> Locations { get; set; } = null!;
 		public virtual DbSet<PickLocation> PickLocations { get; set; } = null!;
@@ -251,8 +305,8 @@ namespace FastGuard.Data
 					.HasConstraintName("tickets_ibfk_1");
 			});
 			OnModelCreatingPartial(modelBuilder);
-		}
+        }
 
 		partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-	}
+    }
 }
