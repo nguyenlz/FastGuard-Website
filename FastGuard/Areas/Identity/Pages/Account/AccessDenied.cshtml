@@ -1,10 +1,10 @@
 ﻿@page
 @model AccessDeniedModel
 @{
-    ViewData["Title"] = "Access denied";
+    ViewData["Title"] = "Truy cập không hợp lệ";
 }
 
-<header>
+<div style="width: 100%; display: flex; flex-direction: column; justify-content: center; align-items:center;">
     <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+    <p class="text-danger">Bạn không có quyền truy cập vào trang này</p>
+</div>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace FastGuard.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class AppRolesController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;

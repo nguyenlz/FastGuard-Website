@@ -1,282 +1,176 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FastGuard</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/FastGuard.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
-    
-    <style>
-        header {
-        background: linear-gradient(360deg, rgba(33, 147, 176, 1) 32%, rgba(109, 213, 237, 1) 100%);
-        width: 100%;
-        height: 30%;
-        display: flex;
-        flex-direction: column;
-    }
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - FastGuard</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/FastGuard.styles.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
 
-    .appName {
-        padding-left: 10px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 30px;
-        color: black;
-    }
+	<style>
+		header {
+			background: radial-gradient(circle, rgba(142,45,226,1) 32%, rgba(74,0,224,1) 100%);
+			width: 100%;
+			height: 50px;
+			display: flex;
+			justify-content: space-between;
+			margin-top: 0;
+			font-size: 17px;
+		}
 
-    .appName:hover {
-        color: black;
-    }
-    .SignInUp {
-        border-radius: 20px;
-        background-color: white;
-        color: black;
-        display: flex;
-        margin: 0;
-        padding: 8px 10px;
-        align-items: center;
-        font-size: 20px;
-    }
+		#side_nav {
+			background: linear-gradient(360deg, rgba(142,45,226,1) 32%, rgba(74,0,224,1) 100%);
+			min-width: 250px;
+			max-width: 250px;
+			transition: all 0.3s;
+			border-right: 1px solid white;
+		}
 
-    .btnSignInUp {
-        background-color: transparent;
-        border: none;
-        padding-left: 13px;
-        font-size: 15px;
-    }
+		.content {
+			min-height: 100vh;
+			width: 100%;
+		}
 
-    .navbar {
-        width: 100%;
-        align-items: center;
-        display: flex;
-        margin-bottom: 10px;
-    }
+		hr.h-color {
+			background: #eee;
+		}
 
-    .navbar ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: transparent;
-        display: flex;
-        padding: 8px;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-    }
+		.sidebar li a {
+			color: white;
+		}
+		.sidebar li:hover {
+			/* background-color: #cccccc; */
+			background-color: #7733ff;
+			border-radius: 8px;
+		}
+		.sidebar li a:hover {
+			color: #e6e6e6;
+			font-size: 17px;
+		}
 
-    .navbar ul li a {
-        color: #cccccc;
-        text-align: center;
-        padding: 10px 30px;
-        text-decoration: none;
-        text-transform: uppercase;
-        font-weight: bold;
-    }
-    .navbar ul li a.active {
-        color: white;
-        font-size: 16px;
-    }
+		#side_nav.active {
+			display: none;
+		}
 
-    .navbar ul li a:hover {
-        color: white;
-        font-size: 16px;
-    }
-
-    .footer {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-        gap: 50px;
-        height: 50vh;
-        overflow: hidden;
-    }
-
-    .h5 .black {
-        color: black;
-    }
-
-    .leftContainer {
-        display: flex;
-        flex-direction: column;
-        width: 40%;
-    }
-
-    .footer .h4 {
-        font-size: medium;
-        color: green;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .footer .h5 {
-        font-size: smaller;
-        color: green;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .rightContainer {
-        display: flex;
-        width: 30%;
-        gap: 20px;
-    }
-
-    .rightContainer ul {
-        padding-left: 20px;
-        font-weight: bold;
-    }
-
-    .rightContainer ul li:hover {
-        color: #6dd5ed;
-    }
-    </style>
+			#side_nav.active {
+				margin-left: 0;
+			}
+	</style>
 </head>
 <body>
-    @* <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FastGuard</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header> *@
-    <header>
-        <div style="display: flex; align-items: center; justify-content: space-between; margin: 10px 70px;">
-            <div style="display: flex; align-items: center;">
-                <span class="fa-solid fa-bus appLogo" style="color: black; font-size: 50px;"></span>
-                <a class="appName" asp-area="" asp-controller="Home" asp-action="Index">FastGuard</a>
-            </div>
-            <div><partial name="_LoginPartial" /></div>
-            @* <div class="SignInUp">
-                <i class="fa-solid fa-circle-user"></i>
-                <button class="btnSignInUp">Đăng nhập/Đăng ký</button>
-            </div> *@
-        </div>
-        <div class="navbar">
-            <ul>
-                <li>
-                    <a class="active" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Customers" asp-action="Index">Khách hàng</a>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Users" asp-action="Index">Nhân viên</a>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Users" asp-action="Index">Tài xế</a>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Coaches" asp-action="Index">Xe</a>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Locations" asp-action="Index">Địa điểm</a>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="PickLocations" asp-action="Index">Điểm đón</a>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Routes" asp-action="Index">Tuyến xe</a>
-                </li>
-               @*  <li>
-                    <a asp-area="" asp-controller="Tickets" asp-action="Index">Đặt Vé</a>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Invoices" asp-action="Index">Hóa đơn</a>
-                </li>         *@        
-            </ul>
-            
-        </div>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+	<div style="display: flex; height: 100%;">		
+		<div class="sidebar" id="side_nav">
+			<div class="header-box px-2 pt-2 pb-4 d-flex justify-content-between" style="align-items: center;">
+				<h1 class="fs-4">
+					<span style="color: white" class="fa-solid fa-bus"></span> <span class="text-white">FastGuard</span>
+				</h1>
+				<button class="btn open-btn pb-1 py-0 text-white" style="font-size: 20px;">
+					<i class="fa-solid fa-bars"></i>
+				</button>							
+			</div>
 
-    <div class="footer">
-        <div class="leftContainer">
-            <div class="h4">TRUNG TÂM TỔNG ĐÀI & CSKH</div>
-            <div style="color: #29b4d6; font-size: large; font-weight: bold;">
-                1900 9067
-            </div>
-            <div class="h4">CÔNG TY CỔ PHẦN XE KHÁCH PHƯƠNG TRANG - FUTA BUS LINES</div>
-            <div class="h5">
-                Địa chỉ: <span class="black">
-                    Số 01 Tô Hiến Thành, Phường 3, Thành phố Đà Lạt, Tỉnh Lâm Đồng,
-                    Việt Nam.
-                </span>
-            </div>
-            <div class="h5">Email: <span style="color: #29b4d6;">hotro@futa.vn</span></div>
-            <div class="h5">Số điện thoại: <span class="black">0123456789</span></div>
-        </div>
-        <div class="rightContainer">
-            <div>
-                <div class="h4">FUTA Bus Lines</div>
-                <ul>
-                    <li>Về chúng tôi</li>
-                    <li>Lịch trình</li>
-                    <li>Tuyển dụng</li>
-                    <li>Tin tức & Sự kiện</li>
-                    <li>Mạng lưới văn phòng</li>
-                </ul>
-            </div>
-            <div>
-                <div class="h4">Hỗ trợ</div>
-                <ul>
-                    <li>Về chúng tôi</li>
-                    <li>Lịch trình</li>
-                    <li>Tuyển dụng</li>
-                    <li>Tin tức & Sự kiện</li>
-                    <li>Mạng lưới văn phòng</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        $(document).ready(function () {
-            // Lấy URL hiện tại
-            console.log("eoeoeoeoe");
-            var currentUrl = window.location.href;
+			<ul class="list-unstyled px-2">
+				<li class="">
+					<a asp-area="" asp-controller="Home" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+						<i class="fa-solid fa-gauge"></i> Dashboard
+					</a>
+				</li>
+				<li class="">
+					<a asp-area="" asp-controller="Customers" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+						<i class="fa-solid fa-user"></i>
+						Khách hàng
+					</a>
+				</li>
+				<li class="">
+					<a asp-area="" asp-controller="Users" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+						<i class="fa-solid fa-user-tie"></i>
+						Nhân viên
+					</a>
+				</li>
+				<li class="">
+					<a asp-area="" asp-controller="Users" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+						<i class="fa-solid fa-road"></i>
+						Tài xế
+					</a>
+				</li>
+				<li class="">
+					<a asp-area="" asp-controller="Coaches" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+						<i class="fa-solid fa-van-shuttle"></i>
+						Xe
+					</a>
+				</li>
+				<li class="">
+					<a asp-area="" asp-controller="Locations" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+						<i class="fa-solid fa-map-location-dot"></i>
+						Địa điểm
+					</a>
+				</li>
+				<li class="">
+					<a asp-area="" asp-controller="PickLocations" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+						<i class="fa-solid fa-location-dot"></i>
+						Điểm đón
+					</a>
+				</li>
+				<li class="">
+					<a asp-area="" asp-controller="Routes" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+						<i class="fa-solid fa-route"></i>
+						Tuyến xe
+					</a>
+				</li>
+			</ul>
 
-            // Kiểm tra xem URL có chứa từ khóa tương ứng không và áp dụng lớp active
-            if (currentUrl.includes("#home")) {
-                $("#home").addClass("active");
-            } else if (currentUrl.includes("#customer")) {
-                $("#customer").addClass("active");
-            }
+		</div>
+		<div class="content">
+			<header>
+				<button class="btn close-btn px-1 py-0 text-white" style="visibility: hidden; margin-left: 5px; font-size: 20px; font-weight: bold;">
+					<i class="fa-solid fa-bus"></i>
+					FastGuard
+					<i class="fa-solid fa-bars" style="margin-left: 30px;"></i>
+				</button>
+				<partial name="_LoginPartial" />
+			</header>
+			<div class="container">
+				<main role="main" class="pb-3">
+					@RenderBody()
+				</main>
+			</div>			
+		</div>
+		<footer class="border-top footer text-muted">
+			<div class="container">
+				&copy; 2023 - FastGuard
+			</div>
+		</footer>
+	</div>
 
-            $("a").click(function () {
-                // Loại bỏ lớp active từ tất cả các thẻ <a>
-                $("a").removeClass("active");
+	
 
-                // Thêm lớp active cho thẻ <a> được click
-                $(this).addClass("active");
-            });
-        });
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script>
+		function toggleSidebar() {
+			
+		}
+		$(".sidebar ul li").on('click', function () {
+			$(".sidebar ul li.active").removeClass('active');
+			$(this).addClass('active');
+		});
+
+		$('.open-btn').on('click', function () {
+			$('.sidebar').addClass('active');
+			$('.close-btn').css('visibility', 'visible');
+		});
 
 
-    </script>
-    @await RenderSectionAsync("Scripts", required: false)
+		$('.close-btn').on('click', function () {
+			$('.sidebar').removeClass('active');
+			$('.close-btn').css('visibility', 'hidden');
+		})
+		
+	</script>
+	@await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
