@@ -101,7 +101,7 @@ hr.h-color {
 }*/
 
 
-@media(max-width: 767px) {
+/*@media(max-width: 767px) {
     #side_nav {
         margin-left: -250px;
         position: absolute;
@@ -112,4 +112,11 @@ hr.h-color {
     #side_nav.active {
         margin-left: 0;
     }
+}*/
+
+.sidebar.active {
+    margin-left: -250px;
+    position: absolute;
+    min-height: 100vh;
+    z-index: 1;
 }
