@@ -278,7 +278,8 @@ namespace FastGuard.Data
 			});
 			OnModelCreatingPartial(modelBuilder);
         }
+     
 
-		partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

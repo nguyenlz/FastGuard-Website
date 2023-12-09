@@ -4,31 +4,31 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Thông tin xe</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Thêm mới xe</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CoachNo)
+               Tên xe 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Supplier)
+               Tên nhà cung cấp 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Capacity)
+               Số lượng khách chở tối đa 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+              Tình trạng 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+               Mô tả xe 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User.Name)
+                Mã tài xế phụ trách 
             </th>
             <th></th>
         </tr>
@@ -55,9 +55,9 @@
                 @Html.DisplayFor(modelItem => item.User.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CoachId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CoachId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CoachId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.CoachId">Sửa</a> |
+                <a asp-action="Details" asp-route-id="@item.CoachId">Chi tiết</a> |
+                <a asp-action="Delete" asp-route-id="@item.CoachId">Xóa</a>
             </td>
         </tr>
 }
