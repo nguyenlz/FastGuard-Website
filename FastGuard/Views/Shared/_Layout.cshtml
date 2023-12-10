@@ -1,71 +1,42 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FastGuard</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/FastGuard.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
-    
-    <style>
-        header {
-        background: linear-gradient(360deg, rgba(33, 147, 176, 1) 32%, rgba(109, 213, 237, 1) 100%);
-        width: 100%;
-        height: 30%;
-        display: flex;
-        flex-direction: column;
-    }
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - FastGuard</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/FastGuard.styles.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
 
-    .appName {
-        padding-left: 10px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 30px;
-        color: black;
-    }
+	<style>
+		header {
+			background: radial-gradient(circle, rgba(142,45,226,1) 32%, rgba(74,0,224,1) 100%);
+			width: 100%;
+			height: 50px;
+			display: flex;
+			justify-content: space-between;
+			margin-top: 0;
+			font-size: 17px;
+			align-items: center;
+		}
 
-    .appName:hover {
-        color: black;
-    }
-    .SignInUp {
-        border-radius: 20px;
-        background-color: white;
-        color: black;
-        display: flex;
-        margin: 0;
-        padding: 8px 10px;
-        align-items: center;
-        font-size: 20px;
-    }
+		.sidebar {
+			background: linear-gradient(360deg, rgba(142,45,226,1) 32%, rgba(74,0,224,1) 100%);
+			min-width: 250px;
+			max-width: 250px;
+			transition: all 0.3s;
+			border-right: 1px solid white;
+		}
 
-    .btnSignInUp {
-        background-color: transparent;
-        border: none;
-        padding-left: 13px;
-        font-size: 15px;
-    }
+		.content {
+			min-height: 100vh;
+			width: 100%;
+		}
 
-    .navbar {
-        width: 100%;
-        align-items: center;
-        display: flex;
-        margin-bottom: 10px;
-    }
-
-    .navbar ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: transparent;
-        display: flex;
-        padding: 8px;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-    }
+		hr.h-color {
+			background: #eee;
+		}
 
     .navbar ul li a {
         color: #cccccc;
@@ -181,7 +152,7 @@
                     <a asp-area="" asp-controller="Users" asp-action="Index">Nhân viên</a>
                 </li>
                 <li>
-                    <a asp-area="" asp-controller="Driver" asp-action="Index">Tài xế</a>
+                    <a asp-area="" asp-controller="Users" asp-action="Index">Tài xế</a>
                 </li>
                 <li>
                     <a asp-area="" asp-controller="Coaches" asp-action="Index">Xe</a>
@@ -270,13 +241,19 @@
                 // Loại bỏ lớp active từ tất cả các thẻ <a>
                 $("a").removeClass("active");
 
-                // Thêm lớp active cho thẻ <a> được click
-                $(this).addClass("active");
-            });
-        });
+		$('.open-btn').on('click', function () {
+			$('.sidebar').addClass('active');
+			$('.close-btn').css('visibility', 'visible');
+		});
 
 
-    </script>
-    @await RenderSectionAsync("Scripts", required: false)
+		$('.close-btn').on('click', function () {
+			$('.sidebar').removeClass('active');
+			$('.close-btn').css('visibility', 'hidden');
+		})
+		
+	</script>
+	@await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
