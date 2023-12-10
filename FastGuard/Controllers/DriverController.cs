@@ -4,29 +4,34 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FastGuard.Controllers
 {
-    public class CustomersController : Controller
+    public class DriverController : Controller
     {
-        private readonly ApplicationDbContext _context; 
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManger;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public CustomersController(UserManager<ApplicationUser> userManger, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext context)
+
+        public DriverController(UserManager<ApplicationUser> userManger, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext context)
         {
             _userManger = userManger;
             _roleManager = roleManager;
             _configuration = configuration;
-            _context= context;
+            _context = context;
         }
-
         public IActionResult Index()
         {
-			
-			var users = _userManger.GetUsersInRoleAsync("Customer").Result;
-            return View(users);
+            var drivers = _userManger.GetUsersInRoleAsync("Driver").Result;
+
+            return View(drivers);
+
         }
 
         public IActionResult Create()
@@ -40,13 +45,13 @@ namespace FastGuard.Controllers
         public async Task<IActionResult> Create([Bind("Id, UserName, NormalizedUserName, Email, " +
             "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
             "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
-            "Name")] ApplicationUser customer)
+            "Name")] ApplicationUser driver)
         {
-            if (await _roleManager.RoleExistsAsync("Customer"))
+            if (await _roleManager.RoleExistsAsync("Driver"))
             {
-                _context.Add(customer);
+                _context.Add(driver);
                 await _context.SaveChangesAsync();
-                await _userManger.AddToRoleAsync(customer, "Customer");
+                await _userManger.AddToRoleAsync(driver, "Driver");
             }
             return RedirectToAction(nameof(Index));
         }
@@ -59,14 +64,14 @@ namespace FastGuard.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Users
+            var driver = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
+            if (driver == null)
             {
                 return NotFound();
             }
 
-            return View(customer);
+            return View(driver);
         }
 
         // POST: Driver/Delete/5
@@ -76,14 +81,14 @@ namespace FastGuard.Controllers
         {
             if (_context.Users == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Customer'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Driver'  is null.");
             }
-            var customer = await _context.Users.FindAsync(id);
-            if (customer != null)
+            var driver = await _context.Users.FindAsync(id);
+            if (driver != null)
             {
-                _context.Users.Remove(customer);
+                _context.Users.Remove(driver);
                 await _context.SaveChangesAsync();
-                await _userManger.RemoveFromRoleAsync(customer, "Customer");
+                await _userManger.RemoveFromRoleAsync(driver, "Driver");
 
             }
             return RedirectToAction(nameof(Index));
@@ -102,13 +107,13 @@ namespace FastGuard.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Users.FindAsync(id);
-            if (customer == null)
+            var driver = await _context.Users.FindAsync(id);
+            if (driver == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", customer.Id);
-            return View(customer);
+            ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", driver.Id);
+            return View(driver);
         }
 
         // POST: Coaches/Edit/5
@@ -119,9 +124,9 @@ namespace FastGuard.Controllers
         public async Task<IActionResult> Edit(string id, [Bind("Id, UserName, NormalizedUserName, Email, " +
     "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
     "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
-    "Name")] ApplicationUser customer)
+    "Name")] ApplicationUser driver)
         {
-            if (id != customer.Id)
+            if (id != driver.Id)
             {
                 return NotFound();
             }
@@ -132,19 +137,19 @@ namespace FastGuard.Controllers
                 return NotFound();
             }
 
-            if (existingUser.ConcurrencyStamp != customer.ConcurrencyStamp)
+            if (existingUser.ConcurrencyStamp != driver.ConcurrencyStamp)
             {
                 // Xung đột xảy ra, giữ lại giá trị ConcurrencyStamp của người dùng trong cơ sở dữ liệu
-                customer.ConcurrencyStamp = existingUser.ConcurrencyStamp;
+                driver.ConcurrencyStamp = existingUser.ConcurrencyStamp;
             }
             else
             {
                 // Không có xung đột, cập nhật giá trị ConcurrencyStamp mới
-                customer.ConcurrencyStamp = Guid.NewGuid().ToString();
+                driver.ConcurrencyStamp = Guid.NewGuid().ToString();
             }
 
-            // Kiểm tra xem có đối tượng nào khác đang được theo dõi trong DbContext có cùng Id như customer không
-            var trackedUser = _context.Set<ApplicationUser>().Local.SingleOrDefault(u => u.Id == customer.Id);
+            // Kiểm tra xem có đối tượng nào khác đang được theo dõi trong DbContext có cùng Id như driver không
+            var trackedUser = _context.Set<ApplicationUser>().Local.SingleOrDefault(u => u.Id == driver.Id);
             if (trackedUser != null)
             {
                 _context.Entry(trackedUser).State = EntityState.Detached;
@@ -152,7 +157,7 @@ namespace FastGuard.Controllers
 
             try
             {
-                _context.Update(customer);
+                _context.Update(driver);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -161,10 +166,11 @@ namespace FastGuard.Controllers
                 // Thực hiện các bước khác để xử lý xung đột
                 // Ví dụ: Truy vấn lại dữ liệu và thử lại quá trình cập nhật
                 ModelState.AddModelError("", "Concurrency conflict occurred. Please try again.");
-                return View(customer);
+                return View(driver);
             }
             return RedirectToAction(nameof(Index));
         }
+
 
         // GET: Driver/Details/5
         public async Task<IActionResult> Details(string? id)
@@ -174,14 +180,15 @@ namespace FastGuard.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Users
+            var driver = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
+            if (driver == null)
             {
                 return NotFound();
             }
 
-            return View(customer);
+            return View(driver);
         }
+
     }
 }
