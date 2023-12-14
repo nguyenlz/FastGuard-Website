@@ -7,8 +7,8 @@ namespace FastGuard.Models
     {
         public PickLocation()
         {
-            InvoicePickLocationId1Navigations = new HashSet<Invoice>();
-            InvoicePickLocationId2Navigations = new HashSet<Invoice>();
+            TicketPickLocationId1Navigations = new HashSet<Ticket>();
+            TicketPickLocationId2Navigations = new HashSet<Ticket>();
         }
 
         public int PickLocationId { get; set; }
@@ -16,7 +16,7 @@ namespace FastGuard.Models
         public int? LocationId { get; set; }
 
         public virtual Location? Location { get; set; }
-        public virtual ICollection<Invoice> InvoicePickLocationId1Navigations { get; set; }
-        public virtual ICollection<Invoice> InvoicePickLocationId2Navigations { get; set; }
+        public virtual ICollection<Ticket> TicketPickLocationId1Navigations { get; set; }
+        public virtual ICollection<Ticket> TicketPickLocationId2Navigations { get; set; }
     }
 }

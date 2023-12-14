@@ -5,16 +5,17 @@ namespace FastGuard.Models
 {
     public partial class Ticket
     {
-        public Ticket()
-        {
-            Invoices = new HashSet<Invoice>();
-        }
-
-        public int TicketId { get; set; }
+        public int InvoiceId { get; set; }
+        public string? UserId { get; set; }
+        public int? SeatNo { get; set; }
+        public DateTime? InvoiceDate { get; set; }
+        public int? PickLocationId1 { get; set; }
+        public int? PickLocationId2 { get; set; }
         public int? RouteId { get; set; }
-        public DateTime? BookingDate { get; set; }
 
+        public virtual PickLocation? PickLocationId1Navigation { get; set; }
+        public virtual PickLocation? PickLocationId2Navigation { get; set; }
         public virtual Route? Route { get; set; }
-        public virtual ICollection<Invoice> Invoices { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }

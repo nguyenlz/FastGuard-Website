@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using FastGuard.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -43,13 +44,13 @@ namespace FastGuard.Data
         }
 		public virtual DbSet<ApplicationUser> Users { get; set; } = null!;
 		public virtual DbSet<Coach> Coaches { get; set; } = null!;
-		public virtual DbSet<Invoice> Invoices { get; set; } = null!;
 		public virtual DbSet<Location> Locations { get; set; } = null!;
 		public virtual DbSet<PickLocation> PickLocations { get; set; } = null!;
 		public virtual DbSet<Models.Route> Routes { get; set; } = null!;
-		public virtual DbSet<Ticket> Tickets { get; set; } = null!;
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public virtual DbSet<Ticket> Tickets { get; set; } = null!;
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
@@ -101,67 +102,7 @@ namespace FastGuard.Data
 					.WithMany()
 					.HasForeignKey(d => d.UserId)
 					.HasConstraintName("fk_userid");
-			});
-
-			modelBuilder.Entity<Invoice>(entity =>
-			{
-				entity.ToTable("invoices");
-
-				entity.HasIndex(e => e.PickLocationId1, "fk_pick_location");
-
-				entity.HasIndex(e => e.PickLocationId2, "fk_pick_location2");
-
-				entity.HasIndex(e => e.TicketId, "ticket_id");
-
-				entity.HasIndex(e => e.UserId, "user_id");
-
-				entity.Property(e => e.InvoiceId)
-					.HasColumnType("int(11)")
-					.HasColumnName("invoice_id");
-
-				entity.Property(e => e.InvoiceDate)
-					.HasColumnType("datetime")
-					.HasColumnName("invoice_date")
-					.HasDefaultValueSql("current_timestamp()");
-
-				entity.Property(e => e.PickLocationId1)
-					.HasColumnType("int(11)")
-					.HasColumnName("pick_location_id1");
-
-				entity.Property(e => e.PickLocationId2)
-					.HasColumnType("int(11)")
-					.HasColumnName("pick_location_id2");
-
-				entity.Property(e => e.SeatNo)
-					.HasColumnType("int(11)")
-					.HasColumnName("seat_no");
-
-				entity.Property(e => e.TicketId)
-					.HasColumnType("int(11)")
-					.HasColumnName("ticket_id");
-
-				entity.Property(e => e.UserId).HasColumnName("user_id");
-
-				entity.HasOne(d => d.PickLocationId1Navigation)
-					.WithMany(p => p.InvoicePickLocationId1Navigations)
-					.HasForeignKey(d => d.PickLocationId1)
-					.HasConstraintName("fk_pick_location");
-
-				entity.HasOne(d => d.PickLocationId2Navigation)
-					.WithMany(p => p.InvoicePickLocationId2Navigations)
-					.HasForeignKey(d => d.PickLocationId2)
-					.HasConstraintName("fk_pick_location2");
-
-				entity.HasOne(d => d.Ticket)
-					.WithMany(p => p.Invoices)
-					.HasForeignKey(d => d.TicketId)
-					.HasConstraintName("invoices_ibfk_2");
-
-				entity.HasOne(d => d.User)
-					.WithMany()
-					.HasForeignKey(d => d.UserId)
-					.HasConstraintName("fk_userid_invoices");
-			});
+			});			
 
 			modelBuilder.Entity<Location>(entity =>
 			{
@@ -250,33 +191,72 @@ namespace FastGuard.Data
 					.WithMany(p => p.RouteLocationId2Navigations)
 					.HasForeignKey(d => d.LocationId2)
 					.HasConstraintName("routes_ibfk_3");
-			});
+            });
 
-			modelBuilder.Entity<Ticket>(entity =>
-			{
-				entity.ToTable("tickets");
+            modelBuilder.Entity<Ticket>(entity =>
+            {
+                entity.HasKey(e => e.InvoiceId)
+                    .HasName("PRIMARY");
 
-				entity.HasIndex(e => e.RouteId, "route_id");
+                entity.ToTable("tickets");
 
-				entity.Property(e => e.TicketId)
-					.HasColumnType("int(11)")
-					.HasColumnName("ticket_id");
+                entity.HasIndex(e => e.PickLocationId1, "fk_pick_location");
 
-				entity.Property(e => e.BookingDate)
-					.HasColumnType("datetime")
-					.HasColumnName("booking_date")
-					.HasDefaultValueSql("current_timestamp()");
+                entity.HasIndex(e => e.PickLocationId2, "fk_pick_location2");
 
-				entity.Property(e => e.RouteId)
-					.HasColumnType("int(11)")
-					.HasColumnName("route_id");
+                entity.HasIndex(e => e.RouteId, "route_id");
 
-				entity.HasOne(d => d.Route)
-					.WithMany(p => p.Tickets)
-					.HasForeignKey(d => d.RouteId)
-					.HasConstraintName("tickets_ibfk_1");
-			});
-			OnModelCreatingPartial(modelBuilder);
+                entity.HasIndex(e => e.UserId, "user_id");
+
+                entity.Property(e => e.InvoiceId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("invoice_id");
+
+                entity.Property(e => e.InvoiceDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("invoice_date")
+                    .HasDefaultValueSql("current_timestamp()");
+
+                entity.Property(e => e.PickLocationId1)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("pick_location_id1");
+
+                entity.Property(e => e.PickLocationId2)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("pick_location_id2");
+
+                entity.Property(e => e.RouteId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("route_id");
+
+                entity.Property(e => e.SeatNo)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("seat_no");
+
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+
+                entity.HasOne(d => d.PickLocationId1Navigation)
+                    .WithMany(p => p.TicketPickLocationId1Navigations)
+                    .HasForeignKey(d => d.PickLocationId1)
+                    .HasConstraintName("fk_pick_location");
+
+                entity.HasOne(d => d.PickLocationId2Navigation)
+                    .WithMany(p => p.TicketPickLocationId2Navigations)
+                    .HasForeignKey(d => d.PickLocationId2)
+                    .HasConstraintName("fk_pick_location2");
+
+                entity.HasOne(d => d.Route)
+                    .WithMany(p => p.Tickets)
+                    .HasForeignKey(d => d.RouteId)
+                    .HasConstraintName("tickets_ibfk_1");
+
+                entity.HasOne(d => d.User)
+                    .WithMany()
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("fk_userid_invoices");
+            });
+
+            OnModelCreatingPartial(modelBuilder);
         }
      
 
