@@ -1,0 +1,366 @@
+﻿@using Newtonsoft.Json;
+@model IEnumerable<Location>
+@{
+	ViewData["Title"] = "SearchTicket";
+}
+<head>
+	<style>
+		::selection {
+			color: #fff;
+			background: #4285f4;
+		}
+
+		.location-wrapper {
+			display: flex;
+			flex-direction: column;			
+		}
+
+		.location-wrapper .error {
+				color: red;
+				display: none;
+				font-size: 20px;
+				margin-top: 10px;
+		}
+
+		.wrapper {
+			width: 370px;
+			/* margin: 85px auto 0; */
+		}
+
+		.select-btn, li {
+			display: flex;
+			align-items: center;
+			cursor: pointer;
+		}
+
+		.select-btn {
+			height: 65px;
+			padding: 0 20px;
+			font-size: 22px;
+			background: #fff;
+			border-radius: 7px;
+			justify-content: space-between;
+			box-shadow: 0 5px 15px rgba(142,45,226,100);
+			/* border: 1px solid #8e2de2; */
+		}
+
+		.select-btn input {
+			border: none;
+			background-color: transparent;
+			cursor: pointer;
+		}
+
+			.select-btn input:focus {
+				outline: none;
+			}
+
+			.select-btn i {
+				font-size: 25px;
+				align-items: center;
+				color: #8e2de2;
+				transition: transform 0.3s linear;
+			}
+
+		#date-input {
+			height: 65px;
+			padding: 0 20px;
+			font-size: 22px;
+			background: #fff;
+			border-radius: 7px;
+			justify-content: space-between;
+			box-shadow: 0 5px 15px rgba(142,45,226,100);
+			border: none;
+			display: flex;
+			gap: 70px;
+		}
+
+		.wrapper.active .select-btn i {
+			transform: rotate(-180deg);
+		}
+
+		.custom-content {
+			display: none;
+			padding: 20px;
+			margin-top: 15px;
+			border-radius: 7px;
+			box-shadow: 0 5px 15px rgba(142,45,226,100);
+			/* border: 1px solid #8e2de2; */
+			position: absolute;
+			z-index: 100;
+			background-color: white;
+			width: 370px;
+		}
+
+		.wrapper.active .custom-content {
+			display: block;
+		}
+
+		.custom-content .search {
+			position: relative;
+		}
+
+		.search i {
+			top: 50%;
+			left: 15px;
+			color: #8e2de2;
+			font-size: 20px;
+			pointer-events: none;
+			transform: translateY(-50%);
+			position: absolute;
+		}
+
+		.search input {
+			height: 50px;
+			width: 100%;
+			outline: none;
+			font-size: 17px;
+			border-radius: 5px;
+			padding: 0 20px 0 43px;
+			border: 1px solid #4a00e0;
+		}
+
+			.search input:focus {
+				padding-left: 42px;
+				border: 2px solid #8e2de2;
+			}
+
+			.search input::placeholder {
+				color: #bfbfbf;
+			}
+
+		.custom-content .options {
+			margin-top: 10px;
+			max-height: 250px;
+			overflow-y: auto;
+			padding-right: 7px;
+		}
+
+		.options::-webkit-scrollbar {
+			width: 7px;
+		}
+
+		.options::-webkit-scrollbar-track {
+			background: #f1f1f1;
+			border-radius: 25px;
+		}
+
+		.options::-webkit-scrollbar-thumb {
+			background: #ccc;
+			border-radius: 25px;
+		}
+
+			.options::-webkit-scrollbar-thumb:hover {
+				background: #b3b3b3;
+			}
+
+		.options li {
+			height: 50px;
+			padding: 0 13px;
+			font-size: 21px;
+		}
+
+			.options li:hover, li.selected {
+				border-radius: 5px;
+				background: #f2f2f2;
+			}
+
+		form button {
+			background: linear-gradient(90deg, rgba(142,45,226,1) 32%, rgba(74,0,224,1) 100%);
+			font-size: 21px;
+			border-radius: 25px;
+			color: white;
+			padding: 5px 30px;
+			border: none;
+		}
+	</style>
+</head>
+<form style="display: flex; flex-direction: column;  gap: 30px;" action="/Tickets/Tickets" method="post" onsubmit="handleSubmit()">
+	<div style="display: flex; gap: 30px; width: 100%;">
+		<div class="location-wrapper">
+			<label style="font-size: 31px;">Điểm đi</label>
+			<div class="wrapper" id="startlocation">
+				<div class="select-btn">
+					<input type="text" value="" id="startid" name="startid" style="display: none;"/>
+					<input type="text" value="Chọn điểm đi" id="start-input" readonly name="start" />
+					<i class="fa-solid fa-angle-down"></i>
+				</div>
+				<div class="custom-content">
+					<div class="search">
+						<i class="fa-solid fa-magnifying-glass"></i>
+						<input spellcheck="false" type="text" placeholder="Search">
+					</div>
+					<ul class="options"></ul>
+				</div>
+			</div>
+			<span class="error" id="errorStart">Chọn điểm đi</span>
+		</div>
+
+		<div class="location-wrapper">
+			<label style="font-size: 31px;">Điểm đến</label>
+			<div class="wrapper" id="endlocation">
+				<div class="select-btn">
+					<input type="text" id="endid" name="endid" style="display: none;" />
+					<input type="text" value="Chọn điểm đến" readonly id="end-input" name="end"></input>
+					<i class="fa-solid fa-angle-down"></i>
+				</div>
+				<div class="custom-content">
+					<div class="search">
+						<i class="fa-solid fa-magnifying-glass"></i>
+						<input spellcheck="false" type="text" placeholder="Search">
+					</div>
+					<ul class="options"></ul>
+				</div>
+			</div>
+			<span class="error" id="errorEnd">Chọn điểm đến</span>
+		</div>
+
+		<div class="location-wrapper">
+			<label style="font-size: 31px;">Ngày đi</label>
+			<input type="date" id="date-input" min="" name="date"/>
+			<span class="error" id="errorDate">Chọn ngày đi</span>
+		</div>
+	</div>
+	<div style="display: flex; justify-content: center; width: 100%;">
+		<button type="submit">Tìm chuyến xe</button>
+	</div>
+
+</form>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+	const currentDate = new Date();
+
+	// Định dạng ngày thành chuỗi yyyy-MM-dd
+	const formattedDate = currentDate.toISOString().split('T')[0];
+
+	// Đặt giá trị tối thiểu cho trường ngày
+	document.getElementById('date-input').min = formattedDate;	
+
+	const wrapper2 = document.querySelector("#startlocation"),
+		selectBtn2 = wrapper2.querySelector(".select-btn"),
+		searchInp2 = wrapper2.querySelector(".custom-content input"),
+		options2 = wrapper2.querySelector(".options");
+
+	var modelData = @Html.Raw(JsonConvert.SerializeObject(Model));
+
+	// Tạo mảng startlocations từ dữ liệu Model
+	let countries = modelData.map(item => ({ id: item.LocationId, name: item.LocationName }));
+
+	function addCountry2(selectedCountry) {
+		options2.innerHTML = "";
+		countries.forEach(country => {
+			let isSelected = country.name == selectedCountry ? "selected" : "";
+			let li = `<li onclick="updateName2(this)" class="${isSelected}" id="${country.id}">${country.name}</li>`;
+			options2.insertAdjacentHTML("beforeend", li);
+		});
+	}
+	addCountry2();
+
+	function updateName2(selectedLi) {
+		searchInp2.value = "";
+		addCountry2(selectedLi.innerText);
+		wrapper2.classList.remove("active");
+		selectBtn2.querySelector("#start-input").value = selectedLi.innerText;
+		selectBtn2.querySelector("#startid").value = selectedLi.id;
+
+	}
+
+	searchInp2.addEventListener("keyup", () => {
+		let arr = [];
+		let searchWord = searchInp2.value.toLowerCase();
+		arr = countries.filter(data => {
+			return data.name.toLowerCase().includes(searchWord);
+		}).map(data => {
+			let isSelected = data.name == selectBtn2.firstElementChild.innerText ? "selected" : "";
+			return `<li onclick="updateName2(this)" class="${isSelected}" id="${data.id}">${data.name}</li>`;
+		}).join("");
+		options2.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Không tìm thấy địa điểm này!</p>`;
+	});
+
+	
+	selectBtn2.addEventListener("click", () => wrapper2.classList.toggle("active"));
+
+	const wrapper = document.querySelector("#endlocation"),
+		selectBtn = wrapper.querySelector(".select-btn"),
+		searchInp = wrapper.querySelector(".custom-content input"),
+		options = wrapper.querySelector(".options");
+
+	// var modelData = @Html.Raw(JsonConvert.SerializeObject(Model));
+
+	// Tạo mảng startlocations từ dữ liệu Model
+	// let countries = modelData.map(item => ({ id: item.LocationId, name: item.LocationName }));
+
+	function addCountry(selectedCountry) {
+		options.innerHTML = "";
+		countries.forEach(country => {
+			let isSelected = country.name == selectedCountry ? "selected" : "";
+			let li = `<li onclick="updateName(this)" class="${isSelected}" id="${country.id}">${country.name}</li>`;
+			options.insertAdjacentHTML("beforeend", li);
+		});
+	}
+	addCountry();
+
+	function updateName(selectedLi) {
+		searchInp.value = "";
+		addCountry(selectedLi.innerText);
+		wrapper.classList.remove("active");
+		selectBtn.querySelector("#end-input").value = selectedLi.innerText;
+		selectBtn.querySelector("#endid").value = selectedLi.id;
+	}
+
+	searchInp.addEventListener("keyup", () => {
+		let arr = [];
+		let searchWord = searchInp.value.toLowerCase();
+		arr = countries.filter(data => {
+			return data.name.toLowerCase().includes(searchWord);
+		}).map(data => {
+			let isSelected = data.name == selectBtn.firstElementChild.innerText ? "selected" : "";
+			return `<li onclick="updateName(this)" class="${isSelected}" id="${data.id}">${data.name}</li>`;
+		}).join("");
+		options.innerHTML = arr ? arr : `<p style="margin-top: 10px;">Không tìm thấy địa điểm này!</p>`;
+	});
+
+	selectBtn.addEventListener("click", () => wrapper.classList.toggle("active"));
+
+	function handleSubmit() {
+		event.preventDefault();		
+
+		const startInput = document.querySelector('#startlocation input');
+		const endInput = document.querySelector('#endlocation input');
+		const errorStart = document.querySelector('#errorStart');
+		const errorEnd = document.querySelector('#errorEnd');
+		const dateInput = document.querySelector('#date-input');
+		const errorDate = document.querySelector('#errorDate');
+
+		let hasError = false;
+
+		if (startInput.value === 'Chọn điểm đi') {
+			errorStart.style.display = 'block';
+			hasError = true;
+		} else {
+			errorStart.style.display = 'none';
+		}
+
+		if (endInput.value === 'Chọn điểm đến') {
+			errorEnd.style.display = 'block';
+			hasError = true;
+		} else {
+			errorEnd.style.display = 'none';
+		}		
+
+		if (dateInput.value === '') {
+			errorDate.style.display = 'block';
+			hasError = true;
+		} else {
+			errorDate.style.display = 'none';
+		}
+
+		if (!hasError) {
+			event.target.submit();
+		}
+	}
+</script>
