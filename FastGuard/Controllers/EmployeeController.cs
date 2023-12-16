@@ -26,9 +26,20 @@ public class EmployeeController : Controller
 
     public IActionResult Index()
     {
-        var allUsers = _context.Users.ToList();
-        return View(allUsers);
+        if (User.IsInRole("Admin"))
+        {
+            var allUsers = _context.Users.ToList();
+            return View("IndexOP",allUsers);
+        }
+        else
+        {
+
+            var allUsers = _context.Users.ToList();
+            return View("Index", allUsers);
+        }
     }
+
+   
 
     public IActionResult Create()
     {
