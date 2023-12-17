@@ -20,6 +20,7 @@ namespace FastGuard.Models
 
         public virtual Coach? Coach { get; set; }
         public virtual Location? LocationId1Navigation { get; set; }
+        
         public virtual Location? LocationId2Navigation { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
     }

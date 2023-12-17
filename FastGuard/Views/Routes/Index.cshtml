@@ -4,28 +4,28 @@
     ViewData["Title"] = "Tuyến Xe";
 }
 
-<h1>Index</h1>
+<h1>Các Chuyến Xe</h1>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
+                Ngày Khởi Hành
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndDate)
+                Ngày Đến
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Giá
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Coach)
+                Biển Số
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LocationId1Navigation)
+                Điểm Đón
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LocationId2Navigation)
+                Điểm Đến
             </th>
             <th></th>
         </tr>
@@ -43,13 +43,13 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Coach.CoachId)
+                @Html.DisplayFor(modelItem => item.Coach.CoachNo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LocationId1Navigation.LocationId)
+                @Html.DisplayFor(modelItem => item.LocationId1Navigation.LocationName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LocationId2Navigation.LocationId)
+                @Html.DisplayFor(modelItem => item.LocationId2Navigation.LocationName)
             </td>
             
         </tr>
