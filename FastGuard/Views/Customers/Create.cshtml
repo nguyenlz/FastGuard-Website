@@ -55,6 +55,7 @@
                     var email = emailInput.value;
                     var isValidEmail = validateEmail(email);
                     if (!isValidEmail) emailValidation.textContent = "Invalid email address.";
+                    else emailValidation.textContent = "";
                     submitButton.disabled = !isValidEmail;
                 });
 
@@ -77,6 +78,7 @@
 
                     if (!isValidPhoneNumber)
                         emailValidation.textContent = "Invalid phone number.";
+                    else emailValidation.textContent = "";
                 });
 
                 function validatePhoneNumber(phoneNumber) {

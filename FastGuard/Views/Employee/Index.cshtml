@@ -1,8 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model IEnumerable<ApplicationUser>
-
+@inject UserManager<ApplicationUser> _userManger;
 @{
-	ViewData["Title"] = "Employee";
+    ViewData["Title"] = "Employee";
+   
 }
 
 <h1>Thông tin nhân viên</h1>
@@ -11,39 +12,39 @@
 </p>
 
 <table class="table">
-	<thead>
-		<tr>
+    <thead>
+        <tr>
 			<th>Mã số nhân viên</th>
-			<th>Tên nhân viên</th>
+            <th>Tên nhân viên</th>
 			<th>User name</th>
-			<th>Email</th>
-			<th>Số điện thoại</th>
-			<th>Ngày sinh</th>
-			<th>Chức năng </th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Ngày sinh</th>
+            <th>Chức năng </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
 				<td>@Html.DisplayFor(modelItem=>item.Id)</td>
 				<td>@Html.DisplayFor(modelItem=>item.Name)</td>
 				<td>@Html.DisplayFor(modelItem=>item.UserName)</td>
 				<td>@Html.DisplayFor(modelItem=>item.Email)</td>
 				<td>@Html.DisplayFor(modelItem=>item.PhoneNumber)</td>
 
-				<td>
-					@{
-						if (item.DateOfBirth != null)
+                <td>
+                    @{
+                        if (item.DateOfBirth != null)
 							@item.DateOfBirth.ToString("dd-MM-yyyy");
-					}
-				</td>
+                    }
+                </td>
 				<td>
 					<a asp-action="Delete" asp-route-id="@item.Id">Xóa</a> |
 					<a asp-action="Edit" asp-route-id="@item.Id">Sửa</a> |
 					<a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a>
 				</td>
-			</tr>
-		}
-	</tbody>
+            </tr>
+        }
+    </tbody>
 </table>

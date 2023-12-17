@@ -185,6 +185,10 @@ namespace FastGuard.Controllers
             try
             {
                 _context.Update(driver);
+
+                var token = await _userManger.GeneratePasswordResetTokenAsync(driver);
+
+                var result = await _userManger.ResetPasswordAsync(driver, token, driver.PasswordHash);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

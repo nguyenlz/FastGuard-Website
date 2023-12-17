@@ -17,7 +17,7 @@ namespace FastGuard.Controllers
         public CustomersController(UserManager<ApplicationUser> userManger, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext context)
         {
             _userManger = userManger;
-            _roleManager = roleManager;
+			_roleManager = roleManager;
             _configuration = configuration;
             _context= context;
         }
@@ -126,6 +126,8 @@ namespace FastGuard.Controllers
     "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
     "Name")] ApplicationUser customer)
         {
+            customer.UserName = customer.Email;
+
             if (id != customer.Id)
             {
                 return NotFound();
@@ -148,7 +150,7 @@ namespace FastGuard.Controllers
                 customer.ConcurrencyStamp = Guid.NewGuid().ToString();
             }
 
-            // Kiểm tra xem có đối tượng nào khác đang được theo dõi trong DbContext có cùng Id như customer không
+            // Kiểm tra xem có đối tượng nào khác đang được theo dõi trong DbContext có cùng Id như employee không
             var trackedUser = _context.Set<ApplicationUser>().Local.SingleOrDefault(u => u.Id == customer.Id);
             if (trackedUser != null)
             {
@@ -158,6 +160,10 @@ namespace FastGuard.Controllers
             try
             {
                 _context.Update(customer);
+
+                var token = await _userManger.GeneratePasswordResetTokenAsync(customer);
+
+                var result = await _userManger.ResetPasswordAsync(customer, token, customer.PasswordHash);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -170,6 +176,8 @@ namespace FastGuard.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+
 
         // GET: Driver/Details/5
         public async Task<IActionResult> Details(string? id)
