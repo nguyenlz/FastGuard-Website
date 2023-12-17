@@ -4,36 +4,37 @@
     ViewData["Title"] = "Điểm Đón";
 }
 
-<h1>Index</h1>
+<h1>Điểm Đón</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Tạo Điểm Đón</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PickLocationName)
+                Tên Thành Phố
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                Điểm Đón
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+               <td>
+                    @Html.DisplayFor(modelItem => item.Location.LocationName)
+               </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PickLocationName)
+                </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PickLocationName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location.LocationId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PickLocationId" class="btn btn-primary">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.PickLocationId" class="btn btn-info">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.PickLocationId" class="btn btn-danger">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.PickLocationId" class="btn btn-primary">Sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.PickLocationId" class="btn btn-info">Chi Tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.PickLocationId" class="btn btn-danger">Xóa</a>
             </td>
         </tr>
 }

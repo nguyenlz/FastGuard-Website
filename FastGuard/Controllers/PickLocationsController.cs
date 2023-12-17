@@ -63,7 +63,7 @@ namespace FastGuard.Controllers
         // GET: PickLocations/Create
         public IActionResult Create()
         {
-            ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "LocationId");
+            ViewData["LocationName"] = new SelectList(_context.Locations, "LocationId", "LocationName");
             return View();
         }
 
@@ -97,7 +97,7 @@ namespace FastGuard.Controllers
             {
                 return NotFound();
             }
-            ViewData["LocationId"] = new SelectList(_context.Locations, "LocationId", "LocationId", pickLocation.LocationId);
+            ViewData["LocationName"] = new SelectList(_context.Locations, "LocationId", "LocationName", pickLocation.LocationId);
             return View(pickLocation);
         }
 

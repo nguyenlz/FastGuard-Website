@@ -4,16 +4,16 @@
     ViewData["Title"] = "Điểm Đón";
 }
 
-<h1>Index</h1>
+<h1>Điểm Đón</h1>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PickLocationName)
+                Tên Thành Phố
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                Điểm Đón
             </th>
             <th></th>
         </tr>
@@ -22,10 +22,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.PickLocationName)
+                    @Html.DisplayFor(modelItem => item.Location.LocationName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Location.LocationId)
+                    @Html.DisplayFor(modelItem => item.PickLocationName)
             </td>
             
         </tr>
