@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model ApplicationUser
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Thêm Nhân Viên";
 }
 
 
@@ -43,7 +43,8 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" id="submitButton" value="Thêm" class="btn btn-primary" />
+                <input type="submit" value="Thêm Nhân Viên" class="btn btn-primary" /> |
+                <a asp-action="Index" class="btn btn-info">Trở Về</a>
             </div>
             <script>
                 var emailInput = document.getElementById('emailInput');
@@ -85,10 +86,6 @@
             </script>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Quay lại trang thông tin</a>
 </div>
 
 @section Scripts {

@@ -8,17 +8,17 @@
 
 
 <div>
-    <h4>Bạn có chắc muốn xóa tài xế này?</h4>
+    <h4>Bạn có chắc muốn nhân viên này?</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            Mã số tài xế
+            Mã Nhân Viên
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Id)
         </dd>
         <dt class="col-sm-2">
-            Tên tài xế
+            Tên nhân viên
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
@@ -63,6 +63,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Xóa" class="btn btn-danger" /> |
-        <a asp-action="Index">Quay lại trang thông tin</a>
+        <a asp-action="Index" class="btn btn-info">Trở Về</a>
     </form>
 </div>

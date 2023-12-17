@@ -1,58 +1,38 @@
 ﻿@model IEnumerable<Route>
 
 @{
-    ViewData["Title"] = "Tuyến Xe";
+    ViewData["Title"] = "Chuyến Xe";
 }
 
-<h1>Các Chuyến Xe</h1>
+<div class="container mt-4">
+    <h1>Danh Sách Các Chuyến Xe</h1>
+    
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Ngày Khởi Hành
-            </th>
-            <th>
-                Ngày Đến
-            </th>
-            <th>
-                Giá
-            </th>
-            <th>
-                Biển Số
-            </th>
-            <th>
-                Điểm Đón
-            </th>
-            <th>
-                Điểm Đến
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Coach.CoachNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocationId1Navigation.LocationName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocationId2Navigation.LocationName)
-            </td>
-            
-        </tr>
-}
-    </tbody>
-</table>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Ngày Khởi Hành</th>
+                <th>Ngày Đến</th>
+                <th>Giá (VNĐ)</th>
+                <th>Biển Số Xe</th>
+                <th>Điểm Đón</th>
+                <th>Điểm Đến</th>
+                <th>Thao Tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Price) VNĐ</td>
+                    <td>@Html.DisplayFor(modelItem => item.Coach.CoachNo)</td>
+                    <td>@Html.DisplayFor(modelItem => item.LocationId1Navigation.LocationName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.LocationId2Navigation.LocationName)</td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
