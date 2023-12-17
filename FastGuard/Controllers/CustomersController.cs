@@ -42,6 +42,11 @@ namespace FastGuard.Controllers
             "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
             "Name")] ApplicationUser customer)
         {
+            if (customer != null)
+            {
+                var result = await _userManger.CreateAsync(customer, customer.PasswordHash);
+            }
+            customer.UserName = customer.Email;
             if (await _roleManager.RoleExistsAsync("Customer"))
             {
                 _context.Add(customer);

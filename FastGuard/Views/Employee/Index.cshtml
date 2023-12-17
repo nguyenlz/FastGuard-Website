@@ -2,19 +2,19 @@
 @model IEnumerable<ApplicationUser>
 
 @{
-	ViewData["Title"] = "Driver";
+	ViewData["Title"] = "Employee";
 }
 
-<h1>Thông tin tài xế</h1>
+<h1>Thông tin nhân viên</h1>
 <p>
-	<a asp-action="Create">Thêm mới tài xế</a>
+	<a asp-action="Create">Thêm mới nhân viên</a>
 </p>
 
 <table class="table">
 	<thead>
 		<tr>
-			<th>Mã số tài xế</th>
-			<th>Tên tài xế</th>
+			<th>Mã số nhân viên</th>
+			<th>Tên nhân viên</th>
 			<th>User name</th>
 			<th>Email</th>
 			<th>Số điện thoại</th>
@@ -23,7 +23,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var item in  Model)
+		@foreach (var item in Model)
 		{
 			<tr>
 				<td>@Html.DisplayFor(modelItem=>item.Id)</td>
@@ -35,14 +35,13 @@
 				<td>
 					@{
 						if (item.DateOfBirth != null)
-							@item.DateOfBirth.ToString("dd-MM-yyyy")
-						;
+							@item.DateOfBirth.ToString("dd-MM-yyyy");
 					}
 				</td>
 				<td>
 					<a asp-action="Delete" asp-route-id="@item.Id">Xóa</a> |
 					<a asp-action="Edit" asp-route-id="@item.Id">Sửa</a> |
-					<a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> 
+					<a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a>
 				</td>
 			</tr>
 		}

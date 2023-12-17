@@ -1,86 +1,119 @@
-﻿@page
-@model FastGuard.Areas.Identity.Pages.Account.RegisterModel
+﻿@using Microsoft.AspNetCore.Identity
+@model ApplicationUser
+
 @{
-	ViewData["Title"] = "Đăng kí";
+    ViewData["Title"] = "Create";
 }
 
 
 
-<div class="d-flex flex-column w-100 align-items-center text-center">
-    <h1>@ViewData["Title"]</h1>
+<h4>Thêm mới tài xế</h4>
+<hr />
+<div class="row">
     <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Tạo tài khoản mới</h2>
-            <hr />
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Input.Name" class="form-control" autocomplete="Name" aria-required="true" />
-                <label asp-for="Input.Name"></label>
-                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" id="emailInput" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <input asp-for="Input.DateOfBirth" type="Date" class="form-control" value="DateTime.Now()">
-                <label asp-for="Input.DateOfBirth"></label>
-                <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="PasswordHash" class="control-label">Mật khẩu</label>
+                <input asp-for="PasswordHash" id="passwordinput" class="form-control" />
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label">Số điện thoại</label>
+                <input asp-for="PhoneNumber" id="phoneNumberInput" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label">Ngày sinh</label>
+                <input asp-for="DateOfBirth" class="form-control" id="dob" type="date" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            <script>
+                document.getElementById('dob').addEventListener('change', function () {
+                    const dataValue = this.value;
+                    this.value = dataValue;
+                });
+            </script>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Tên tài xế</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select" aria-required="true">
-                    <option disabled selected>Chọn Role</option>
-                </select>
-                <span asp-validation-for="Input.Role" class="text-danger"></span>
+            <div class="form-group">
+                <input type="submit" id="submitButton" value="Thêm" class="btn btn-primary" />
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Đăng kí</button>
+            <script>
+                var emailInput = document.getElementById('emailInput');
+                var emailValidation = document.querySelector("#emailInput + .text-danger");
+                var submitButton = document.getElementById('submitButton');
+
+                emailInput.addEventListener('input', function () {
+                    var email = emailInput.value;
+                    var isValidEmail = validateEmail(email);
+                    if (!isValidEmail) emailValidation.textContent = "Invalid email address.";
+                    submitButton.disabled = !isValidEmail;
+                });
+
+                function validateEmail(email) {
+                    var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+                    return emailRegex.test(email);
+                }
+            </script>
+            <script>
+                var phoneNumberInput = document.getElementById('phoneNumberInput');
+                var submitButton = document.getElementById('submitButton');
+
+                phoneNumberInput.addEventListener('input', function () {
+                    var phoneNumber = phoneNumberInput.value;
+                    var isValidPhoneNumber = validatePhoneNumber(phoneNumber);
+
+                    submitButton.disabled = !isValidPhoneNumber;
+                    var emailValidation = document.querySelector("#phoneNumberInput + .text-danger");
+                    // Hiển thị thông báo nếu số điện thoại không hợp lệ
+
+                    if (!isValidPhoneNumber)
+                        emailValidation.textContent = "Invalid phone number.";
+                });
+
+                function validatePhoneNumber(phoneNumber) {
+                    var phoneNumberRegex = /^0\d{9}$/; // Kiểm tra số điện thoại có 10 chữ số và bắt đầu bằng số 0
+                    return phoneNumberRegex.test(phoneNumber);
+                }
+            </script>
+            <script>
+                var passwordInput = document.getElementById('passwordinput');
+                var submitButton = document.getElementById('submitButton');
+                passwordInput.addEventListener('input', function () {
+                    var password = passwordInput.value;
+          
+                // Định nghĩa biểu thức chính quy để kiểm tra mật khẩu
+                var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@@#$%^&*()\-_=+\\|[\]{};:'",.<>/?]).{6,}$/;
+
+                // Kiểm tra mật khẩu với biểu thức chính quy
+                var isValid = regex.test(password);
+                 submitButton.disabled = !isValid;
+                // Hiển thị thông báo lỗi nếu mật khẩu không hợp lệ
+                    var errorElement = document.querySelector("#passwordinput + .text-danger");
+                    if (!isValid)
+                        errorElement.textContent = "Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hoa, 1 chữ thường, và 1 kí tự đặc biệt.";
+                    else errorElement.textContent = '';
+                });
+        </script>
         </form>
     </div>
+</div>
 
-    @*     <div class="col-md-6 col-md-offset-2">
-        <section>
-        <h3>Use another service to register.</h3>
-        <hr />
-        @{
-        if ((Model.ExternalLogins?.Count ?? 0) == 0)
-        {
-        <div>
-        <p>
-        There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-        about setting up this ASP.NET application to support logging in via external services</a>.
-        </p>
-        </div>
-        }
-        else
-        {
-        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-        <div>
-        <p>
-        @foreach (var provider in Model.ExternalLogins!)
-        {
-        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-        }
-        </p>
-        </div>
-        </form>
-        }
-        }
-        </section>
-        </div> *@
+<div>
+    <a asp-action="Index">Quay lại trang thông tin</a>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
-

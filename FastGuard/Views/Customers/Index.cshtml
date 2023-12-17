@@ -16,8 +16,7 @@
             <tr>
                 <th>Mã số khách hàng</th>
                 <th>Tên khách hàng</th>
-                <th>Tài khoản</th>
-                <th>Mật khẩu</th>
+                <th>User name</th>
                 <th>Email</th>
                 <th>Số điện thoại</th>
                 <th>Ngày sinh</th>
@@ -31,7 +30,6 @@
                     <td>@Html.DisplayFor(modelItem => item.Id)</td>
                     <td>@Html.DisplayFor(modelItem => item.Name)</td>
                     <td>@Html.DisplayFor(modelItem => item.UserName)</td>
-                    <td style="word-wrap: break-word; max-width: 200px;">@Html.DisplayFor(modelItem => item.PasswordHash)</td>
                     <td>@Html.DisplayFor(modelItem => item.Email)</td>
                     <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
                     <td>

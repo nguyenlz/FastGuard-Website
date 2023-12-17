@@ -5,8 +5,7 @@
 }
 
 
-
-<h4>Cập nhật thông tin khách hàng</h4>
+<h4>Thay đổi thông tin nhân viên</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,27 +13,20 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label">Tên khách hàng</label>
+                <label asp-for="Name" class="control-label">Tên nhân viên</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label">User name</label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" id="emailInput" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label">Số điện thoại</label>
                 <input asp-for="PhoneNumber" id="phoneNumberInput" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-    
             <div class="form-group">
                 <label asp-for="DateOfBirth" class="control-label">Ngày sinh</label>
                 <input asp-for="DateOfBirth" class="form-control" id="dob" type="date" />
@@ -77,8 +69,8 @@
                     submitButton.disabled = !isValidPhoneNumber;
                     var emailValidation = document.querySelector("#phoneNumberInput + .text-danger");
                     // Hiển thị thông báo nếu số điện thoại không hợp lệ
-                 
-                    if (!isValidPhoneNumber) 
+
+                    if (!isValidPhoneNumber)
                         emailValidation.textContent = "Invalid phone number.";
                 });
 
