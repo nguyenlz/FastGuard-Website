@@ -1,0 +1,65 @@
+﻿@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+
+
+<div>
+    <dl class="row">
+        <h4>Chi tiết thông tin tài xế</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Mã số tài xế
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+            <dt class="col-sm-2">
+                Tên tài xế
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                Tài khoản
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.UserName)
+            </dd>
+            <dt class="col-sm-2">
+                Mật khẩu
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PasswordHash)
+            </dd>
+            <dt class="col-sm-2">
+                Email
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-2">
+                Số điện thoại
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+            <dt class="col-sm-2">
+                Ngày sinh
+            </dt>
+            <dd class="col-sm-10">
+                @{
+                    @if (Model.DateOfBirth != null)
+                    {
+                        @Model.DateOfBirth.ToString("dd-MM-yyyy")
+                    }
+                }
+            </dd>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Sửa</a> |
+    <a asp-action="Index">Quay lại trang thông tin</a>
+</div>
