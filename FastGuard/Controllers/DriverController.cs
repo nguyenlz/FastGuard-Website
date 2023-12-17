@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace FastGuard.Controllers
 {
     public class DriverController : Controller
@@ -17,15 +18,20 @@ namespace FastGuard.Controllers
         private readonly UserManager<ApplicationUser> _userManger;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        //private readonly IUserStore<ApplicationUser> _userStore;
+        //private readonly IUserEmailStore<ApplicationUser> _emailStore;
 
-
-        public DriverController(UserManager<ApplicationUser> userManger, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext context)
+        public DriverController(UserManager<ApplicationUser> userManger, RoleManager<IdentityRole> roleManager
+            , IConfiguration configuration, ApplicationDbContext context, IUserStore<ApplicationUser> userStore, IUserEmailStore<ApplicationUser> emailStore)
         {
             _userManger = userManger;
             _roleManager = roleManager;
             _configuration = configuration;
             _context = context;
+            //_userStore = userStore;
+            //_emailStore = emailStore;
         }
+
         public IActionResult Index()
         {
             var drivers = _userManger.GetUsersInRoleAsync("Driver").Result;
@@ -39,6 +45,19 @@ namespace FastGuard.Controllers
             return View();
         }
 
+        private ApplicationUser CreateUser()
+        {
+            try
+            {
+                return Activator.CreateInstance<ApplicationUser>();
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+            }
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -47,11 +66,14 @@ namespace FastGuard.Controllers
             "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
             "Name")] ApplicationUser driver)
         {
+            var user = CreateUser();
+            driver.UserName = driver.Email;
             if (await _roleManager.RoleExistsAsync("Driver"))
             {
-                _context.Add(driver);
-                await _context.SaveChangesAsync();
-                await _userManger.AddToRoleAsync(driver, "Driver");
+               // var check = await _userManger.FindByEmailAsync(driver.Email);
+                 _context.Add(driver);
+                    await _context.SaveChangesAsync();
+                    await _userManger.AddToRoleAsync(driver, "Driver");
             }
             return RedirectToAction(nameof(Index));
         }
@@ -126,6 +148,7 @@ namespace FastGuard.Controllers
     "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
     "Name")] ApplicationUser driver)
         {
+            driver.UserName = driver.Email;
             if (id != driver.Id)
             {
                 return NotFound();
