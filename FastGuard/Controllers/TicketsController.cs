@@ -20,12 +20,12 @@ namespace FastGuard.Controllers
         }
 
 		[HttpPost]
-		public async Task<IActionResult> Tickets(string start, int startid, string end, int endid, DateTime date)
+		public IActionResult Tickets(string start, int startid, string end, int endid, DateTime startdate)
 		{
-			ViewData["route"] = end + " id: " + endid;
-			return _context.Routes != null ?
-						  View(await _context.Routes.ToListAsync()) :
-						  Problem("Entity set 'ApplicationDbContext.Routes'  is null.");
+			string strStartDate = startdate.ToString("yyyy-MM-dd");
+			ViewData["route"] = start + " - " + end;
+			ApplicationDbContext context = HttpContext.RequestServices.GetService(typeof(FastGuard.Data.ApplicationDbContext)) as ApplicationDbContext;
+			return View(context.SearchRoute(startid, endid, strStartDate));
 		}
 	}
 }

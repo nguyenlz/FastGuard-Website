@@ -1,4 +1,91 @@
-﻿@{
+﻿@model IEnumerable<Route>
+
+@{
 	ViewData["Title"] = "Chọn vé thích hợp";
+	// string timeString = startDate.ToString("HH:mm");
 }
-<h1>@ViewData["route"]</h1>
+<style>
+	.start-date {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.start-date-icon {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 80%;
+		gap: 10px;
+	}
+
+		.start-date-icon hr {
+			width: 80%;
+			color: black;
+			/* border: 1px dashed black; */
+		}
+
+	.card-price {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.text-violet {
+		color: #4a00e0;
+		font-weight: bold;
+		font-size: 18px;
+		display: flex;
+		gap: 10px;
+		align-items: center;
+	}
+
+	.text-grayy-icon {
+		color: #8c8c8c;
+		font-size: 8px;
+	}
+
+	.text-grayy {
+		color: #8c8c8c;
+	}
+</style>
+<h1>@ViewData["Title"]</h1>
+<h3>@ViewData["route"] (@Model.Count())</h3>
+
+
+@foreach (var item in Model)
+{
+	<div class="card text-center px-2 my-3">
+		<div class="card-body">
+			<div class="start-date">
+				<div>@item.StartDate.ToString("HH:mm")</div>
+				<div class="start-date-icon">
+					<i class="fa-solid fa-circle"></i>
+					<hr>
+					<i class="fa-solid fa-location-dot"></i>
+				</div>
+				<div>@item.EndDate.ToString("HH:mm")</div>
+			</div>
+		</div>
+		<div class="card-footer text-muted">
+			<div class="card-price">
+				<div class="text-violet">
+					<div>@item.Price đ</div>
+					<div class="text-grayy-icon">
+						<i class="fa-solid fa-circle"></i>
+					</div>
+					<div class="text-grayy">Giường</div>				
+				</div>
+				<form>
+					<button 
+						class="btn btn-primary" 
+						style="background-color: #4a00e0"
+						type="submit"
+					> 
+						Chọn chuyến
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+}
+
+

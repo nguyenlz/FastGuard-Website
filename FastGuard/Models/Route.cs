@@ -14,8 +14,8 @@ namespace FastGuard.Models
         public int? CoachId { get; set; }
         public int? LocationId1 { get; set; }
         public int? LocationId2 { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public float? Price { get; set; }
 
         public virtual Coach? Coach { get; set; }

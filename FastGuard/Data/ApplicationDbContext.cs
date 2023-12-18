@@ -42,6 +42,45 @@ namespace FastGuard.Data
 
             return rowsAffected;
         }
+		public List<Models.Route> SearchRoute(int locationid1, int locationid2, string startdate)
+		{
+			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+
+			List < Models.Route > list = new List<Models.Route> ();
+
+			using (MySqlConnection conn = new MySqlConnection(connectionString))
+			{
+				conn.Open();
+
+				string str = "SELECT * from routes WHERE location_id1=@locationid1 and location_id2=@locationid2 and DATE(start_date)=@startdate";
+				MySqlCommand cmd = new MySqlCommand(str, conn);
+				cmd.Parameters.AddWithValue("locationid1", locationid1);
+				cmd.Parameters.AddWithValue("locationid2", locationid2);
+				cmd.Parameters.AddWithValue("startdate", startdate);
+
+				using (var reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						list.Add(new Models.Route()
+						{
+							RouteId = Convert.ToInt32(reader["route_id"]),
+							CoachId = Convert.ToInt32(reader["coach_id"]),
+							LocationId1 = Convert.ToInt32(reader["location_id1"]),
+							LocationId2 = Convert.ToInt32(reader["location_id2"]),
+							StartDate = Convert.ToDateTime(reader["start_date"]),
+							EndDate = Convert.ToDateTime(reader["end_date"]),
+							Price = Convert.ToSingle(reader["price"])
+					});
+					}
+					reader.Close();
+				}
+
+				conn.Close();
+			}
+
+			return list;
+		}
 		public virtual DbSet<ApplicationUser> Users { get; set; } = null!;
 		public virtual DbSet<Coach> Coaches { get; set; } = null!;
 		public virtual DbSet<Location> Locations { get; set; } = null!;
