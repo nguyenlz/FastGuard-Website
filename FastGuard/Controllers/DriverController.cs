@@ -1,13 +1,16 @@
-﻿using FastGuard.Data;
+﻿using FastGuard.Areas.Identity.Pages.Account;
+using FastGuard.Data;
 using FastGuard.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace FastGuard.Controllers
 {
@@ -19,16 +22,18 @@ namespace FastGuard.Controllers
         private readonly IConfiguration _configuration;
 
 
-        public DriverController(UserManager<ApplicationUser> userManger, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext context)
+        public DriverController(UserManager<ApplicationUser> userManger, RoleManager<IdentityRole> roleManager
+            , IConfiguration configuration, ApplicationDbContext context)
         {
             _userManger = userManger;
             _roleManager = roleManager;
             _configuration = configuration;
             _context = context;
         }
+
         public IActionResult Index()
         {
-            var drivers = _userManger.GetUsersInRoleAsync("Driver").Result;
+			var drivers = _userManger.GetUsersInRoleAsync("Driver").Result;
 
             return View(drivers);
 
@@ -39,22 +44,43 @@ namespace FastGuard.Controllers
             return View();
         }
 
+        private ApplicationUser CreateUser()
+        {
+            try
+            {
+                return Activator.CreateInstance<ApplicationUser>();
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+            }
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id, UserName, NormalizedUserName, Email, " +
-            "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
-            "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
-            "Name")] ApplicationUser driver)
+                 "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
+                 "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
+                 "Name")] ApplicationUser driver)
         {
+            if (driver != null)
+            {
+                var result = await _userManger.CreateAsync(driver, driver.PasswordHash);
+            }
+            driver.UserName = driver.Email;
+            
             if (await _roleManager.RoleExistsAsync("Driver"))
             {
+                // var check = await _userManger.FindByEmailAsync(driver.Email);
                 _context.Add(driver);
                 await _context.SaveChangesAsync();
                 await _userManger.AddToRoleAsync(driver, "Driver");
             }
             return RedirectToAction(nameof(Index));
         }
+
 
         // GET: Driver/Delete/5
         public async Task<IActionResult> Delete(string? id)
@@ -126,6 +152,7 @@ namespace FastGuard.Controllers
     "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
     "Name")] ApplicationUser driver)
         {
+            driver.UserName = driver.Email;
             if (id != driver.Id)
             {
                 return NotFound();
@@ -158,6 +185,10 @@ namespace FastGuard.Controllers
             try
             {
                 _context.Update(driver);
+
+                var token = await _userManger.GeneratePasswordResetTokenAsync(driver);
+
+                var result = await _userManger.ResetPasswordAsync(driver, token, driver.PasswordHash);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

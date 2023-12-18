@@ -9,16 +9,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+namespace FastGuard.Controllers
+{
 public class EmployeeController : Controller
 {
     private readonly ApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _userManager;
+		private readonly UserManager<ApplicationUser> _userManger;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
-    public EmployeeController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext context)
+		public EmployeeController(UserManager<ApplicationUser> userManger, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext context)
     {
-        _userManager = userManager;
+			_userManger = userManger;
         _roleManager = roleManager;
         _configuration = configuration;
         _context = context;
@@ -34,8 +36,8 @@ public class EmployeeController : Controller
         else
         {
 
-            var allUsers = _context.Users.ToList();
-            return View("Index", allUsers);
+			var users = _userManger.GetUsersInRoleAsync("Employee").Result;
+			return View(users);
         }
     }
 
@@ -46,22 +48,29 @@ public class EmployeeController : Controller
         return View();
     }
 
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id, UserName, NormalizedUserName, Email, " +
         "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
-        "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd, LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
-        "Name")] ApplicationUser user)
+			"PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
+			"Name")] ApplicationUser employee)
     {
-        if (ModelState.IsValid)
+			if (employee != null)
         {
-            await _userManager.CreateAsync(user);
+				var result = await _userManger.CreateAsync(employee, employee.PasswordHash);
+			}
+			employee.UserName = employee.Email;
+			if (await _roleManager.RoleExistsAsync("Employee"))
+			{
+				_context.Add(employee);
+				await _context.SaveChangesAsync();
+				await _userManger.AddToRoleAsync(employee, "Employee");
+			}
             return RedirectToAction(nameof(Index));
         }
 
-        return View(user);
-    }
-
+		// GET: Driver/Delete/5
     public async Task<IActionResult> Delete(string? id)
     {
         if (id == null || _context.Users == null)
@@ -69,30 +78,33 @@ public class EmployeeController : Controller
             return NotFound();
         }
 
-        var user = await _userManager.FindByIdAsync(id);
-        if (user == null)
+			var employee = await _context.Users
+				.FirstOrDefaultAsync(m => m.Id == id);
+			if (employee == null)
         {
             return NotFound();
         }
 
-        return View(user);
+			return View(employee);
     }
 
+		// POST: Driver/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(string id)
     {
-        var user = await _userManager.FindByIdAsync(id);
-        if (user != null)
+			if (_context.Users == null)
         {
-            // Retrieve and delete associated records in the coaches table
-            var associatedCoaches = _context.Coaches.Where(c => c.UserId == id).ToList();
-            _context.Coaches.RemoveRange(associatedCoaches);
-
-            // Delete the user
-            await _userManager.DeleteAsync(user);
+				return Problem("Entity set 'ApplicationDbContext.employee'  is null.");
         }
+			var employee = await _context.Users.FindAsync(id);
+			if (employee != null)
+			{
+				_context.Users.Remove(employee);
+				await _context.SaveChangesAsync();
+				await _userManger.RemoveFromRoleAsync(employee, "Employee");
 
+			}
         return RedirectToAction(nameof(Index));
     }
 
@@ -101,72 +113,86 @@ public class EmployeeController : Controller
         return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
     }
 
+		// GET: Coaches/Edit/5
     public async Task<IActionResult> Edit(string id)
     {
+
         if (id == null || _context.Users == null)
         {
             return NotFound();
         }
 
-        var user = await _userManager.FindByIdAsync(id);
-        if (user == null)
+			var employee = await _context.Users.FindAsync(id);
+			if (employee == null)
         {
             return NotFound();
         }
-
-        return View(user);
+			ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", employee.Id);
+			return View(employee);
     }
 
+		// POST: Coaches/Edit/5
+		// To protect from overposting attacks, enable the specific properties you want to bind to.
+		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(string id, [Bind("Id, UserName, NormalizedUserName, Email, " +
     "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
-    "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd, LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
-    "Name")] ApplicationUser updatedUser)
+	"PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
+	"Name")] ApplicationUser employee)
+		{
+			employee.UserName = employee.Email;
+
+            if (id != employee.Id)
     {
-        if (id != updatedUser.Id)
+				return NotFound();
+			}
+
+			var existingUser = await _userManger.FindByIdAsync(id);
+			if (existingUser == null)
         {
             return NotFound();
         }
 
-        if (ModelState.IsValid)
+			if (existingUser.ConcurrencyStamp != employee.ConcurrencyStamp)
         {
-            try
+				// Xung đột xảy ra, giữ lại giá trị ConcurrencyStamp của người dùng trong cơ sở dữ liệu
+				employee.ConcurrencyStamp = existingUser.ConcurrencyStamp;
+			}
+			else
             {
-                var existingUser = await _userManager.FindByIdAsync(id);
+				// Không có xung đột, cập nhật giá trị ConcurrencyStamp mới
+				employee.ConcurrencyStamp = Guid.NewGuid().ToString();
+			}
 
-                if (existingUser == null)
+			// Kiểm tra xem có đối tượng nào khác đang được theo dõi trong DbContext có cùng Id như employee không
+			var trackedUser = _context.Set<ApplicationUser>().Local.SingleOrDefault(u => u.Id == employee.Id);
+			if (trackedUser != null)
                 {
-                    return NotFound();
+				_context.Entry(trackedUser).State = EntityState.Detached;
                 }
 
-                
-                existingUser.UserName = updatedUser.UserName;
-                existingUser.Email = updatedUser.Email;
-                existingUser.Name = updatedUser.Name;
-                existingUser.PasswordHash = _userManager.PasswordHasher.HashPassword(existingUser, updatedUser.PasswordHash);
-                existingUser.PhoneNumber = updatedUser.PhoneNumber;
-                existingUser.DateOfBirth = updatedUser.DateOfBirth;
+			try
+			{
+				_context.Update(employee);
 
+                var token = await _userManger.GeneratePasswordResetTokenAsync(employee);
                 
-                await _userManager.UpdateAsync(existingUser);
+                var result = await _userManger.ResetPasswordAsync(employee, token, employee.PasswordHash);
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UsersExists(updatedUser.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+				// Xử lý xung đột xảy ra trong quá trình cập nhật
+				// Thực hiện các bước khác để xử lý xung đột
+				// Ví dụ: Truy vấn lại dữ liệu và thử lại quá trình cập nhật
+				ModelState.AddModelError("", "Concurrency conflict occurred. Please try again.");
+				return View(employee);
             }
             return RedirectToAction(nameof(Index));
         }
 
-        return View(updatedUser);
-    }
+		// GET: Driver/Details/5
     public async Task<IActionResult> Details(string? id)
     {
         if (id == null || _context.Users == null)
@@ -174,12 +200,14 @@ public class EmployeeController : Controller
             return NotFound();
         }
 
-        var user = await _userManager.FindByIdAsync(id);
-        if (user == null)
+			var employee = await _context.Users
+				.FirstOrDefaultAsync(m => m.Id == id);
+			if (employee == null)
         {
             return NotFound();
         }
 
-        return View(user);
+			return View(employee);
+		}
     }
 }
