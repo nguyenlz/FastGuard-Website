@@ -1,48 +1,48 @@
 ﻿@model ApplicationUser
 
 @{
-    ViewData["Title"] = "Detail";
+    ViewData["Title"] = "Thông Tin Tài Xế";
 }
 
 
 
 <div>
     <dl class="row">
-        <h4>Chi tiết thông tin tài xế</h4>
+        <h4>Chi Tiết Thông Tin Tài Xế</h4>
         <hr />
         <dl class="row">
             <dt class="col-sm-2">
-                Mã số tài xế
+                Mã số tài xế:
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Id)
             </dd>
             <dt class="col-sm-2">
-                Tên tài xế
+                Tên tài xế:
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Name)
             </dd>
             <dt class="col-sm-2">
-                User name
+                User name:
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.UserName)
             </dd>
             <dt class="col-sm-2">
-                Email
+                Email:
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Email)
             </dd>
             <dt class="col-sm-2">
-                Số điện thoại
+                Số điện thoại:
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.PhoneNumber)
             </dd>
             <dt class="col-sm-2">
-                Ngày sinh
+                Ngày sinh:
             </dt>
             <dd class="col-sm-10">
                 @{
@@ -54,6 +54,6 @@
             </dd>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Sửa</a> |
-    <a asp-action="Index">Quay lại trang thông tin</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Sửa</a> |
+    <a asp-action="Index" class="btn btn-info">Trở Về</a>
 </div>

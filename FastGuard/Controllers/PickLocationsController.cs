@@ -29,16 +29,10 @@ namespace FastGuard.Controllers
         // GET: PickLocations
         public async Task<IActionResult> Index()
         {
-            if (User.IsInRole("Admin"))
-            {
-                var applicationDbContext = _context.PickLocations.Include(p => p.Location);
-                return View("IndexOP",await applicationDbContext.ToListAsync());
-            }
-            else
-            {
+            
                 var applicationDbContext = _context.PickLocations.Include(p => p.Location);
                 return View(await applicationDbContext.ToListAsync());
-            }
+           
         }
 
         // GET: PickLocations/Details/5
@@ -76,6 +70,15 @@ namespace FastGuard.Controllers
         {
             if (ModelState.IsValid)
             {
+               
+                bool locationExists = await _context.PickLocations.AnyAsync(pl => pl.PickLocationName == pickLocation.PickLocationName);
+                if (locationExists)
+                {
+                    ModelState.AddModelError("PickLocationName", "Điểm đón đã tồn tại.");
+                    ViewData["LocationName"] = new SelectList(_context.Locations, "LocationId", "LocationName");
+                    return View(pickLocation);
+                }
+
                 _context.Add(pickLocation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

@@ -10,7 +10,7 @@ namespace FastGuard.Controllers
 {
     public class CustomersController : Controller
     {
-        private readonly ApplicationDbContext _context; 
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManger;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
@@ -25,7 +25,7 @@ namespace FastGuard.Controllers
 			ApplicationDbContext context)
         {
             _userManger = userManger;
-			_roleManager = roleManager;
+            _roleManager = roleManager;
             _configuration = configuration;
             _context= context;
 			_emailStore = GetEmailStore();
@@ -35,8 +35,8 @@ namespace FastGuard.Controllers
 
 		public IActionResult Index()
         {
-			
-			var users = _userManger.GetUsersInRoleAsync("Customer").Result;
+
+            var users = _userManger.GetUsersInRoleAsync("Customer").Result;
             return View(users);
         }
 

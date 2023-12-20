@@ -29,16 +29,10 @@ namespace FastGuard.Controllers
         // GET: Routes
         public async Task<IActionResult> Index()
         {
-            if (User.IsInRole("Admin"))
-            {
-                var applicationDbContext = _context.Routes.Include(r => r.Coach).Include(r => r.LocationId1Navigation).Include(r => r.LocationId2Navigation);
-                return View("IndexOP",await applicationDbContext.ToListAsync());
-            }
-            else
-            {
+           
                 var applicationDbContext = _context.Routes.Include(r => r.Coach).Include(r => r.LocationId1Navigation).Include(r => r.LocationId2Navigation);
                 return View(await applicationDbContext.ToListAsync());
-            }
+           
                 
             
         }
@@ -76,16 +70,36 @@ namespace FastGuard.Controllers
         // POST: Routes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Routes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind(",CoachId,LocationId1,LocationId2,StartDate,EndDate,Price")] Models.Route route)
         {
             if (ModelState.IsValid)
             {
+                
+                bool routeExists = await _context.Routes.AnyAsync(r =>
+                    r.CoachId == route.CoachId &&
+                    r.LocationId1 == route.LocationId1 &&
+                    r.LocationId2 == route.LocationId2 &&
+                    r.StartDate == route.StartDate &&
+                    r.EndDate == route.EndDate &&
+                    r.Price == route.Price);
+
+                if (routeExists)
+                {
+                    ModelState.AddModelError("", "The route already exists.");
+                    ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
+                    ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
+                    ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
+                    return View(route);
+                }
+
                 _context.Add(route);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CoachId"] = new SelectList(_context.Coaches, "CoachId", "CoachId", route.CoachId);
             ViewData["LocationId1"] = new SelectList(_context.Locations, "LocationId", "LocationId", route.LocationId1);
             ViewData["LocationId2"] = new SelectList(_context.Locations, "LocationId", "LocationId", route.LocationId2);

@@ -163,9 +163,9 @@ namespace FastGuard.Controllers
 				_context.Entry(trackedUser).State = EntityState.Detached;
 			}
 
-			try
-			{
-				_context.Update(employee);
+            try
+            {
+                _context.Update(employee);
 
 				var token = await _userManger.GeneratePasswordResetTokenAsync(employee);
 

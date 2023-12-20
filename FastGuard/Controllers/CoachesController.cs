@@ -52,6 +52,7 @@ namespace FastGuard.Controllers
         public IActionResult Create()
         {
             ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
+            ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName");
             return View();
             //ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
             //int count;

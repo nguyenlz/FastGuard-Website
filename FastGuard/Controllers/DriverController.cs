@@ -61,24 +61,33 @@ namespace FastGuard.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id, UserName, NormalizedUserName, Email, " +
-                 "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
-                 "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
-                 "Name")] ApplicationUser driver)
+         "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
+         "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
+         "Name")] ApplicationUser driver)
         {
-            if (driver != null)
+            if (ModelState.IsValid)
             {
+                // Set the username to be the same as the email
+                driver.UserName = driver.Email;
+
+                // Create the driver user
                 var result = await _userManger.CreateAsync(driver, driver.PasswordHash);
+
+                if (result.Succeeded)
+                {
+                    // Add the driver role to the user
+                    await _userManger.AddToRoleAsync(driver, "Driver");
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
             }
-            driver.UserName = driver.Email;
-            
-            if (await _roleManager.RoleExistsAsync("Driver"))
-            {
-                // var check = await _userManger.FindByEmailAsync(driver.Email);
-                _context.Add(driver);
-                await _context.SaveChangesAsync();
-                await _userManger.AddToRoleAsync(driver, "Driver");
-            }
-            return RedirectToAction(nameof(Index));
+
+            return View(driver);
         }
 
 
@@ -107,16 +116,36 @@ namespace FastGuard.Controllers
         {
             if (_context.Users == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Driver'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Driver' is null.");
             }
-            var driver = await _context.Users.FindAsync(id);
+
+            var driver = await _userManger.FindByIdAsync(id);
+
             if (driver != null)
             {
-                _context.Users.Remove(driver);
-                await _context.SaveChangesAsync();
-                await _userManger.RemoveFromRoleAsync(driver, "Driver");
+                // Check if the driver is associated with any coaches
+                var isDriverAssociatedWithCoaches = _context.Coaches.Any(c => c.UserId == id);
 
+                if (isDriverAssociatedWithCoaches)
+                {
+                    TempData["Notice"] = "Cannot delete the driver. Please remove associated coaches first.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var result = await _userManger.DeleteAsync(driver);
+
+                if (result.Succeeded)
+                {
+                    await _userManger.RemoveFromRoleAsync(driver, "Driver");
+                    return RedirectToAction(nameof(Index));
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
             }
+
             return RedirectToAction(nameof(Index));
         }
 
