@@ -19,11 +19,11 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.UserId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.User.Name)</td>
                     <td>@Html.DisplayFor(modelItem => item.SeatNo)</td>
-                    <td>@Html.DisplayFor(modelItem => item.InvoiceDate)</td>
-                    <td>@Html.DisplayFor(modelItem => item.PickLocationId1)</td>
-                    <td>@Html.DisplayFor(modelItem => item.PickLocationId2)</td>
+                    <td>@item.InvoiceDate.ToString("dd/MM/yyyy")</td>
+                    <td>@Html.DisplayFor(modelItem => item.PickLocationId1Navigation.PickLocationName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PickLocationId2Navigation.PickLocationName)</td>
                     <td>@Html.DisplayFor(modelItem => item.TotalMoney)</td>
                 </tr>
             }
