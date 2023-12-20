@@ -1,5 +1,29 @@
 ﻿@{
 
 }
+<style>
+	.custom-button {
+		background: linear-gradient(90deg, rgba(142,45,226,1) 32%, rgba(74,0,224,1) 100%);
+		font-size: 21px;
+		border-radius: 25px;
+		text-align: center;
+		border: 1px solid transparent;
+		color: white;
+		text-decoration: none;
+		padding: 7px 40px;
+	}
 
-<h1>Kết quả thanh toán</h1>
+		.custom-button:hover {
+			background: #9e4be7;
+			color: white;
+		}
+</style>
+<div class="d-flex flex-column gap-3 justify-content-center text-center w-100 h-75 py-5 fs-5">
+	<i class="fa-solid fa-circle-check fa-beat" style="font-size: 50px;"></i>
+	<h5>@ViewData["message"]!</h5>
+	<div>
+		<a asp-area="" asp-controller="Tickets" asp-action="SearchTicket" class="custom-button">Đặt vé khác</a>
+		<a asp-area="" asp-controller="Tickets" asp-action="BookedTicket" class="custom-button">Xem vé đã đặt</a>
+	</div>
+	
+</div>
