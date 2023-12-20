@@ -5,17 +5,17 @@
 	ViewData["Title"] = "Application Roles";
 }
 
-<h1>View Roles</h1>
+<h1>Danh sách các role</h1>
 <p>
-	<a asp-action="Create">Create Role</a>
+	<a asp-action="Create" class="btn btn-success">Tạo role mới</a>
 </p>
 
-<table class="table">
+<table class="table table-bordered table-striped">
 	<thead>
 		<tr>
 			<th>@Html.DisplayNameFor(model=>model.Id)</th>
-			<th>@Html.DisplayNameFor(model=>model.Name)</th>
-
+			<th>Tên role</th>
+			<th>Chức năng</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -24,7 +24,19 @@
 			<tr>
 				<td>@Html.DisplayFor(modelItem=>item.Id)</td>
 				<td>@Html.DisplayFor(modelItem=>item.Name)</td>
-
+				<td>
+					<div class="d-flex gap-2" role="group">
+						<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+							<i class="fas fa-trash"></i> Xóa
+						</a>
+						<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">
+							<i class="fas fa-edit"></i> Sửa
+						</a>
+						<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">
+							<i class="fas fa-info-circle"></i> Chi tiết
+						</a>
+					</div>
+				</td>
 			</tr>
 		}
 	</tbody>

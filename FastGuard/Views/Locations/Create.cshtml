@@ -9,12 +9,13 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" onsubmit="return validateLocationForm(event)">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="LocationName" class="control-label">Tên Địa Điểm</label>
-                <input asp-for="LocationName" class="form-control" />
+                <input asp-for="LocationName" class="form-control" id="LocationNameInput" />
                 <span asp-validation-for="LocationName" class="text-danger"></span>
+                <span class="error" id="locationNameError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Tạo" class="btn btn-primary" /> |
@@ -26,5 +27,19 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        function validateLocationForm(event) {
+            var LocationNameInput = document.getElementById('LocationNameInput');
+            var locationNameError = document.getElementById('locationNameError');
+
+            if (LocationNameInput.value === '') {
+                event.preventDefault();
+                locationNameError.style.display = 'block';
+                return false;
+            } else {
+                locationNameError.style.display = 'none';
+            }
+        }
+    </script>
 }

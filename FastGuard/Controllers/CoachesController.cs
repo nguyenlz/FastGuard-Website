@@ -8,11 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using FastGuard.Data;
 using FastGuard.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FastGuard.Controllers
 {
-
-    public class CoachesController : Controller
+	[Authorize(Roles = "Admin, Employee")]
+	public class CoachesController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;

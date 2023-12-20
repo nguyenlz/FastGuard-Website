@@ -24,15 +24,15 @@
                         @Html.DisplayFor(modelItem => item.LocationName)
                     </td>
                     <td>
-                        <div class="btn-group" role="group">
+                        <div class="d-flex gap-2" role="group">
+                            <a asp-action="Delete" asp-route-id="@item.LocationId" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Xóa
+                            </a>
                             <a asp-action="Edit" asp-route-id="@item.LocationId" class="btn btn-primary">
                                 <i class="fas fa-edit"></i> Sửa
                             </a>
-                            <a asp-action="Details" asp-route-id="@item.LocationId" class="btn btn-info">
-                                <i class="fas fa-info-circle"></i> Chi Tiết
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@item.LocationId" class="btn btn-danger">
-                                <i class="fas fa-trash"></i> Xóa
+                            <a asp-action="Details" asp-route-id="@item.LocationId" class="btn btn-secondary">
+                                <i class="fas fa-info-circle"></i> Chi tiết
                             </a>
                         </div>
                     </td>
