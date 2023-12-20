@@ -14,6 +14,7 @@ namespace FastGuard.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
+
         public CustomersController(UserManager<ApplicationUser> userManger, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext context)
         {
             _userManger = userManger;
@@ -43,6 +44,7 @@ namespace FastGuard.Controllers
             "Name")] ApplicationUser customer)
         {
             if (customer != null)
+              //  customer.PasswordHash
             {
                 var result = await _userManger.CreateAsync(customer, customer.PasswordHash);
             }

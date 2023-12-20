@@ -5,13 +5,18 @@
 	ViewData["Title"] = "Customers";
 }
 
-<h1>Danh sách thông tin khách hàng</h1>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Danh sách thông tin khách hàng</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
 <p>
 	<a asp-action="Create">Thêm mới khách hàng</a>
 </p>
 
 <div style="width: 100%;">
-    <table class="table">
+            <table id="example1" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Mã số khách hàng</th>
@@ -49,4 +54,6 @@
             }
         </tbody>
     </table>
+</div>
+    </div>
 </div>

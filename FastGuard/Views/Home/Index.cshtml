@@ -1,12 +1,372 @@
-﻿@{
+﻿@model List<int>;
+@{
     ViewData["Title"] = "Home Page";
+    List<int> list = Model; // 0- nhan vien, 1- khach hang,2-tai xe,3-xe,4-pick location,5-dia diem(location),6-so tuyen(route),7-so ve
 }
+
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+@* <link rel="stylesheet" href="~/dist/css/adminlte.min.css"> *@
 <link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
+<br />
+       <!-- Small boxes (Stat box) -->
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>@list[1]</h3>
 
-<div class="text-center">
-    <h1 class="display-4">
-        This is dashboard
-    </h1>
+                <p>Khách hàng</p>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <a asp-area="" asp-controller="Customers" asp-action="Index" class="small-box-footer">
+                More Infor <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>   @list[0] @* <sup style="font-size: 20px">%</sup> *@</h3>
 
-    @* <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
+                <p>
+                   Nhân viên 
+                </p>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-user-tie"></i>
+            </div>
+            <a asp-area="" asp-controller="Employee" asp-action="Index" class="small-box-footer">
+                More Infor <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>@list[2]</h3>
+
+                <p>Tài xế</p>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-road"></i>
+            </div>
+            <a asp-area="" asp-controller="Driver" asp-action="Index" class="small-box-footer">
+                More Infor <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>@list[3]</h3>
+
+                <p>Xe</p>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-van-shuttle"></i>
+            </div>
+            <a asp-area="" asp-controller="Coaches" asp-action="Index" class="small-box-footer">
+                More Infor <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>@list[5]</h3>
+
+                <p>Địa điểm</p>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <a asp-area="" asp-controller="Locations" asp-action="Index" class="small-box-footer">
+                More Infor <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>@list[6]</h3>
+
+                <p>Tuyến xe</p>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-route"></i>
+            </div>
+            <a asp-area="" asp-controller="Routes" asp-action="Index" class="small-box-footer">
+                More Infor <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>@list[7]</h3>
+
+                <p>Đặt vé xe</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-ticket"></i>
+            </div>
+            <a asp-area="" asp-controller="Tickets" asp-action="SearchTicket" class="small-box-footer">
+                More Infor <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>@list[4]</h3>
+
+                <p>Điểm đón</p>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <a asp-area="" asp-controller="PickLocations" asp-action="Index" class="small-box-footer">
+                More Infor <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
 </div>
+<div class="row">
+</div>
+
+@* <div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Line Chart</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="chart">
+            <canvas id="lineChart" style="min-height: 220px; height: 220px; max-height: 220px; max-width: 100%;"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="../../plugins/chart.js/Chart.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+<!-- Page specific script -->
+<script>
+    $(function () {
+        /* ChartJS
+     * -------
+     * Here we will create a few charts using ChartJS
+     */
+
+        //--------------
+        //- AREA CHART -
+        //--------------
+
+        // Get context with jQuery - using jQuery's .get() method.
+        var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+
+        var areaChartData = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [
+                {
+                    label: 'Digital Goods',
+                    backgroundColor: 'rgba(60,141,188,0.9)',
+                    borderColor: 'rgba(60,141,188,0.8)',
+                    pointRadius: false,
+                    pointColor: '#3b8bba',
+                    pointStrokeColor: 'rgba(60,141,188,1)',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                },
+                {
+                    label: 'Electronics',
+                    backgroundColor: 'rgba(210, 214, 222, 1)',
+                    borderColor: 'rgba(210, 214, 222, 1)',
+                    pointRadius: false,
+                    pointColor: 'rgba(210, 214, 222, 1)',
+                    pointStrokeColor: '#c1c7d1',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                    data: [65, 59, 80, 81, 56, 55, 40]
+                },
+            ]
+        }
+
+        var areaChartOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display: false,
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        display: false,
+                    }
+                }]
+            }
+        }
+
+        // This will get the first returned node in the jQuery collection.
+        new Chart(areaChartCanvas, {
+            type: 'line',
+            data: areaChartData,
+            options: areaChartOptions
+        })
+        //-------------
+        //- LINE CHART -
+        //--------------
+        var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+        var lineChartOptions = $.extend(true, {}, areaChartOptions)
+        var lineChartData = $.extend(true, {}, areaChartData)
+        lineChartData.datasets[0].fill = false;
+        lineChartData.datasets[1].fill = false;
+        lineChartOptions.datasetFill = false
+
+        var lineChart = new Chart(lineChartCanvas, {
+            type: 'line',
+            data: lineChartData,
+            options: lineChartOptions
+        })
+</script> *@
+<div class="card card-info">
+    <div class="card-header" style="background: linear-gradient(90deg, #8e2de2, #4a00e0); color: #ffffff;">
+        <h3 class="card-title">Biểu đồ danh thu</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div>
+            <label for="year-select">Chọn năm:</label>
+            <select id="year-select"></select>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var yearOptions = '';
+                for (var year = 2019; year <= 2023; year++) {
+                    if(year==2023)
+                        yearOptions += '<option selected value="' + year + '">' + year + '</option  >';
+                    else
+                        yearOptions += '<option value="' + year + '">' + year + '</option  >';
+                }
+                $('#year-select').html(yearOptions);
+            });
+        </script>
+        <canvas id="body" style="min-height: 200px; height: 220px; max-height: 200px; max-width: 100%;"></canvas>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="../../plugins/chart.js/Chart.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+<!-- Page specific script -->
+<script>
+    $(function () {
+        var lineChartCanvas = $('#body').get(0).getContext('2d')
+        var lineChartData = {
+            labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7',
+                'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+            datasets: [
+                {
+                    label: 'Doanh thu',
+                    backgroundColor: 'linear-gradient(90deg, #8e2de2, #4a00e0)',
+                    borderColor: '#ffffff',
+                    pointRadius: false,
+                    pointBackgroundColor: '#8e2de2',
+                    pointBorderColor: '#4a00e0',
+                    pointHoverBackgroundColor: '#8e2de2',
+                    pointHoverBorderColor: '#4a00e0',
+                    data: [28, 48, 40, 19, 86, 27, 90, 11, 22, 33, 44, 55]
+                }
+            ]
+        }
+
+        var lineChartOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display: true, // Hiển thị đường grid trên trục x
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Tháng' // Tên trục ngang
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        display: true, // Hiển thị đường grid trên trục y
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Doanh thu (Chục triệu đồng)' // Tên trục dọc
+                    }
+                }]
+            }
+        }
+
+        // This will get the first returned node in the jQuery collection.
+        new Chart(lineChartCanvas, {
+            type: 'line',
+            data: lineChartData,
+            options: lineChartOptions
+        })
+    })
+</script>

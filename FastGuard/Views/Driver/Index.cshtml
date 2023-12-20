@@ -5,18 +5,22 @@
 	ViewData["Title"] = "Driver";
 }
 
-<h1>Thông tin tài xế</h1>
+<div class="card">
+	<div class="card-header">
+		<h3 class="card-title">Danh sách thông tin tài xế</h3>
+	</div>
+	<!-- /.card-header -->
+	<div class="card-body">
 <p>
 	<a asp-action="Create">Thêm mới tài xế</a>
 </p>
 
-<table class="table">
+		<table id="example1" class="table table-bordered table-striped">
 	<thead>
 		<tr>
 			<th>Mã số tài xế</th>
 			<th>Tên tài xế</th>
-			<th>User name</th>
-			<th>Email</th>
+			<th>Email/User name</th>
 			<th>Số điện thoại</th>
 			<th>Ngày sinh</th>
 			<th>Chức năng </th>
@@ -28,7 +32,6 @@
 			<tr>
 				<td>@Html.DisplayFor(modelItem=>item.Id)</td>
 				<td>@Html.DisplayFor(modelItem=>item.Name)</td>
-				<td>@Html.DisplayFor(modelItem=>item.UserName)</td>
 				<td>@Html.DisplayFor(modelItem=>item.Email)</td>
 				<td>@Html.DisplayFor(modelItem=>item.PhoneNumber)</td>
 
@@ -48,3 +51,5 @@
 		}
 	</tbody>
 </table>
+	</div>
+</div>

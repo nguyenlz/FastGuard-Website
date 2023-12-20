@@ -5,13 +5,16 @@
     ViewData["Title"] = "Employee";
    
 }
-
-<h1>Thông tin nhân viên</h1>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Danh sách thông tin nhân viên</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
 <p>
 	<a asp-action="Create">Thêm mới nhân viên</a>
 </p>
-
-<table class="table">
+ <table id="example1" class="table table-bordered table-striped">
     <thead>
         <tr>
 			<th>Mã số nhân viên</th>
@@ -48,3 +51,5 @@
         }
     </tbody>
 </table>
+</div>
+</div>
