@@ -54,12 +54,21 @@ namespace FastGuard.Controllers
         // POST: Locations/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Locations/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LocationId,LocationName")] Location location)
         {
             if (ModelState.IsValid)
             {
+                // Check if the location already exists
+                bool locationExists = await _context.Locations.AnyAsync(l => l.LocationName == location.LocationName);
+                if (locationExists)
+                {
+                    ModelState.AddModelError("LocationName", "Địa điểm đã tồn tại.");
+                    return View(location);
+                }
+
                 _context.Add(location);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

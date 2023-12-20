@@ -1,10 +1,10 @@
 ﻿@model ApplicationUser
 
 @{
-    ViewData["Title"] = "Detail";
+    ViewData["Title"] = "Thông Tin Khách Hàng";
 }
 
-<h1>Thông tin chi tiết</h1>
+<h1>Thông Tin Khách Hàng</h1>
 
 <div>
     <dl class="row">
@@ -54,6 +54,6 @@
             </dd>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Sửa</a> |
-    <a asp-action="Index">Quay lại trang thông tin</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Sửa</a> |
+    <a asp-action="Index" class="btn btn-info">Trở Về</a>
 </div>

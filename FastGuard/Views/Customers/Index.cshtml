@@ -1,20 +1,18 @@
-﻿@using Microsoft.AspNetCore.Identity
-@model IEnumerable<ApplicationUser>
+﻿@model IEnumerable<ApplicationUser>
 
 @{
-	ViewData["Title"] = "Customers";
+    ViewData["Title"] = "Danh sách khách hàng";
 }
 
-<h1>Danh sách thông tin khách hàng</h1>
-<p>
-	<a asp-action="Create">Thêm mới khách hàng</a>
-</p>
-
-<div style="width: 100%;">
-    <table class="table">
+<div class="container mt-4">
+    <h1>Danh sách khách hàng</h1>
+    <p>
+        <a asp-action="Create" class="btn btn-success">Thêm mới khách hàng</a>
+    </p>
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>Mã số khách hàng</th>
+                <th>#</th>
                 <th>Tên khách hàng</th>
                 <th>User name</th>
                 <th>Email</th>
@@ -24,10 +22,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var (item, index) in Model.Select((value, i) => (value, i)))
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                    <td>@(index + 1)</td> 
                     <td>@Html.DisplayFor(modelItem => item.Name)</td>
                     <td>@Html.DisplayFor(modelItem => item.UserName)</td>
                     <td>@Html.DisplayFor(modelItem => item.Email)</td>
@@ -37,16 +35,27 @@
                             if (item.DateOfBirth != null)
                             {
                                 @item.DateOfBirth.ToString("dd-MM-yyyy")
+                                ;
                             }
                         }
                     </td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Xóa</a> |
-                        <a asp-action="Edit" asp-route-id="@item.Id">Sửa</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Xóa
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">
+                                <i class="fas fa-edit"></i> Sửa
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">
+                                <i class="fas fa-info-circle"></i> Chi tiết
+                            </a>
+                        </div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+

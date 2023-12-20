@@ -1,11 +1,11 @@
 ﻿@model ApplicationUser
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Thay Đổi Thông Tin Tài Xế";
 }
 
 
-<h4>Thay đổi thông tin tài xế</h4>
+<h4>Thay Đổi Thông Tin Tài Xế</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -13,7 +13,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label">Tên tài xế</label>
+                <label asp-for="Name" class="control-label">Tên tài xế:</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
@@ -23,17 +23,17 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PasswordHash" class="control-label">Mật khẩu</label>
+                <label asp-for="PasswordHash" class="control-label">Mật khẩu:</label>
                 <input asp-for="PasswordHash" id="passwordinput" class="form-control" />
                 <span asp-validation-for="PasswordHash" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label">Số điện thoại</label>
+                <label asp-for="PhoneNumber" class="control-label">Số điện thoại:</label>
                 <input asp-for="PhoneNumber" id="phoneNumberInput" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateOfBirth" class="control-label">Ngày sinh</label>
+                <label asp-for="DateOfBirth" class="control-label">Ngày sinh:</label>
                 <input asp-for="DateOfBirth" class="form-control" id="dob"  type="date"/>
                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
             </div>
@@ -44,7 +44,8 @@
                 });
             </script>
             <div class="form-group">
-                <input type="submit" id="submitButton" value="Lưu" class="btn btn-primary" />
+                <input type="submit" value="Lưu" class="btn btn-primary" /> |
+                <a asp-action="Index" class="btn btn-info">Trở Về</a>
             </div>
             <script>
                 var emailInput = document.getElementById('emailInput');
@@ -107,10 +108,6 @@
             </script>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Quay lại trang thông tin</a>
 </div>
 
 @section Scripts {
