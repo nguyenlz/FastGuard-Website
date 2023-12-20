@@ -29,16 +29,10 @@ namespace FastGuard.Controllers
         // GET: Routes
         public async Task<IActionResult> Index()
         {
-            if (User.IsInRole("Admin"))
-            {
-                var applicationDbContext = _context.Routes.Include(r => r.Coach).Include(r => r.LocationId1Navigation).Include(r => r.LocationId2Navigation);
-                return View("IndexOP",await applicationDbContext.ToListAsync());
-            }
-            else
-            {
+           
                 var applicationDbContext = _context.Routes.Include(r => r.Coach).Include(r => r.LocationId1Navigation).Include(r => r.LocationId2Navigation);
                 return View(await applicationDbContext.ToListAsync());
-            }
+           
                 
             
         }

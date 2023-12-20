@@ -29,16 +29,10 @@ namespace FastGuard.Controllers
         // GET: PickLocations
         public async Task<IActionResult> Index()
         {
-            if (User.IsInRole("Admin"))
-            {
-                var applicationDbContext = _context.PickLocations.Include(p => p.Location);
-                return View("IndexOP",await applicationDbContext.ToListAsync());
-            }
-            else
-            {
+            
                 var applicationDbContext = _context.PickLocations.Include(p => p.Location);
                 return View(await applicationDbContext.ToListAsync());
-            }
+           
         }
 
         // GET: PickLocations/Details/5
