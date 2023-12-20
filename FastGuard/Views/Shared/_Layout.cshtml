@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<ApplicationUser> signInManager;
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -65,65 +67,79 @@
 			</div>
 
 			<ul class="list-unstyled px-2">
-				<li class="">
-					<a asp-area="" asp-controller="Home" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-						<i class="fa-solid fa-gauge"></i> Dashboard
-					</a>
-				</li>
-				<li class="">
-					<a asp-area="" asp-controller="Customers" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-						<i class="fa-solid fa-user"></i>
-						Khách hàng
-					</a>
-				</li>
-				<li class="">
-					<a asp-area="" asp-controller="Employee" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-						<i class="fa-solid fa-user-tie"></i>
-						Nhân viên
-					</a>
-				</li>
-				<li class="">
-					<a asp-area="" asp-controller="Driver" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-						<i class="fa-solid fa-road"></i>
-						Tài xế
-					</a>
-				</li>
-				<li class="">
-					<a asp-area="" asp-controller="Coaches" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-						<i class="fa-solid fa-van-shuttle"></i>
-						Xe
-					</a>
-				</li>
-				<li class="">
-					<a asp-area="" asp-controller="Locations" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-						<i class="fa-solid fa-map-location-dot"></i>
-						Địa điểm
-					</a>
-				</li>
-				<li class="">
-					<a asp-area="" asp-controller="PickLocations" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-						<i class="fa-solid fa-location-dot"></i>
-						Điểm đón
-					</a>
-				</li>
-				<li class="">
-					<a asp-area="" asp-controller="Routes" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-						<i class="fa-solid fa-route"></i>
-						Tuyến xe
-					</a>
-				</li>
+				@if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin"))){
+					<li class="">
+						<a asp-area="" asp-controller="AppRoles" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-person-circle-plus"></i>
+							Quản lí Role
+						</a>
+					</li>
+				}
+				@if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Employee")))
+				{
+					<li class="">
+						<a asp-area="" asp-controller="Home" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-gauge"></i> Dashboard
+						</a>
+					</li>
+					<li class="">
+						<a asp-area="" asp-controller="Customers" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-user"></i>
+							Khách hàng
+						</a>
+					</li>
+					<li class="">
+						<a asp-area="" asp-controller="Employee" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-user-tie"></i>
+							Nhân viên
+						</a>
+					</li>
+					<li class="">
+						<a asp-area="" asp-controller="Driver" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-road"></i>
+							Tài xế
+						</a>
+					</li>
+					<li class="">
+						<a asp-area="" asp-controller="Coaches" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-van-shuttle"></i>
+							Xe
+						</a>
+					</li>
+					<li class="">
+						<a asp-area="" asp-controller="Locations" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-map-location-dot"></i>
+							Địa điểm
+						</a>
+					</li>
+					<li class="">
+						<a asp-area="" asp-controller="PickLocations" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-location-dot"></i>
+							Điểm đón
+						</a>
+					</li>
+					<li class="">
+						<a asp-area="" asp-controller="Routes" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-route"></i>
+							Tuyến xe
+						</a>
+					</li>
+				}
 				<li class="">
 					<a asp-area="" asp-controller="Tickets" asp-action="SearchTicket" class="text-decoration-none px-3 py-2 d-block">
 						<i class="fa fa-ticket"></i>
 						Đặt vé xe
 					</a>
 				</li>
-				<li class="">
-					<a asp-area="" asp-controller="Tickets" asp-action="BookedTicket" class="text-decoration-none px-3 py-2 d-block">
-						<i class="fa-solid fa-clock-rotate-left"></i>
-						Vé đã đặt
-					</a>
-				</li>
+				@if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Employee") || User.IsInRole("Customer")))
+				{					
+					<li class="">
+						<a asp-area="" asp-controller="Tickets" asp-action="BookedTicket" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-clock-rotate-left"></i>
+							Vé đã đặt
+						</a>
+					</li>
+				}				
 			</ul>
 
 		</div>
