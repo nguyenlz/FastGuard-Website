@@ -174,7 +174,7 @@
 		}
 	</style>
 </head>
-<form style="display: flex; flex-direction: column;  gap: 30px;" action="/Tickets/Tickets" method="post" onsubmit="handleSubmit()">
+<form style="display: flex; flex-direction: column;  gap: 30px;" action="/Tickets/Tickets" method="get" onsubmit="handleSubmit()">
 	<div style="display: flex; gap: 30px; width: 100%;">
 		<div class="location-wrapper">
 			<label style="font-size: 31px;">Điểm đi</label>
@@ -238,7 +238,7 @@
 	const formattedDate = currentDate.toISOString().split('T')[0];
 	
 	var dInput = document.getElementById("date-input");
-	dInput.value = formattedDate;
+	// dInput.value = formattedDate;
 	// Đặt giá trị tối thiểu cho trường ngày
 	document.getElementById('date-input').min = formattedDate;	
 

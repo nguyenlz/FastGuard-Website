@@ -269,8 +269,8 @@ namespace FastGuard.Data
                     .HasColumnName("route_id");
 
                 entity.Property(e => e.SeatNo)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("seat_no");
+					.HasMaxLength(20)
+					.HasColumnName("seat_no");
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 

@@ -68,8 +68,8 @@ namespace FastGuard.Controllers
         public IActionResult Create()
         {
             ViewData["CoachId"] = new SelectList(_context.Coaches, "CoachId", "CoachId");
-            ViewData["LocationId1"] = new SelectList(_context.Locations, "LocationId", "LocationId");
-            ViewData["LocationId2"] = new SelectList(_context.Locations, "LocationId", "LocationId");
+            ViewData["LocationId1"] = new SelectList(_context.Locations, "LocationId", "LocationName");
+            ViewData["LocationId2"] = new SelectList(_context.Locations, "LocationId", "LocationName");
             return View();
         }
 

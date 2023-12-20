@@ -1,6 +1,7 @@
 ﻿using FastGuard.Data;
 using FastGuard.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +14,26 @@ namespace FastGuard.Controllers
         private readonly UserManager<ApplicationUser> _userManger;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+		private readonly IUserEmailStore<ApplicationUser> _emailStore;
+		private readonly IUserStore<ApplicationUser> _userStore;
 
-        public CustomersController(UserManager<ApplicationUser> userManger, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ApplicationDbContext context)
+		public CustomersController(UserManager<ApplicationUser> userManger, 
+            RoleManager<IdentityRole> roleManager, 
+            IConfiguration configuration,
+			IUserStore<ApplicationUser> userStore,
+
+			ApplicationDbContext context)
         {
             _userManger = userManger;
 			_roleManager = roleManager;
             _configuration = configuration;
             _context= context;
-        }
+			_emailStore = GetEmailStore();
+			_userStore = userStore;
 
-        public IActionResult Index()
+		}
+
+		public IActionResult Index()
         {
 			
 			var users = _userManger.GetUsersInRoleAsync("Customer").Result;
@@ -196,5 +207,13 @@ namespace FastGuard.Controllers
 
             return View(customer);
         }
-    }
+		private IUserEmailStore<ApplicationUser> GetEmailStore()
+		{
+			if (!_userManger.SupportsUserEmail)
+			{
+				throw new NotSupportedException("The default UI requires a user store with email support.");
+			}
+			return (IUserEmailStore<ApplicationUser>)_userStore;
+		}
+	}
 }
