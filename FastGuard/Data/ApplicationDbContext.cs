@@ -19,7 +19,7 @@ namespace FastGuard.Data
         }
         public int CreateCoach(Coach c)
         {
-            string connectionString = "server=localhost;user id=root;port=3307;database=test_fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             int rowsAffected = 0;
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -42,6 +42,70 @@ namespace FastGuard.Data
 
             return rowsAffected;
         }
+		public int CreateTicket(Ticket c)
+		{
+			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+			int rowsAffected = 0;
+
+			using (MySqlConnection connection = new MySqlConnection(connectionString))
+			{
+				connection.Open();
+
+				string sql = "insert into tickets(`user_id`, `seat_no`, `pick_location_id1`, `pick_location_id2`, `route_id`, `total_money`) values(@userid,@seat,@pick1,@pick2,@routeid,@total)";
+				using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+				{
+					cmd.Parameters.AddWithValue("userid", c.UserId);
+					cmd.Parameters.AddWithValue("seat", c.SeatNo);
+					cmd.Parameters.AddWithValue("pick1", c.PickLocationId1);
+					cmd.Parameters.AddWithValue("pick2", c.PickLocationId2);
+					cmd.Parameters.AddWithValue("routeid", c.RouteId);
+					cmd.Parameters.AddWithValue("total", c.TotalMoney);
+
+					rowsAffected = cmd.ExecuteNonQuery();
+				}
+			}
+
+			return rowsAffected;
+		}
+		public List<Models.Route> SearchRoute(int locationid1, int locationid2, string startdate)
+		{
+			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+
+			List < Models.Route > list = new List<Models.Route> ();
+
+			using (MySqlConnection conn = new MySqlConnection(connectionString))
+			{
+				conn.Open();
+
+				string str = "SELECT * from routes WHERE location_id1=@locationid1 and location_id2=@locationid2 and DATE(start_date)=@startdate";
+				MySqlCommand cmd = new MySqlCommand(str, conn);
+				cmd.Parameters.AddWithValue("locationid1", locationid1);
+				cmd.Parameters.AddWithValue("locationid2", locationid2);
+				cmd.Parameters.AddWithValue("startdate", startdate);
+
+				using (var reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						list.Add(new Models.Route()
+						{
+							RouteId = Convert.ToInt32(reader["route_id"]),
+							CoachId = Convert.ToInt32(reader["coach_id"]),
+							LocationId1 = Convert.ToInt32(reader["location_id1"]),
+							LocationId2 = Convert.ToInt32(reader["location_id2"]),
+							StartDate = Convert.ToDateTime(reader["start_date"]),
+							EndDate = Convert.ToDateTime(reader["end_date"]),
+							Price = Convert.ToSingle(reader["price"])
+					});
+					}
+					reader.Close();
+				}
+
+				conn.Close();
+			}
+
+			return list;
+		}
 		public virtual DbSet<ApplicationUser> Users { get; set; } = null!;
 		public virtual DbSet<Coach> Coaches { get; set; } = null!;
 		public virtual DbSet<Location> Locations { get; set; } = null!;
@@ -205,8 +269,9 @@ namespace FastGuard.Data
                 entity.HasIndex(e => e.PickLocationId2, "fk_pick_location2");
 
                 entity.HasIndex(e => e.RouteId, "route_id");
+				entity.Property(e => e.TotalMoney).HasColumnName("total_money");
 
-                entity.HasIndex(e => e.UserId, "user_id");
+				entity.HasIndex(e => e.UserId, "user_id");
 
                 entity.Property(e => e.InvoiceId)
                     .HasColumnType("int(11)")
@@ -230,8 +295,8 @@ namespace FastGuard.Data
                     .HasColumnName("route_id");
 
                 entity.Property(e => e.SeatNo)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("seat_no");
+					.HasMaxLength(20)
+					.HasColumnName("seat_no");
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 

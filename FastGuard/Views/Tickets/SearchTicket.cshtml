@@ -174,7 +174,7 @@
 		}
 	</style>
 </head>
-<form style="display: flex; flex-direction: column;  gap: 30px;" action="/Tickets/Tickets" method="post" onsubmit="handleSubmit()">
+<form style="display: flex; flex-direction: column;  gap: 30px;" action="/Tickets/Tickets" method="get" onsubmit="handleSubmit()">
 	<div style="display: flex; gap: 30px; width: 100%;">
 		<div class="location-wrapper">
 			<label style="font-size: 31px;">Điểm đi</label>
@@ -216,7 +216,7 @@
 
 		<div class="location-wrapper">
 			<label style="font-size: 31px;">Ngày đi</label>
-			<input type="date" id="date-input" min="" name="date"/>
+			<input type="date" id="date-input" name="startdate"/>
 			<span class="error" id="errorDate">Chọn ngày đi</span>
 		</div>
 	</div>
@@ -236,7 +236,9 @@
 
 	// Định dạng ngày thành chuỗi yyyy-MM-dd
 	const formattedDate = currentDate.toISOString().split('T')[0];
-
+	
+	var dInput = document.getElementById("date-input");
+	// dInput.value = formattedDate;
 	// Đặt giá trị tối thiểu cho trường ngày
 	document.getElementById('date-input').min = formattedDate;	
 
@@ -362,5 +364,7 @@
 		if (!hasError) {
 			event.target.submit();
 		}
+
+		console.log(dateInput);
 	}
 </script>

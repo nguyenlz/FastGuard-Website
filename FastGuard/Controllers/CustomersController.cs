@@ -14,26 +14,26 @@ namespace FastGuard.Controllers
         private readonly UserManager<ApplicationUser> _userManger;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
-        private readonly IUserEmailStore<ApplicationUser> _emailStore;
-        private readonly IUserStore<ApplicationUser> _userStore;
+		private readonly IUserEmailStore<ApplicationUser> _emailStore;
+		private readonly IUserStore<ApplicationUser> _userStore;
 
-        public CustomersController(UserManager<ApplicationUser> userManger,
-            RoleManager<IdentityRole> roleManager,
+		public CustomersController(UserManager<ApplicationUser> userManger, 
+            RoleManager<IdentityRole> roleManager, 
             IConfiguration configuration,
-            IUserStore<ApplicationUser> userStore,
+			IUserStore<ApplicationUser> userStore,
 
-            ApplicationDbContext context)
+			ApplicationDbContext context)
         {
             _userManger = userManger;
             _roleManager = roleManager;
             _configuration = configuration;
-            _context = context;
-            _emailStore = GetEmailStore();
-            _userStore = userStore;
+            _context= context;
+			_emailStore = GetEmailStore();
+			_userStore = userStore;
 
-        }
+		}
 
-        public IActionResult Index()
+		public IActionResult Index()
         {
 
             var users = _userManger.GetUsersInRoleAsync("Customer").Result;
@@ -45,26 +45,26 @@ namespace FastGuard.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetCustomerInfo(string email)
-        {
-            var user = await _userManger.FindByEmailAsync(email);
+		public async Task<IActionResult> GetCustomerInfo(string email)
+		{
+			var user = await _userManger.FindByEmailAsync(email);
 
-            if (user != null)
-            {
-                // Người dùng được tìm thấy
-                // Thực hiện các thao tác khác với người dùng tại đây
-                // Ví dụ: Trả về thông tin người dùng dưới dạng JSON
-                return Json(new { success = true, name = user.Name, phone = user.PhoneNumber });
-            }
-            else
-            {
-                // Người dùng không được tìm thấy
-                // Xử lý tình huống không tìm thấy người dùng tại đây
-                return Json(new { success = false, message = "Không tìm thấy người dùng" });
-            }
-        }
+			if (user != null)
+			{
+				// Người dùng được tìm thấy
+				// Thực hiện các thao tác khác với người dùng tại đây
+				// Ví dụ: Trả về thông tin người dùng dưới dạng JSON
+				return Json(new { success = true, name = user.Name, phone = user.PhoneNumber });
+			}
+			else
+			{
+				// Người dùng không được tìm thấy
+				// Xử lý tình huống không tìm thấy người dùng tại đây
+				return Json(new { success = false, message = "Không tìm thấy người dùng" });
+			}
+		}
 
-        [HttpPost]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id, UserName, NormalizedUserName, Email, " +
             "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
@@ -225,13 +225,13 @@ namespace FastGuard.Controllers
 
             return View(customer);
         }
-        private IUserEmailStore<ApplicationUser> GetEmailStore()
-        {
-            if (!_userManger.SupportsUserEmail)
-            {
-                throw new NotSupportedException("The default UI requires a user store with email support.");
-            }
-            return (IUserEmailStore<ApplicationUser>)_userStore;
-        }
-    }
+		private IUserEmailStore<ApplicationUser> GetEmailStore()
+		{
+			if (!_userManger.SupportsUserEmail)
+			{
+				throw new NotSupportedException("The default UI requires a user store with email support.");
+			}
+			return (IUserEmailStore<ApplicationUser>)_userStore;
+		}
+	}
 }

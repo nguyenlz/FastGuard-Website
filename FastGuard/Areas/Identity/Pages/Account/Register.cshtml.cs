@@ -112,7 +112,7 @@ namespace FastGuard.Areas.Identity.Pages.Account
 			public string ConfirmPassword { get; set; }
 
 			[Required]
-			public string? Role { get; set; }
+			public string Role { get; set; }
 			[ValidateNever]
 			public IEnumerable<SelectListItem> RoleList { get; set; }
 		}
