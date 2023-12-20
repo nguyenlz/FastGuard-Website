@@ -2,19 +2,15 @@
 @model IEnumerable<ApplicationUser>
 @inject UserManager<ApplicationUser> _userManger;
 @{
-    ViewData["Title"] = "Employee";
-   
+    ViewData["Title"] = "Nhân Viên";
 }
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Danh sách thông tin nhân viên</h3>
-    </div>
-    <!-- /.card-header -->
-    <div class="card-body">
+
+<h1>Thông tin nhân viên</h1>
 <p>
 	<a asp-action="Create">Thêm mới nhân viên</a>
 </p>
- <table id="example1" class="table table-bordered table-striped">
+
+<table class="table">
     <thead>
         <tr>
 			<th>Mã số nhân viên</th>

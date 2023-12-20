@@ -1,54 +1,52 @@
 ﻿@model Route
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Tạo Chuyến Xe";
 }
 
-<h1>Create</h1>
+<h1>Tạo Chuyến Xe</h1>
 
-<h4>Route</h4>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CoachId" class="control-label"></label>
-                <select asp-for="CoachId" class ="form-control" asp-items="ViewBag.CoachId"></select>
+                <label asp-for="CoachId" class="control-label">Biển Số Xe</label>
+                <select asp-for="CoachId" class ="form-control" asp-items="ViewBag.CoachNo"></select>
             </div>
             <div class="form-group">
-                <label asp-for="LocationId1" class="control-label"></label>
-                <select asp-for="LocationId1" class ="form-control" asp-items="ViewBag.LocationId1"></select>
+                <label asp-for="LocationId1" class="control-label">Điểm Đi</label>
+                <select asp-for="LocationId1" class="form-control" asp-items="ViewBag.LocationName1"></select>
             </div>
             <div class="form-group">
-                <label asp-for="LocationId2" class="control-label"></label>
-                <select asp-for="LocationId2" class ="form-control" asp-items="ViewBag.LocationId2"></select>
+                <label asp-for="LocationId2" class="control-label">Điểm Đến</label>
+                <select asp-for="LocationId2" class="form-control" asp-items="ViewBag.LocationName2"></select>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
+                <label asp-for="StartDate" class="control-label">Ngày Khởi Hành</label>
                 <input asp-for="StartDate" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
+                <label asp-for="EndDate" class="control-label">Ngày Đến</label>
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
+                <label asp-for="Price" class="control-label">Giá Vé</label>
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Tạo Chuyến Xe" class="btn btn-primary" /> |
+                <a asp-action="Index" class="btn btn-info">Trở Về</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -4,31 +4,31 @@
     ViewData["Title"] = "Điểm Đón";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <h1>Quản Lý Điểm Đón</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PickLocationName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PickLocationName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location.LocationId)
-            </td>
-            
-        </tr>
-}
-    </tbody>
-</table>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="col-4">Tên Thành Phố</th>
+                <th class="col-4">Điểm Đón</th>
+                <th class="col-4">Thao Tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location.LocationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PickLocationName)
+                    </td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

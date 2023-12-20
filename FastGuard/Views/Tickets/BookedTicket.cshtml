@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Ticket>
+
+
+<div class="container mt-4">
+    <h1>Vé đã đặt</h1>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Tên người đặt</th>
+                <th>Số ghế</th>
+                <th>Ngày đặt</th>
+                <th>Điểm đón</th>
+                <th>Điểm trả</th>
+                <th>Giá vé</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.UserId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SeatNo)</td>
+                    <td>@Html.DisplayFor(modelItem => item.InvoiceDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PickLocationId1)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PickLocationId2)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalMoney)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,54 +1,54 @@
 ﻿@model Route
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Chi Tiết Chuyến Xe";
 }
 
-<h1>Details</h1>
+<h1>Thông Tin Chi Tiết</h1>
 
 <div>
-    <h4>Route</h4>
+    
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
+            Ngày Khởi Hành
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.StartDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
+            Ngày Đến
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EndDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
+            Giá Vé
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
+            @Html.DisplayFor(model => model.Price)VNĐ
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Coach)
+            Biển Số Xe
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Coach.CoachId)
+            @Html.DisplayFor(model => model.Coach.CoachNo)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LocationId1Navigation)
+            Điểm Đi
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LocationId1Navigation.LocationId)
+            @Html.DisplayFor(model => model.LocationId1Navigation.LocationName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LocationId2Navigation)
+            Điểm Đến
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LocationId2Navigation.LocationId)
+            @Html.DisplayFor(model => model.LocationId2Navigation.LocationName)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.RouteId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.RouteId"class="btn btn-primary">Sửa</a> |
+    <a asp-action="Index"class="btn btn-info">Trở Về</a>
 </div>

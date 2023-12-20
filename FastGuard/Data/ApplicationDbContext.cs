@@ -193,6 +193,31 @@ namespace FastGuard.Data
 
             return rowsAffected;
         }
+		public int CreateTicket(Ticket c)
+		{
+			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+			int rowsAffected = 0;
+
+			using (MySqlConnection connection = new MySqlConnection(connectionString))
+			{
+				connection.Open();
+
+				string sql = "insert into tickets(`user_id`, `seat_no`, `pick_location_id1`, `pick_location_id2`, `route_id`, `total_money`) values(@userid,@seat,@pick1,@pick2,@routeid,@total)";
+				using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+				{
+					cmd.Parameters.AddWithValue("userid", c.UserId);
+					cmd.Parameters.AddWithValue("seat", c.SeatNo);
+					cmd.Parameters.AddWithValue("pick1", c.PickLocationId1);
+					cmd.Parameters.AddWithValue("pick2", c.PickLocationId2);
+					cmd.Parameters.AddWithValue("routeid", c.RouteId);
+					cmd.Parameters.AddWithValue("total", c.TotalMoney);
+
+					rowsAffected = cmd.ExecuteNonQuery();
+				}
+			}
+
+			return rowsAffected;
+		}
 		public List<Models.Route> SearchRoute(int locationid1, int locationid2, string startdate)
 		{
 			string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
@@ -395,8 +420,9 @@ namespace FastGuard.Data
                 entity.HasIndex(e => e.PickLocationId2, "fk_pick_location2");
 
                 entity.HasIndex(e => e.RouteId, "route_id");
+				entity.Property(e => e.TotalMoney).HasColumnName("total_money");
 
-                entity.HasIndex(e => e.UserId, "user_id");
+				entity.HasIndex(e => e.UserId, "user_id");
 
                 entity.Property(e => e.InvoiceId)
                     .HasColumnType("int(11)")
@@ -420,8 +446,8 @@ namespace FastGuard.Data
                     .HasColumnName("route_id");
 
                 entity.Property(e => e.SeatNo)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("seat_no");
+					.HasMaxLength(20)
+					.HasColumnName("seat_no");
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 

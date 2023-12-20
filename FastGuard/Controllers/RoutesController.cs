@@ -67,9 +67,9 @@ namespace FastGuard.Controllers
         // GET: Routes/Create
         public IActionResult Create()
         {
-            ViewData["CoachId"] = new SelectList(_context.Coaches, "CoachId", "CoachId");
-            ViewData["LocationId1"] = new SelectList(_context.Locations, "LocationId", "LocationId");
-            ViewData["LocationId2"] = new SelectList(_context.Locations, "LocationId", "LocationId");
+            ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo");
+            ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName");
+            ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName");
             return View();
         }
 
@@ -105,9 +105,13 @@ namespace FastGuard.Controllers
             {
                 return NotFound();
             }
-            ViewData["CoachId"] = new SelectList(_context.Coaches, "CoachId", "CoachId", route.CoachId);
-            ViewData["LocationId1"] = new SelectList(_context.Locations, "LocationId", "LocationId", route.LocationId1);
-            ViewData["LocationId2"] = new SelectList(_context.Locations, "LocationId", "LocationId", route.LocationId2);
+
+            
+            ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
+            ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
+            ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
+
+            
             return View(route);
         }
 

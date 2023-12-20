@@ -4,38 +4,46 @@
     ViewData["Title"] = "Điểm Đón";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <h1>Quản Lý Điểm Đón</h1>
+    <p>
+        <a asp-action="Create" class="btn btn-success">Tạo Điểm Đón Mới</a>
+    </p>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PickLocationName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PickLocationName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location.LocationId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PickLocationId" class="btn btn-primary">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.PickLocationId" class="btn btn-info">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.PickLocationId" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="col-4">Tên Thành Phố</th>
+                <th class="col-4">Điểm Đón</th>
+                <th class="col-4">Thao Tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location.LocationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PickLocationName)
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@item.PickLocationId" class="btn btn-primary">
+                                <i class="fas fa-edit"></i> Sửa </a>
+                            <a asp-action="Details" asp-route-id="@item.PickLocationId" class="btn btn-info">
+                                <i class="fas fa-info-circle"></i> Chi Tiết</a>
+                            <a asp-action="Delete" asp-route-id="@item.PickLocationId" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Xóa
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyETe1BzBo6UqjPUy9H7HSBktN+REMoI" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-Z2UDy3aHEA1Msz6F5xg6HIe5auXJF05IRtA1BkkfquIbNBKKaD49T4tIrK8R9dHj" crossorigin="anonymous">
