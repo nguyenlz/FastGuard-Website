@@ -181,7 +181,7 @@
 			<div class="wrapper" id="startlocation">
 				<div class="select-btn">
 					<input type="text" value="" id="startid" name="startid" style="display: none;"/>
-					<input type="text" value="Chọn điểm đi" id="start-input" readonly name="start"/>
+					<input type="text" value="Chọn điểm đi" id="start-input" readonly name="start" />
 					<i class="fa-solid fa-angle-down"></i>
 				</div>
 				<div class="custom-content">
@@ -331,8 +331,8 @@
 	function handleSubmit() {
 		event.preventDefault();		
 
-		const startInput = document.querySelector('#start-input');
-		const endInput = document.querySelector('#end-input');
+		const startInput = document.querySelector('#startlocation input');
+		const endInput = document.querySelector('#endlocation input');
 		const errorStart = document.querySelector('#errorStart');
 		const errorEnd = document.querySelector('#errorEnd');
 		const dateInput = document.querySelector('#date-input');
