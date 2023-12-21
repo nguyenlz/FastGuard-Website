@@ -69,7 +69,7 @@ namespace FastGuard.Data
 		}
 		public List<Models.Route> SearchRoute(int locationid1, int locationid2, string startdate)
 		{
-			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+			string connectionString = "server=localhost;user id=root;password=root;port=3306;database=fastguard";
 
 			List < Models.Route > list = new List<Models.Route> ();
 

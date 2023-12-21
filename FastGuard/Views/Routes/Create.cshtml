@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" onsubmit="return validateRouteForm()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CoachId" class="control-label">Biển Số Xe</label>
@@ -26,18 +26,21 @@
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label">Ngày Khởi Hành</label>
-                <input asp-for="StartDate" class="form-control" />
+                <input asp-for="StartDate" class="form-control" id="StartDateInput" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
+                <span class="error" id="StartDateError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label">Ngày Đến</label>
-                <input asp-for="EndDate" class="form-control" />
+                <input asp-for="EndDate" class="form-control" id="EndDateInput" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
+                <span class="error" id="EndDateError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label">Giá Vé</label>
-                <input asp-for="Price" class="form-control" />
+                <input asp-for="Price" class="form-control" id="PriceInput" />
                 <span asp-validation-for="Price" class="text-danger"></span>
+                <span class="error" id="PriceError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Tạo Chuyến Xe" class="btn btn-primary" /> |
@@ -50,4 +53,86 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function validateRouteForm() {
+            var StartDateInput = document.getElementById('StartDateInput');
+            var EndDateInput = document.getElementById('EndDateInput');
+            var PriceInput = document.getElementById('PriceInput');
+
+
+            var StartDateError = document.getElementById('StartDateError');
+            var EndDateError = document.getElementById('EndDateError');
+            var PriceError = document.getElementById('PriceError');
+
+
+            if (StartDateInput.value === '') {
+                event.preventDefault();
+                StartDateError.style.display = 'block';
+                return false;
+            } else {
+                StartDateError.style.display = 'none';
+            }
+
+            if (EndDateInput.value === '') {
+                event.preventDefault();
+                EndDateError.style.display = 'block';
+                return false;
+            } else {
+                EndDateError.style.display = 'none';
+            }
+
+            if (PriceInput.value === '') {
+                event.preventDefault();
+                PriceError.style.display = 'block';
+                return false;
+            } else {
+                PriceError.style.display = 'none';
+            }
+
+           
+
+            return true;
+        }
+
+
+
+
+        var PriceInput = document.getElementById('PriceInput');
+        var PriceValidation = createValidation(PriceInput);
+
+        PriceInput.addEventListener('input', function () {
+            validateField(PriceInput, PriceValidation, "Giá vé phải là số.", validatePrice);
+            updateSubmitButtonState();
+        });
+
+        function validatePrice(price) {
+            //Kiểm tra có phải số hay ko
+            var priceRegex = /^\d+(\.\d{1,2})?$/;
+            return priceRegex.test(price);
+        }
+
+        function createValidation(inputElement) {
+            return {
+                input: inputElement,
+                validation: document.querySelector(`#${inputElement.id} + .text-danger`)
+            };
+        }
+
+        function validateField(inputElement, validation, errorMessage, customValidation) {
+            var value = inputElement.value;
+            var isValid = customValidation(value);
+            if (!isValid) {
+                validation.validation.textContent = errorMessage;
+            } else {
+                validation.validation.textContent = "";
+            }
+        }
+
+        function updateSubmitButtonState() {
+            var submitButton = document.getElementById('submit');
+            var isValidPrice = validatePrice(PriceInput.value);
+
+            submitButton.disabled = !isValidPrice;
+        }
+    </script>
 }

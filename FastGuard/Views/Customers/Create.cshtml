@@ -4,114 +4,173 @@
     ViewData["Title"] = "Tạo Khách Hành Mới";
 }
 
-
-
 <h4>Tạo Khách Hành Mới</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" onsubmit="return validateCustomerForm()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" id="emailInput" class="form-control" />
+                <label asp-for="Email" class="control-label">Email</label>
+                <input asp-for="Email" id="customerEmailInput" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
+                <span class="error" id="customerEmailError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
             <div class="form-group">
                 <label asp-for="PasswordHash" class="control-label">Mật khẩu</label>
-                <input asp-for="PasswordHash" id="passwordinput" class="form-control" />
+                <input asp-for="PasswordHash" id="customerPasswordInput" class="form-control" />
                 <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                <span class="error" id="customerPasswordError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
             <div class="form-group">
-                <label asp-for="PhoneNumber"  class="control-label">Số điện thoại</label>
-                <input asp-for="PhoneNumber" id="phoneNumberInput" class="form-control" />
+                <label asp-for="PhoneNumber" class="control-label">Số điện thoại</label>
+                <input asp-for="PhoneNumber" id="customerPhoneNumberInput" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                <span class="error" id="customerPhoneNumberError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
             <div class="form-group">
                 <label asp-for="DateOfBirth" class="control-label">Ngày sinh</label>
-                <input asp-for="DateOfBirth" class="form-control" type="date" id="dob"/>
+                <input asp-for="DateOfBirth" class="form-control" type="date" id="customerDob" />
                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                <span class="error" id="customerDobError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
-            <script>
-                document.getElementById('dob').addEventListener('change', function () {
-                    const dataValue = this.value;
-                    this.value = dataValue;
-                });
-            </script>
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Tên khách hàng</label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" id="customerNameInput" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+                <span class="error" id="customerNameError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Tạo" class="btn btn-primary" /> |
                 <a asp-action="Index" class="btn btn-info">Trở Về</a>
             </div>
-            <script>
-                var emailInput = document.getElementById('emailInput');
-                var emailValidation = document.querySelector("#emailInput + .text-danger");
-                var submitButton = document.getElementById('submitButton');
-
-                emailInput.addEventListener('input', function () {
-                    var email = emailInput.value;
-                    var isValidEmail = validateEmail(email);
-                    if (!isValidEmail) emailValidation.textContent = "Invalid email address.";
-                    else emailValidation.textContent = "";
-                    submitButton.disabled = !isValidEmail;
-                });
-
-                function validateEmail(email) {
-                    var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
-                    return emailRegex.test(email);
-                }
-            </script>
-            <script>
-                var phoneNumberInput = document.getElementById('phoneNumberInput');
-                var submitButton = document.getElementById('submitButton');
-
-                phoneNumberInput.addEventListener('input', function () {
-                    var phoneNumber = phoneNumberInput.value;
-                    var isValidPhoneNumber = validatePhoneNumber(phoneNumber);
-
-                    submitButton.disabled = !isValidPhoneNumber;
-                    var emailValidation = document.querySelector("#phoneNumberInput + .text-danger");
-                    // Hiển thị thông báo nếu số điện thoại không hợp lệ
-
-                    if (!isValidPhoneNumber)
-                        emailValidation.textContent = "Invalid phone number.";
-                    else emailValidation.textContent = "";
-                });
-
-                function validatePhoneNumber(phoneNumber) {
-                    var phoneNumberRegex = /^0\d{9}$/; // Kiểm tra số điện thoại có 10 chữ số và bắt đầu bằng số 0
-                    return phoneNumberRegex.test(phoneNumber);
-                }
-            </script>
-            <script>
-                var passwordInput = document.getElementById('passwordinput');
-                var submitButton = document.getElementById('submitButton');
-                passwordInput.addEventListener('input', function () {
-                    var password = passwordInput.value;
-
-                    // Định nghĩa biểu thức chính quy để kiểm tra mật khẩu
-                    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@@#$%^&*()\-_=+\\|[\]{};:'",.<>/?]).{6,}$/;
-
-                    // Kiểm tra mật khẩu với biểu thức chính quy
-                    var isValid = regex.test(password);
-                    submitButton.disabled = !isValid;
-                    // Hiển thị thông báo lỗi nếu mật khẩu không hợp lệ
-                    var errorElement = document.querySelector("#passwordinput + .text-danger");
-                    if (!isValid)
-                        errorElement.textContent = "Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hoa, 1 chữ thường, và 1 kí tự đặc biệt.";
-                    else errorElement.textContent = '';
-                });
-            </script>
         </form>
     </div>
 </div>
-
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        function validateCustomerForm() {
+            var customerEmailInput = document.getElementById('customerEmailInput');
+            var customerPasswordInput = document.getElementById('customerPasswordInput');
+            var customerPhoneNumberInput = document.getElementById('customerPhoneNumberInput');
+            var customerDobInput = document.getElementById('customerDob');
+            var customerNameInput = document.getElementById('customerNameInput');
+
+            var customerEmailError = document.getElementById('customerEmailError');
+            var customerPasswordError = document.getElementById('customerPasswordError');
+            var customerPhoneNumberError = document.getElementById('customerPhoneNumberError');
+            var customerDobError = document.getElementById('customerDobError');
+            var customerNameError = document.getElementById('customerNameError');
+
+            if (customerEmailInput.value === '') {
+                event.preventDefault();
+                customerEmailError.style.display = 'block';
+                return false; 
+            } else {
+                customerEmailError.style.display = 'none';
+            }
+
+            if (customerPasswordInput.value === '') {
+                event.preventDefault();
+                customerPasswordError.style.display = 'block';
+                return false; 
+            } else {
+                customerPasswordError.style.display = 'none';
+            }
+
+            if (customerPhoneNumberInput.value === '') {
+                event.preventDefault();
+                customerPhoneNumberError.style.display = 'block';
+                return false; 
+            } else {
+                customerPhoneNumberError.style.display = 'none';
+            }
+
+            if (customerDobInput.value === '') {
+                event.preventDefault();
+                customerDobError.style.display = 'block';
+                return false; 
+            } else {
+                customerDobError.style.display = 'none';
+            }
+
+            if (customerNameInput.value === '') {
+                event.preventDefault();
+                customerNameError.style.display = 'block';
+                return false; 
+            } else {
+                customerNameError.style.display = 'none';
+            }
+
+            return true; 
+        }
+
+        var emailInput = document.getElementById('customerEmailInput');
+        var emailValidation = createValidation(emailInput);
+
+        emailInput.addEventListener('input', function () {
+            validateField(emailInput, emailValidation, "Mail không hợp lệ.", validateEmail);
+            updateSubmitButtonState();
+        });
+
+
+        var phoneNumberInput = document.getElementById('customerPhoneNumberInput');
+        var phoneNumberValidation = createValidation(phoneNumberInput);
+
+        phoneNumberInput.addEventListener('input', function () {
+            validateField(phoneNumberInput, phoneNumberValidation, "Số điện thoại không hợp lệ.", validatePhoneNumber);
+            updateSubmitButtonState();
+        });
+
+        var passwordInput = document.getElementById('customerPasswordInput');
+        var passwordValidation = createValidation(passwordInput);
+
+        passwordInput.addEventListener('input', function () {
+            validateField(passwordInput, passwordValidation, "Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hoa, 1 chữ thường, và 1 kí tự đặc biệt.", validatePassword);
+            updateSubmitButtonState();
+        });
+
+        function createValidation(inputElement) {
+            return {
+                input: inputElement,
+                validation: document.querySelector(`#${inputElement.id} + .text-danger`)
+            };
+        }
+
+        function validateField(inputElement, validation, errorMessage, customValidation) {
+            var value = inputElement.value;
+            var isValid = customValidation(value);
+            if (!isValid) {
+                validation.validation.textContent = errorMessage;
+            } else {
+                validation.validation.textContent = "";
+            }
+        }
+
+        function validateEmail(email) {
+            var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/; 
+            return emailRegex.test(email);
+        }
+
+
+        function validatePhoneNumber(phoneNumber) {
+            var phoneNumberRegex = /^0\d{9}$/; // Kiểm tra số điện thoại có 10 chữ số và bắt đầu bằng số 0
+            return phoneNumberRegex.test(phoneNumber);
+        }
+
+        function validatePassword(password) {
+            // Định nghĩa biểu thức chính quy để kiểm tra mật khẩu
+            var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@@#$%^&*()\-_=+\\|[\]{};:'",.<>/?]).{6,}$/;
+            // Kiểm tra mật khẩu với biểu thức chính quy
+            return regex.test(password);
+        }
+
+        function updateSubmitButtonState() {
+            var submitButton = document.getElementById('submit');
+            var isValidEmail = validateEmail(emailInput.value);
+            var isValidPhoneNumber = validatePhoneNumber(phoneNumberInput.value);
+            var isValidPassword = validatePassword(passwordInput.value);
+            submitButton.disabled = !isValidEmail || !isValidPhoneNumber || !isValidPassword;
+        }
+    </script>
 }
