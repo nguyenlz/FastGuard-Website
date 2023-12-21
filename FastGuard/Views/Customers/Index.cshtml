@@ -4,18 +4,23 @@
     ViewData["Title"] = "Danh sách khách hàng";
 }
 
-<div class="container mt-4">
-    <h1>Danh sách khách hàng</h1>
-    <p>
-        <a asp-action="Create" class="btn btn-success">Thêm mới khách hàng</a>
-    </p>
-    <table class="table table-bordered table-striped">
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Danh sách thông tin khách hàng</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+<p>
+	<a asp-action="Create">Thêm mới khách hàng</a>
+</p>
+
+<div style="width: 100%;">
+            <table id="example1" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>#</th>
                 <th>Tên khách hàng</th>
-                <th>User name</th>
-                <th>Email</th>
+                <th>Email/Username</th>
                 <th>Số điện thoại</th>
                 <th>Ngày sinh</th>
                 <th>Chức năng</th>
@@ -27,7 +32,6 @@
                 <tr>
                     <td>@(index + 1)</td> 
                     <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.UserName)</td>
                     <td>@Html.DisplayFor(modelItem => item.Email)</td>
                     <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
                     <td>
@@ -57,5 +61,5 @@
         </tbody>
     </table>
 </div>
-
-
+    </div>
+</div>

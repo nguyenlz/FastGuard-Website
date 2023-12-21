@@ -11,8 +11,8 @@
         <form asp-action="Create" onsubmit="return validateCustomerForm()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label">Email</label>
-                <input asp-for="Email" id="customerEmailInput" class="form-control" />
+                <label asp-for="Email" class="control-label">Username/Email</label>
+                <input asp-for="Email" id="emailInput" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
                 <span class="error" id="customerEmailError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
@@ -158,12 +158,41 @@
             return phoneNumberRegex.test(phoneNumber);
         }
 
-        function validatePassword(password) {
-            // Định nghĩa biểu thức chính quy để kiểm tra mật khẩu
-            var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@@#$%^&*()\-_=+\\|[\]{};:'",.<>/?]).{6,}$/;
-            // Kiểm tra mật khẩu với biểu thức chính quy
-            return regex.test(password);
-        }
+                    // Định nghĩa biểu thức chính quy để kiểm tra mật khẩu
+                    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
+
+                    // Kiểm tra mật khẩu với biểu thức chính quy
+                    var isValid = regex.test(password);
+                    submitButton.disabled = !isValid;
+                    // Hiển thị thông báo lỗi nếu mật khẩu không hợp lệ
+                    var errorElement = document.querySelector("#passwordinput + .text-danger");
+                    if (!isValid)
+                        errorElement.textContent = "Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hoa, 1 chữ thường và 1 kí tự không phải chữ và số.";
+                    else errorElement.textContent = '';
+                });
+            </script>
+            <script>
+                var submitButton = document.getElementById('submitButton');
+                var isEmailExists = @ViewData["ErrorCode"].ToString(); // Bọc giá trị trong dấu nháy đơn hoặc nháy kép
+                var emailValidation = document.querySelector("#emailInput + .text-danger");
+
+                // Nếu địa chỉ email đã tồn tại, hiển thị thông báo cảnh báo
+                if (isEmailExists == '0') {
+                    emailValidation.textContent = "Email đã tồn tại";
+                    submitButton.disabled = true;
+                }
+                else {
+                    emailValidation.textContent = "";
+                    submitButton.disabled = false;
+                }
+            </script>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Quay lại trang thông tin</a>
+</div>
 
         function updateSubmitButtonState() {
             var submitButton = document.getElementById('submit');
