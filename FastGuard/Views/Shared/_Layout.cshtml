@@ -22,7 +22,7 @@
 	<link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
 	<!-- JQVMap -->
 	<link rel="stylesheet" href="~/plugins/jqvmap/jqvmap.min.css">
-	<!-- Theme style -->
+	<!-- Theme style file nay lam loi font -->
 	<link rel="stylesheet" href="~/dist/css/adminlte.min.css">
 	<!-- overlayScrollbars -->
 	<link rel="stylesheet" href="~/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
@@ -44,7 +44,7 @@
 		}
 		/* body
 		{
-			//background-image: linear-gradient( 135deg, #E2B0FF 10%, #9F44D3 100%);
+			background-image: linear-gradient( 109.6deg, rgba(177,173,219,1) 11.2%, rgba(245,226,226,1) 91.1% );
 		} */
 		.sidebar {
 			background: linear-gradient(360deg, rgba(142,45,226,1) 32%, rgba(74,0,224,1) 100%);
@@ -78,8 +78,9 @@
 	</style>
 </head>
 <body>
-	<div style="display: flex; height: 100vh;">		
-		<div class="sidebar" id="side_nav">
+	@* thẻ này bị làm lỗi  *@
+	<div class="NOLUNGTUNG" style="display: flex; overflow: hidden ">
+		<div class="sidebar" id="side_nav" style="position:fixed; height: 100%; overflow: hidden">
 			<div class="header-box px-2 pt-2 pb-4 d-flex justify-content-between" style="align-items: center;">
 				<h1 class="fs-4">
 					<span style="color: white" class="fa-solid fa-bus"></span> <span class="text-white">FastGuard</span>
@@ -89,7 +90,7 @@
 				</button>							
 			</div>
 
-			<ul class="list-unstyled px-2">
+			<ul class="list-unstyled px-2" style="height: 100%;">
 				@if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin"))){
 					<li class="">
 						<a asp-area="" asp-controller="AppRoles" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
@@ -102,7 +103,7 @@
 				{
 					<li class="">
 						<a asp-area="" asp-controller="Home" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-							<i class="fa-solid fa-gauge"></i> Dashboard
+							<i class="fa-solid fa-gauge NOLUNGTUNG"></i> Dashboard
 						</a>
 					</li>
 					<li class="">
@@ -165,7 +166,6 @@
 				}				
 			</ul>
 		</div>
-
 		<div class="content">
 			<header>
 				<button class="btn close-btn px-1 py-0 text-white" style="visibility: hidden; margin-left: 5px; font-size: 20px; font-weight: bold;">
@@ -189,7 +189,7 @@
 	</div>
 
 	
-
+	
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
