@@ -1,5 +1,6 @@
 ﻿using FastGuard.Data;
 using FastGuard.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,7 +12,9 @@ using System.Threading.Tasks;
 
 namespace FastGuard.Controllers
 {
-    public class PickLocationsController : Controller
+	[Authorize(Roles = "Admin, Employee")]
+
+	public class PickLocationsController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
