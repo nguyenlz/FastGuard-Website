@@ -36,33 +36,46 @@ namespace FastGuard.Controllers
 
 		public IActionResult Create()
 		{
-			return View();
+            ViewData["ErrorCode"] = 1;
+            return View();
 		}
 
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id, UserName, NormalizedUserName, Email, " +
-		"NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
-			"PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
-			"Name")] ApplicationUser employee)
-		{
-			if (employee != null)
-			{
-				var result = await _userManger.CreateAsync(employee, employee.PasswordHash);
-			}
-			employee.UserName = employee.Email;
-			if (await _roleManager.RoleExistsAsync("Employee"))
-			{
-				_context.Add(employee);
-				await _context.SaveChangesAsync();
-				await _userManger.AddToRoleAsync(employee, "Employee");
-			}
-			return RedirectToAction(nameof(Index));
-		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id, UserName, NormalizedUserName, Email, " +
+                 "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
+                 "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
+                 "Name,salary")] ApplicationUser employee)
+        {
+            ViewData["ErrorCode"] = 1;
+            bool check = _context.checkExistUser(employee.Email);
+            if (check)
+            {
+                ViewData["ErrorCode"] = 0;
+                return View("Create");
+            }
+            else
+            {
+                employee.UserName = employee.Email;
+                if (await _roleManager.RoleExistsAsync("Employee"))
+                {
 
-		// GET: Driver/Delete/5
-		public async Task<IActionResult> Delete(string? id)
+                    _context.Add(employee);
+                    var result = await _userManger.AddPasswordAsync(employee, employee.PasswordHash);
+                    var passwordHasher = new PasswordHasher<ApplicationUser>();
+                    employee.PasswordHash = passwordHasher.HashPassword(employee, employee.PasswordHash);
+                    await _context.SaveChangesAsync();
+                    await _userManger.AddToRoleAsync(employee, "Employee");
+
+                }
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+
+        // GET: Driver/Delete/5
+        public async Task<IActionResult> Delete(string? id)
 		{
 			if (id == null || _context.Users == null)
 			{
@@ -107,8 +120,8 @@ namespace FastGuard.Controllers
 		// GET: Coaches/Edit/5
 		public async Task<IActionResult> Edit(string id)
 		{
-
-			if (id == null || _context.Users == null)
+            ViewData["EditCodeEdit"] = 1;
+            if (id == null || _context.Users == null)
 			{
 				return NotFound();
 			}
@@ -122,69 +135,78 @@ namespace FastGuard.Controllers
 			return View(employee);
 		}
 
-		// POST: Coaches/Edit/5
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(string id, [Bind("Id, UserName, NormalizedUserName, Email, " +
-	"NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
-	"PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
-	"Name")] ApplicationUser employee)
-		{
-			employee.UserName = employee.Email;
+        // POST: Coaches/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("Id, UserName, NormalizedUserName, Email, " +
+        "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
+        "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
+        "Name,salary")] ApplicationUser employee)
+        {
+            employee.UserName = employee.Email;
+            ViewData["EditCodeEdit"] = 1;
 
-			if (id != employee.Id)
-			{
-				return NotFound();
-			}
+            bool check = _context.checkExistUserEdit(employee.Id, employee.Email);
+            if (check)
+            {
+                ViewData["EditCodeEdit"] = 0;
+                return View("Edit", employee);
+            }
+            else
+            {
+                if (id != employee.Id)
+                {
+                    return NotFound();
+                }
 
-			var existingUser = await _userManger.FindByIdAsync(id);
-			if (existingUser == null)
-			{
-				return NotFound();
-			}
+                var existingUser = await _userManger.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Id == employee.Id);
+                if (existingUser == null)
+                {
+                    return NotFound();
+                }
 
-			if (existingUser.ConcurrencyStamp != employee.ConcurrencyStamp)
-			{
-				// Xung đột xảy ra, giữ lại giá trị ConcurrencyStamp của người dùng trong cơ sở dữ liệu
-				employee.ConcurrencyStamp = existingUser.ConcurrencyStamp;
-			}
-			else
-			{
-				// Không có xung đột, cập nhật giá trị ConcurrencyStamp mới
-				employee.ConcurrencyStamp = Guid.NewGuid().ToString();
-			}
+                if (existingUser.ConcurrencyStamp != employee.ConcurrencyStamp)
+                {
 
-			// Kiểm tra xem có đối tượng nào khác đang được theo dõi trong DbContext có cùng Id như employee không
-			var trackedUser = _context.Set<ApplicationUser>().Local.SingleOrDefault(u => u.Id == employee.Id);
-			if (trackedUser != null)
-			{
-				_context.Entry(trackedUser).State = EntityState.Detached;
-			}
+                    employee.ConcurrencyStamp = existingUser.ConcurrencyStamp;
+                }
+                else
+                {
+                    // Không có xung đột, cập nhật giá trị ConcurrencyStamp mới
+                    employee.ConcurrencyStamp = Guid.NewGuid().ToString();
+                }
+                // Kiểm tra xem có đối tượng nào khác đang được theo dõi trong DbContext có cùng Id như driver không
+                var trackedUser = _context.Set<ApplicationUser>().Local.SingleOrDefault(u => u.Id == employee.Id);
+                if (trackedUser != null)
+                {
+                    _context.Entry(trackedUser).State = EntityState.Detached;
+                }
 
-			try
-			{
-				_context.Update(employee);
+                try
+                {
+                    var newPass = employee.PasswordHash;
+                    var CurrentDriver = await _userManger.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Id == employee.Id);
+                    if (CurrentDriver != null)
+                    employee.PasswordHash = CurrentDriver.PasswordHash;
+                    _context.Update(employee);
+                    await _userManger.UpdateAsync(employee);
+                    var token = await _userManger.GeneratePasswordResetTokenAsync(employee);
+                    var result = await _userManger.ResetPasswordAsync(employee, token, newPass);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    ModelState.AddModelError("", "Concurrency conflict occurred. Please try again.");
+                    return View(employee);
+                }
+                return RedirectToAction(nameof(Index));
+            }
+        }
 
-				var token = await _userManger.GeneratePasswordResetTokenAsync(employee);
-
-				var result = await _userManger.ResetPasswordAsync(employee, token, employee.PasswordHash);
-				await _context.SaveChangesAsync();
-			}
-			catch (DbUpdateConcurrencyException)
-			{
-				// Xử lý xung đột xảy ra trong quá trình cập nhật
-				// Thực hiện các bước khác để xử lý xung đột
-				// Ví dụ: Truy vấn lại dữ liệu và thử lại quá trình cập nhật
-				ModelState.AddModelError("", "Concurrency conflict occurred. Please try again.");
-				return View(employee);
-			}
-			return RedirectToAction(nameof(Index));
-		}
-
-		// GET: Driver/Details/5
-		public async Task<IActionResult> Details(string? id)
+        // GET: Driver/Details/5
+        public async Task<IActionResult> Details(string? id)
 		{
 			if (id == null || _context.Users == null)
 			{

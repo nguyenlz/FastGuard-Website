@@ -27,41 +27,51 @@ namespace FastGuard.Controllers
 
         public IActionResult Index()
         {
+         
             List<int> list = new List<int>();
             // lấy số lượng nhân viên 
             var listEmployeeTask = _userManager.GetUsersInRoleAsync("Employee");
             listEmployeeTask.Wait(); // Đợi kết quả trả về
             var listEmployee = listEmployeeTask.Result;
-            list.Add( listEmployee.Count);
+            //list.Add( listEmployee.Count);
+            ViewData["NhanVien"] = listEmployee.Count;
 
             //lấy số lượng khách hàng 
             var listCustomerTask = _userManager.GetUsersInRoleAsync("Customer");
             listCustomerTask.Wait(); // Đợi kết quả trả về
             var listCustomer = listCustomerTask.Result;
-            list.Add(listCustomer.Count);
+            //list.Add(listCustomer.Count);
+            ViewData["KhachHang"] = listCustomer.Count;
 
             // lấy số lượng tài xế 
             var listDriverTask = _userManager.GetUsersInRoleAsync("Driver");
             listDriverTask.Wait(); // Đợi kết quả trả về
             var listDriver = listDriverTask.Result;
-            list.Add(listDriver.Count);
+            //list.Add(listDriver.Count);
+            ViewData["TaiXe"] = listDriver.Count;
 
             // lấy số lượng xe 
-            list.Add(_context.countCoach());
+            //list.Add(_context.countCoach());
+            ViewData["Xe"] = _context.countCoach();
 
             // lay so luong diem doan (pick location)
-            list.Add(_context.countPickLocation());
+            //list.Add(_context.countPickLocation());
+            ViewData["DiemDon"] = _context.countPickLocation();
 
             // lay so luong dia diem 
-            list.Add(_context.countLocation());
+            //list.Add(_context.countLocation());
+            ViewData["DiaDiem"] = _context.countLocation();
 
             // lay so tuyen (routes)
-            list.Add(_context.countRoutes());
+            //list.Add(_context.countRoutes());
+            ViewData["SoTuyen"] = _context.countRoutes();
+
 
             // lay so luong ve
-            list.Add(_context.countTicket());
+            //list.Add(_context.countTicket());
+            ViewData["VeXe"]= _context.countTicket();
 
-            return View(list);
+            return View(_context.GetRevenue());
         }
 
         public IActionResult Privacy()

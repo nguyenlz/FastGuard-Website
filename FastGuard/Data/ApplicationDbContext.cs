@@ -18,6 +18,78 @@ namespace FastGuard.Data
         {
         }
 
+        public List<object> GetRevenue()
+        {
+            List<object> list = new List<object>();
+            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT YEAR(invoice_date) AS 'year', MONTH(invoice_date) AS 'month', SUM(total_money) AS 'total_amount' FROM tickets GROUP BY YEAR(invoice_date), MONTH(invoice_date) ORDER BY YEAR(invoice_date), MONTH(invoice_date);";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var ob = new
+                        {
+                            thang = Convert.ToInt32(reader["month"]),
+                            nam = Convert.ToInt32(reader["year"]),
+                            doanhThu = Convert.ToDouble(reader["total_amount"])/100
+                        };
+                        list.Add(ob);
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return list;
+        }
+
+        public bool checkCustomerWithTicket(string CustomerId)
+        {
+            bool check = false;
+            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT *  FROM aspnetusers a JOIN tickets c ON a.Id=c.user_id where c.user_id=@CUSTOMERID";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("CUSTOMERID", CustomerId);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        check = true;
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return check;
+        }
+        public bool checkDriverWithCoach(string driverId)
+        {
+            bool check = false;
+            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT *  FROM aspnetusers a JOIN coaches c ON a.Id=c.user_id where c.user_id=@DRIVERID";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("DRIVERID", driverId);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        check = true;
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return check;
+        }
         public bool checkExistUserEdit(string Id,string email)
         {
             bool check = false;

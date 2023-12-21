@@ -20,8 +20,9 @@
 		<tr>
 			<th>Mã số tài xế</th>
 			<th>Tên tài xế</th>
-			<th>Email/User name</th>
+			<th>Email/Username</th>
 			<th>Số điện thoại</th>
+			<th>Lương tài xế</th>
 			<th>Ngày sinh</th>
 			<th>Chức năng </th>
 		</tr>
@@ -34,7 +35,7 @@
 				<td>@Html.DisplayFor(modelItem=>item.Name)</td>
 				<td>@Html.DisplayFor(modelItem=>item.Email)</td>
 				<td>@Html.DisplayFor(modelItem=>item.PhoneNumber)</td>
-
+				<td>@Html.DisplayFor(modelItem=>item.salary)</td>
 				<td>
 					@{
 						if (item.DateOfBirth != null)

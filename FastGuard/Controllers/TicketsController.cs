@@ -33,7 +33,7 @@ namespace FastGuard.Controllers
 
 			List<Ticket> bookedTickets = new List<Ticket>();
 
-			if (await _userManager.IsInRoleAsync(user, "Customer"))
+			if (user != null && await _userManager.IsInRoleAsync(user, "Customer"))
 			{
 				// Lấy danh sách vé đã đặt của khách hàng
 				bookedTickets = await _context.Tickets

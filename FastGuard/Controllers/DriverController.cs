@@ -51,7 +51,7 @@ namespace FastGuard.Controllers
         public async Task<IActionResult> Create([Bind("Id, UserName, NormalizedUserName, Email, " +
                  "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
                  "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
-                 "Name")] ApplicationUser driver)
+                 "Name,salary")] ApplicationUser driver)
         {
             ViewData["ErrorCode"] = 1;
             bool check = _context.checkExistUser(driver.Email);
@@ -102,11 +102,22 @@ namespace FastGuard.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+            var driver = await _context.Users.FindAsync(id);
+            
+            bool check = _context.checkDriverWithCoach(id);
+            ViewData["ErrorDelete"] = "";
+            if (check)
+            {
+                ViewData["ErrorDelete"] = "Không thể xóa tài xế, tài xế đang phụ trách xe";
+                return View("Delete",driver);
+            }
+
+
             if (_context.Users == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Driver'  is null.");
             }
-            var driver = await _context.Users.FindAsync(id);
+           
             if (driver != null)
             {
                 _context.Users.Remove(driver);
@@ -148,7 +159,7 @@ namespace FastGuard.Controllers
         public async Task<IActionResult> Edit(string id, [Bind("Id, UserName, NormalizedUserName, Email, " +
         "NormalizedEmail, EmailConfirmed, PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumber, " +
         "PhoneNumberConfirmed, TwoFactorEnabled, LockoutEnd,LockoutEnabled, AccessFailedCount, DateOfBirth, Discriminator, " +
-        "Name")] ApplicationUser driver)
+        "Name,salary")] ApplicationUser driver)
         {
             driver.UserName = driver.Email;
             ViewData["EditCodeEdit"] = 1;
@@ -193,7 +204,8 @@ namespace FastGuard.Controllers
                 {
                     var newPass = driver.PasswordHash;
                     var CurrentDriver = await _userManger.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Id == driver.Id);
-                    driver.PasswordHash = CurrentDriver.PasswordHash;
+                    if (CurrentDriver != null)
+                        driver.PasswordHash = CurrentDriver.PasswordHash;
                     _context.Update(driver);
                     await _userManger.UpdateAsync(driver);
                     var token = await _userManger.GeneratePasswordResetTokenAsync(driver);

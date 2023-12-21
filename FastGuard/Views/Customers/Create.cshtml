@@ -93,7 +93,7 @@
                     var password = passwordInput.value;
 
                     // Định nghĩa biểu thức chính quy để kiểm tra mật khẩu
-                    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@@#$%^&*()\-_=+\\|[\]{};:'",.<>/?]).{6,}$/;
+                    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
 
                     // Kiểm tra mật khẩu với biểu thức chính quy
                     var isValid = regex.test(password);
@@ -101,9 +101,24 @@
                     // Hiển thị thông báo lỗi nếu mật khẩu không hợp lệ
                     var errorElement = document.querySelector("#passwordinput + .text-danger");
                     if (!isValid)
-                        errorElement.textContent = "Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hoa, 1 chữ thường, và 1 kí tự đặc biệt.";
+                        errorElement.textContent = "Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hoa, 1 chữ thường và 1 kí tự không phải chữ và số.";
                     else errorElement.textContent = '';
                 });
+            </script>
+            <script>
+                var submitButton = document.getElementById('submitButton');
+                var isEmailExists = @ViewData["ErrorCode"].ToString(); // Bọc giá trị trong dấu nháy đơn hoặc nháy kép
+                var emailValidation = document.querySelector("#emailInput + .text-danger");
+
+                // Nếu địa chỉ email đã tồn tại, hiển thị thông báo cảnh báo
+                if (isEmailExists == '0') {
+                    emailValidation.textContent = "Email đã tồn tại";
+                    submitButton.disabled = true;
+                }
+                else {
+                    emailValidation.textContent = "";
+                    submitButton.disabled = false;
+                }
             </script>
         </form>
     </div>

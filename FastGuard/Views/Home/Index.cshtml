@@ -1,7 +1,8 @@
-﻿@model List<int>;
+﻿@model List<object>;
 @{
     ViewData["Title"] = "Home Page";
-    List<int> list = Model; // 0- nhan vien, 1- khach hang,2-tai xe,3-xe,4-pick location,5-dia diem(location),6-so tuyen(route),7-so ve
+   // var list = ViewData["Dem"]; // 0- nhan vien, 1- khach hang,2-tai xe,3-xe,4-pick location,5-dia diem(location),6-so tuyen(route),7-so ve
+   
 }
 
 <!-- Google Font: Source Sans Pro -->
@@ -11,14 +12,18 @@
 <!-- Theme style -->
 @* <link rel="stylesheet" href="~/dist/css/adminlte.min.css"> *@
 <link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
+
+
 <br />
+
+
        <!-- Small boxes (Stat box) -->
 <div class="row">
     <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box bg-info">
             <div class="inner">
-                <h3>@list[1]</h3>
+                <h3> @ViewData["KhachHang"].ToString() </h3>
 
                 <p>Khách hàng</p>
             </div>
@@ -35,7 +40,7 @@
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>   @list[0] @* <sup style="font-size: 20px">%</sup> *@</h3>
+                <h3>  @ViewData["NhanVien"].ToString() </h3>
 
                 <p>
                    Nhân viên 
@@ -54,7 +59,7 @@
         <!-- small box -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>@list[2]</h3>
+                <h3> @ViewData["TaiXe"].ToString() </h3>
 
                 <p>Tài xế</p>
             </div>
@@ -71,7 +76,7 @@
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>@list[3]</h3>
+                <h3> @ViewData["Xe"].ToString()</h3>
 
                 <p>Xe</p>
             </div>
@@ -87,7 +92,7 @@
         <!-- small box -->
         <div class="small-box bg-info">
             <div class="inner">
-                <h3>@list[5]</h3>
+                <h3> @ViewData["DiaDiem"].ToString()</h3>
 
                 <p>Địa điểm</p>
             </div>
@@ -104,7 +109,7 @@
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>@list[6]</h3>
+                <h3> @ViewData["SoTuyen"].ToString()</h3>
 
                 <p>Tuyến xe</p>
             </div>
@@ -121,7 +126,7 @@
         <!-- small box -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>@list[7]</h3>
+                <h3>@ViewData["VeXe"].ToString()</h3>
 
                 <p>Đặt vé xe</p>
             </div>
@@ -138,9 +143,9 @@
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>@list[4]</h3>
+                <h3>@ViewData["DiemDon"].ToString()</h3>
 
-                <p>Điểm đón</p>
+                <p>Điểm đón   </p>
             </div>
             <div class="icon">
                 <i class="fa-solid fa-location-dot"></i>
@@ -154,122 +159,7 @@
 <div class="row">
 </div>
 
-@* <div class="card card-info">
-    <div class="card-header">
-        <h3 class="card-title">Line Chart</h3>
 
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-            </button>
-            <button type="button" class="btn btn-tool" data-card-widget="remove">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="chart">
-            <canvas id="lineChart" style="min-height: 220px; height: 220px; max-height: 220px; max-width: 100%;"></canvas>
-        </div>
-    </div>
-</div>
-
-
-<!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- ChartJS -->
-<script src="../../plugins/chart.js/Chart.min.js"></script>
-<!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../../dist/js/demo.js"></script>
-<!-- Page specific script -->
-<script>
-    $(function () {
-        /* ChartJS
-     * -------
-     * Here we will create a few charts using ChartJS
-     */
-
-        //--------------
-        //- AREA CHART -
-        //--------------
-
-        // Get context with jQuery - using jQuery's .get() method.
-        var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
-
-        var areaChartData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'Digital Goods',
-                    backgroundColor: 'rgba(60,141,188,0.9)',
-                    borderColor: 'rgba(60,141,188,0.8)',
-                    pointRadius: false,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(60,141,188,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(60,141,188,1)',
-                    data: [28, 48, 40, 19, 86, 27, 90]
-                },
-                {
-                    label: 'Electronics',
-                    backgroundColor: 'rgba(210, 214, 222, 1)',
-                    borderColor: 'rgba(210, 214, 222, 1)',
-                    pointRadius: false,
-                    pointColor: 'rgba(210, 214, 222, 1)',
-                    pointStrokeColor: '#c1c7d1',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                    data: [65, 59, 80, 81, 56, 55, 40]
-                },
-            ]
-        }
-
-        var areaChartOptions = {
-            maintainAspectRatio: false,
-            responsive: true,
-            legend: {
-                display: false
-            },
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        display: false,
-                    }
-                }],
-                yAxes: [{
-                    gridLines: {
-                        display: false,
-                    }
-                }]
-            }
-        }
-
-        // This will get the first returned node in the jQuery collection.
-        new Chart(areaChartCanvas, {
-            type: 'line',
-            data: areaChartData,
-            options: areaChartOptions
-        })
-        //-------------
-        //- LINE CHART -
-        //--------------
-        var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
-        var lineChartOptions = $.extend(true, {}, areaChartOptions)
-        var lineChartData = $.extend(true, {}, areaChartData)
-        lineChartData.datasets[0].fill = false;
-        lineChartData.datasets[1].fill = false;
-        lineChartOptions.datasetFill = false
-
-        var lineChart = new Chart(lineChartCanvas, {
-            type: 'line',
-            data: lineChartData,
-            options: lineChartOptions
-        })
-</script> *@
 <div class="card card-info">
     <div class="card-header" style="background: linear-gradient(90deg, #8e2de2, #4a00e0); color: #ffffff;">
         <h3 class="card-title">Biểu đồ danh thu</h3>
@@ -289,7 +179,7 @@
         <script>
             $(document).ready(function () {
                 var yearOptions = '';
-                for (var year = 2019; year <= 2023; year++) {
+                for (var year = 2021; year <= 2023; year++) {
                     if(year==2023)
                         yearOptions += '<option selected value="' + year + '">' + year + '</option  >';
                     else
@@ -298,6 +188,7 @@
                 $('#year-select').html(yearOptions);
             });
         </script>
+        <p id="revenue-text"></p>
         <canvas id="body" style="min-height: 200px; height: 220px; max-height: 200px; max-width: 100%;"></canvas>
     </div>
 </div>
@@ -315,10 +206,35 @@
 <!-- Page specific script -->
 <script>
     $(function () {
-        var lineChartCanvas = $('#body').get(0).getContext('2d')
+        var revenueData = {
+            '2021': new Array(12).fill(0),
+            '2022': new Array(12).fill(0),
+            '2023': new Array(12).fill(0)
+        };
+
+            @foreach (var item in Model)
+            {
+            var x = (int)@item.GetType().GetProperty("thang").GetValue(@item, null) - 1;
+            var doanhThu = (double)@item.GetType().GetProperty("doanhThu").GetValue(@item, null);
+            var nam = @item.GetType().GetProperty("nam").GetValue(@item, null).ToString();
+            if (@nam == "2021")
+            {
+            @:revenueData['2021'][@x] = @doanhThu;
+                }
+            else if (@nam == "2022")
+            {
+            @:revenueData['2022'][@x]= @doanhThu
+
+        }
+            else
+            {
+            @:revenueData['2023'][@x]  =@doanhThu;
+        }
+            }
+       
+        var lineChartCanvas = $('#body').get(0).getContext('2d');
         var lineChartData = {
-            labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7',
-                'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+            labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
             datasets: [
                 {
                     label: 'Doanh thu',
@@ -329,10 +245,10 @@
                     pointBorderColor: '#4a00e0',
                     pointHoverBackgroundColor: '#8e2de2',
                     pointHoverBorderColor: '#4a00e0',
-                    data: [28, 48, 40, 19, 86, 27, 90, 11, 22, 33, 44, 55]
+                    data: revenueData['2023']
                 }
             ]
-        }
+        };
 
         var lineChartOptions = {
             maintainAspectRatio: false,
@@ -360,13 +276,19 @@
                     }
                 }]
             }
-        }
+        };
 
-        // This will get the first returned node in the jQuery collection.
-        new Chart(lineChartCanvas, {
+        var lineChart = new Chart(lineChartCanvas, {
             type: 'line',
             data: lineChartData,
             options: lineChartOptions
-        })
-    })
+        });
+
+        $('#year-select').on('change', function () {
+            var selectedYear = $(this).val();
+            lineChart.data.datasets[0].data = revenueData[selectedYear];
+            lineChart.update();
+        });
+    }
+    );
 </script>
