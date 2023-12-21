@@ -82,27 +82,24 @@
 							<i class="fa-solid fa-gauge"></i> Dashboard
 						</a>
 					</li>
-					@if ((User.IsInRole("Admin")))
-					{
-						<li class="">
-							<a asp-area="" asp-controller="Employee" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-								<i class="fa-solid fa-user-tie"></i>
-								Nhân viên
-							</a>
-						</li>
-						<li class="">
-							<a asp-area="" asp-controller="Driver" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-								<i class="fa-solid fa-road"></i>
-								Tài xế
-							</a>
-						</li>
-					}
 					<li class="">
 						<a asp-area="" asp-controller="Customers" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
 							<i class="fa-solid fa-user"></i>
 							Khách hàng
 						</a>
-					</li>					
+					</li>
+					<li class="">
+						<a asp-area="" asp-controller="Employee" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-user-tie"></i>
+							Nhân viên
+						</a>
+					</li>
+					<li class="">
+						<a asp-area="" asp-controller="Driver" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+							<i class="fa-solid fa-road"></i>
+							Tài xế
+						</a>
+					</li>
 					<li class="">
 						<a asp-area="" asp-controller="Coaches" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
 							<i class="fa-solid fa-van-shuttle"></i>

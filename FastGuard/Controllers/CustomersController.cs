@@ -1,6 +1,5 @@
 ﻿using FastGuard.Data;
 using FastGuard.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
@@ -9,8 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FastGuard.Controllers
 {
-	[Authorize(Roles = "Admin, Employee")]
-	public class CustomersController : Controller
+    public class CustomersController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManger;
