@@ -9,7 +9,6 @@ using System.Reflection.Metadata;
 
 namespace FastGuard.Controllers
 {
-    [Authorize]
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,12 +20,14 @@ namespace FastGuard.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
+        [Authorize(Roles = "Admin, Employee, Customer")]
         public async Task<IActionResult> SearchTicket()
         {
             return _context.Locations != null ?
                           View(await _context.Locations.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Locations'  is null.");
         }
+        [Authorize(Roles = "Admin, Employee, Customer")]
         public async Task<IActionResult> BookedTicket()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -55,6 +56,56 @@ namespace FastGuard.Controllers
 
             return View(bookedTickets);
         }
+
+        [Authorize(Roles = "Admin, Employee")]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.Tickets == null)
+            {
+                return NotFound();
+            }
+
+            var ticket = await _context.Tickets.FindAsync(id);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+            ViewData["PickLocationName"] = new SelectList(_context.PickLocations, "PickLocationId", "PickLocationName", ticket.PickLocationId1);
+            return View(ticket);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("LocationId,LocationName")] Location location)
+        //{
+        //    if (id != location.LocationId)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(location);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!LocationExists(location.LocationId))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(location);
+        //}
+
+        [Authorize(Roles = "Admin, Employee, Customer")]
         [HttpGet]
         public IActionResult Tickets(string start, int startid, string end, int endid, DateTime startdate)
         {
@@ -64,7 +115,8 @@ namespace FastGuard.Controllers
             List<Models.Route> list = context.SearchRoute(startid, endid, strStartDate);
             return View(list);
         }
-
+        
+        [Authorize(Roles = "Admin, Employee, Customer")]
         public async Task<IActionResult> Checkout(int routeid, string start, string end)
         {
             ViewData["start"] = start;
@@ -109,7 +161,8 @@ namespace FastGuard.Controllers
                 .FirstOrDefaultAsync(m => m.RouteId == routeid);
             return View(route);
         }
-
+        
+        [Authorize(Roles = "Admin, Employee, Customer")]
         [HttpGet]
         public async Task<IActionResult> PayResult(string cusemail, string cusphone, string cusname, string[] selectedSeats, int startid, int endid, int routeid, float price)
         {
@@ -165,6 +218,8 @@ namespace FastGuard.Controllers
             ViewData["message"] = "Đặt vé thành công";
             return View();
         }
+
+        [Authorize(Roles = "Admin, Employee, Customer")]
         public Ticket FindTicketBySeatNoAndRouteId(string seatNo, int routeId)
         {
 

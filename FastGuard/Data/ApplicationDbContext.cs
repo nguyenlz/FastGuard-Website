@@ -69,7 +69,7 @@ namespace FastGuard.Data
 		}
 		public List<Models.Route> SearchRoute(int locationid1, int locationid2, string startdate)
 		{
-			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+			string connectionString = "server=localhost;user id=root;password=root;port=3307;database=fastguard";
 
 			List < Models.Route > list = new List<Models.Route> ();
 
@@ -119,7 +119,7 @@ namespace FastGuard.Data
 			if (!optionsBuilder.IsConfigured)
 			{
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-				optionsBuilder.UseMySql("server=localhost;user id=root;port=3307;database=test_fastguard", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
+				optionsBuilder.UseMySql("server=localhost;user id=root;port=3307;database=fastguard", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
 			}
 		}
 
