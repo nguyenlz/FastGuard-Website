@@ -78,14 +78,7 @@ namespace FastGuard.Controllers
             }
         }
 
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
-            }
-
-            return View(driver);
-        }
+ 
 
 
         // GET: Driver/Delete/5

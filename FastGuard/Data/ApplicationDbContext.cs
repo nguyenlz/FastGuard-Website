@@ -267,7 +267,7 @@ namespace FastGuard.Data
         }
 		public int CreateTicket(Ticket c)
 		{
-			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+			string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
 			int rowsAffected = 0;
 
 			using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -292,7 +292,7 @@ namespace FastGuard.Data
 		}
 		public List<Models.Route> SearchRoute(int locationid1, int locationid2, string startdate)
 		{
-			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+			string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
 
 			List < Models.Route > list = new List<Models.Route> ();
 
