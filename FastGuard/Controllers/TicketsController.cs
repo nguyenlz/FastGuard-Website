@@ -39,14 +39,16 @@ namespace FastGuard.Controllers
                 bookedTickets = await _context.Tickets
                     .Where(t => t.UserId == user.Id)
                     .Include(p => p.PickLocationId1Navigation)
-                    .Include(p => p.PickLocationId2Navigation)
+					.Include(p => p.Route)
+					.Include(p => p.PickLocationId2Navigation)
                     .ToListAsync();
             }
             else if (await _userManager.IsInRoleAsync(user, "Admin") || await _userManager.IsInRoleAsync(user, "Employee"))
             {
                 // Lấy tất cả danh sách vé cho admin
                 bookedTickets = await _context.Tickets.Include(p => p.User)
-                    .Include(p => p.PickLocationId1Navigation)
+					.Include(p => p.Route)
+					.Include(p => p.PickLocationId1Navigation)
                     .Include(p => p.PickLocationId2Navigation)
                     .ToListAsync();
             }

@@ -10,6 +10,7 @@
                 <th>Tên người đặt</th>
                 <th>Số ghế</th>
                 <th>Ngày đặt</th>
+                <th>Thời gian khởi hành</th>
                 <th>Điểm đón</th>
                 <th>Điểm trả</th>
                 <th>Giá vé</th>
@@ -22,6 +23,7 @@
                     <td>@Html.DisplayFor(modelItem => item.User.Name)</td>
                     <td>@Html.DisplayFor(modelItem => item.SeatNo)</td>
                     <td>@item.InvoiceDate.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Route.StartDate.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@Html.DisplayFor(modelItem => item.PickLocationId1Navigation.PickLocationName)</td>
                     <td>@Html.DisplayFor(modelItem => item.PickLocationId2Navigation.PickLocationName)</td>
                     <td>@Html.DisplayFor(modelItem => item.TotalMoney)</td>

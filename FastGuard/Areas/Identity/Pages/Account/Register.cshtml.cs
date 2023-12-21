@@ -76,18 +76,18 @@ namespace FastGuard.Areas.Identity.Pages.Account
 		/// </summary>
 		public class InputModel
 		{
-			[Required]
+			[Required(ErrorMessage = "Tên không được để trống")]
 			[Display(Name = "Tên")]
 			public string Name { get; set; }
 
-			[Required]
+			[Required(ErrorMessage = "Ngày sinh không được để trống")]
 			[Display(Name = "Ngày sinh")]
 			public DateTime DateOfBirth { get; set; }
 			/// <summary>
 			///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
 			///     directly from your code. This API may change or be removed in future releases.
 			/// </summary>
-			[Required]
+			[Required(ErrorMessage = "Email không được để trống")]
 			[EmailAddress]
 			[Display(Name = "Email")]
 			public string Email { get; set; }
@@ -96,10 +96,10 @@ namespace FastGuard.Areas.Identity.Pages.Account
 			///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
 			///     directly from your code. This API may change or be removed in future releases.
 			/// </summary>
-			[Required]
-			[StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+			[Required(ErrorMessage = "Mật khẩu không được để trống")]
+			[StringLength(100, ErrorMessage = "Mật khẩu phải có ít nhất 6 kí tự và tối đã 100 kí tự", MinimumLength = 6)]
 			[DataType(DataType.Password)]
-			[Display(Name = "Password")]
+			[Display(Name = "Mật khẩu")]
 			public string Password { get; set; }
 
 			/// <summary>
@@ -107,8 +107,8 @@ namespace FastGuard.Areas.Identity.Pages.Account
 			///     directly from your code. This API may change or be removed in future releases.
 			/// </summary>
 			[DataType(DataType.Password)]
-			[Display(Name = "Confirm password")]
-			[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+			[Display(Name = "Xác nhận mật khẩu")]
+			[Compare("Password", ErrorMessage = "Mật khẩu phải trùng với mật khẩu ở trên")]
 			public string ConfirmPassword { get; set; }
 
 			[Required]
@@ -174,6 +174,12 @@ namespace FastGuard.Areas.Identity.Pages.Account
 					else
 					{
 						await _signInManager.SignInAsync(user, isPersistent: false);
+						
+						if (await _userManager.IsInRoleAsync(user, "Customer"))
+						{
+							// User has "Customer" role, redirect to SearchTicket action of TicketsController
+							return RedirectToAction("SearchTicket", "Tickets");
+						}
 						return LocalRedirect(returnUrl);
 					}
 				}
