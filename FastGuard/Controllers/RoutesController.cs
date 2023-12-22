@@ -31,12 +31,8 @@ namespace FastGuard.Controllers
         // GET: Routes
         public async Task<IActionResult> Index()
         {           
-           
             var applicationDbContext = _context.Routes.Include(r => r.Coach).Include(r => r.LocationId1Navigation).Include(r => r.LocationId2Navigation);
             return View(await applicationDbContext.ToListAsync());               
-           
-                
-            
         }
 
         // GET: Routes/Details/5
@@ -122,12 +118,10 @@ namespace FastGuard.Controllers
                 return NotFound();
             }
                         
-            
             ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
             ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
             ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
 
-            
             return View(route);
         }
 

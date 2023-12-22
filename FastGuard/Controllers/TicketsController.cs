@@ -10,7 +10,6 @@ using System.Reflection.Metadata;
 
 namespace FastGuard.Controllers
 {
-    [Authorize]
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
