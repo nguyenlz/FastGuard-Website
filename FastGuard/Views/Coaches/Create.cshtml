@@ -1,0 +1,146 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model Coach
+@inject UserManager<ApplicationUser> userManager
+@{
+    ViewData["Title"] = "Thêm Xe Mới";
+}
+
+<h4>Thêm mới xe</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" onsubmit="return validateCoachForm()">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CoachNo" class="control-label"> Biển số xe:</label>
+                <input asp-for="CoachNo" class="form-control" id="coachNoInput" />
+                <span asp-validation-for="CoachNo" class="text-danger"></span>
+                <span class="error" id="coachNoError" style="color: red; display: none;">Nhập dữ liệu</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label">Mã tài xế phụ trách:</label>
+                <select asp-for="UserId" class="form-control">
+                    @foreach (var user in await userManager.GetUsersInRoleAsync("Driver"))
+                    {
+                        <option value="@user.Id">@user.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Supplier" class="control-label">Tên nhà cung cấp:</label>
+                <input asp-for="Supplier" class="form-control" id="SupplierInput" />
+                <span asp-validation-for="Supplier" class="text-danger"></span>
+                <span class="error" id="SupplierError" style="color: red; display: none;">Nhập dữ liệu</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Capacity" class="control-label"> Số lượng khách chở tối đa:</label>
+                <input asp-for="Capacity" class="form-control" id="CapacityInput" />
+                <span asp-validation-for="Capacity" class="text-danger"></span>
+                <span class="error" id="CapacityError" style="color: red; display: none;">Nhập dữ liệu</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Mô tả xe:</label>
+                <input asp-for="Description" class="form-control" id="DescriptionInput" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+                <span class="error" id="DescriptionError" style="color: red; display: none;">Nhập dữ liệu</span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Tạo" class="btn btn-primary" id="submit" /> |
+                <a asp-action="Index" class="btn btn-info">Trở Về</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function validateCoachForm() {
+            var coachNoInput = document.getElementById('coachNoInput');
+            var SupplierInput = document.getElementById('SupplierInput');
+            var CapacityInput = document.getElementById('CapacityInput');
+            var DescriptionInput = document.getElementById('DescriptionInput');
+
+            var coachNoError = document.getElementById('coachNoError');
+            var SupplierError = document.getElementById('SupplierError');
+            var CapacityError = document.getElementById('CapacityError');
+            var DescriptionError = document.getElementById('DescriptionError');
+
+            if (coachNoInput.value.trim() === '') {
+                event.preventDefault();
+                coachNoError.style.display = 'block';
+                return false;
+            } else {
+                coachNoError.style.display = 'none';
+            }
+
+            if (SupplierInput.value.trim() === '') {
+                event.preventDefault();
+                SupplierError.style.display = 'block';
+                return false;
+            } else {
+                SupplierError.style.display = 'none';
+            }
+
+            if (CapacityInput.value.trim() === '') {
+                event.preventDefault();
+                CapacityError.style.display = 'block';
+                return false;
+            } else {
+                CapacityError.style.display = 'none';
+            }
+
+            if (DescriptionInput.value.trim() === '') {
+                event.preventDefault();
+                DescriptionError.style.display = 'block';
+                return false;
+            } else {
+                DescriptionError.style.display = 'none';
+            }
+
+            return true;
+        }
+
+        var coachNoInput = document.getElementById('coachNoInput');
+        var coachNoValidation = createValidation(coachNoInput);
+
+        coachNoInput.addEventListener('input', function () {
+            validateField(coachNoInput, coachNoValidation, "Biển số xe không đúng định dạng.", validateCoachNo);
+            updateSubmitButtonState();
+        });
+
+        function createValidation(inputElement) {
+            return {
+                input: inputElement,
+                validation: document.querySelector(`#${inputElement.id} + .text-danger`)
+            };
+        }
+
+        function validateField(inputElement, validation, errorMessage, customValidation) {
+            var value = inputElement.value;
+            if (value.trim() === '' || !customValidation(value)) {
+                validation.validation.textContent = errorMessage;
+            } else {
+                validation.validation.textContent = "";
+            }
+        }
+
+        function validateCoachNo(coachNo) {
+            var coachNoRegex = /^\d{2}[A-Z]\-\d{6}$/;
+            return coachNoRegex.test(coachNo.trim());
+        }
+
+        function updateSubmitButtonState() {
+            var submitButton = document.getElementById('submit');
+            var isValidCoachNo = validateCoachNo(coachNoInput.value);
+
+            // Add additional validations for other fields if needed
+
+            submitButton.disabled = !isValidCoachNo;
+        }
+
+
+    </script>
+}

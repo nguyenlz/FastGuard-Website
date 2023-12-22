@@ -1,0 +1,141 @@
+﻿@page
+@model RegisterModel
+@{
+	ViewData["Title"] = "Đăng kí";
+}
+
+<div class="d-flex flex-column w-100 align-items-center">
+	<h1>@ViewData["Title"]</h1>
+	<div class="col-md-4">
+		<form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+			<div class="w-100 text-center"><h4>Tạo tài khoản mới</h4></div>
+			<hr />
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-floating">
+				<input asp-for="Input.Name" class="form-control" autocomplete="Name" aria-required="true" />
+				<label asp-for="Input.Name"></label>
+				<span asp-validation-for="Input.Name" class="text-danger"></span>
+			</div>
+			<div class="form-floating">
+				<input asp-for="Input.DateOfBirth" type="date" class="form-control" id="date-input">
+				<label asp-for="Input.DateOfBirth"></label>
+				<span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+			</div>
+			<div class="form-floating">
+				<input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+				<label asp-for="Input.Email"></label>
+				<span asp-validation-for="Input.Email" class="text-danger"></span>
+			</div>
+			<div class="form-floating">
+				<input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+				<label asp-for="Input.Password"></label>
+				<span asp-validation-for="Input.Password" class="text-danger"></span>
+			</div>
+			<div class="form-floating">
+				<input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+				<label asp-for="Input.ConfirmPassword"></label>
+				<span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+			</div>
+			<div class="form-floating">
+				<select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select" aria-required="true">
+					<option disabled selected>Chọn Role</option>
+				</select>
+				<span asp-validation-for="Input.Role" class="text-danger"></span>
+			</div>
+			<button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Đăng kí</button>
+		</form>
+	</div>
+
+	@*     <div class="col-md-6 col-md-offset-2">
+	<section>
+	<h3>Use another service to register.</h3>
+	<hr />
+	@{
+	if ((Model.ExternalLogins?.Count ?? 0) == 0)
+	{
+	<div>
+	<p>
+	There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+	about setting up this ASP.NET application to support logging in via external services</a>.
+	</p>
+	</div>
+	}
+	else
+	{
+	<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+	<div>
+	<p>
+	@foreach (var provider in Model.ExternalLogins!)
+	{
+	<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+	}
+	</p>
+	</div>
+	</form>
+	}
+	}
+	</section>
+	</div> *@
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+	const currentDate = new Date();
+
+	// Định dạng ngày thành chuỗi yyyy-MM-dd
+	const formattedDate = currentDate.toISOString().split('T')[0];
+
+	var dInput = document.getElementById("date-input");
+	dInput.value = currentDate;
+
+	document.getElementById('date-input').max = formattedDate;	
+
+
+	function validatePassword(password) {
+		var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
+		return regex.test(password);
+	}
+
+	function handleSubmit() {
+		event.preventDefault();
+
+		const emailInput = document.querySelector('#emailInput');
+		const passInput = document.querySelector('#passInput');
+		const errorEmail = document.querySelector('#errorEmail');
+		const errorPass = document.querySelector('#errorPass');
+
+		let hasError = false;
+
+		if (emailInput.value.trim() === '') {
+			errorEmail.style.display = 'block';
+			hasError = true;
+		} else {
+			errorEmail.style.display = 'none';
+		}
+
+		const password = passInput.value;
+		if (password.trim() === '') {
+			errorPass.innerText = "Mật khẩu không được để trống";
+			errorPass.style.display = 'block';
+			hasError = true;
+		} else if (!validatePassword(password)) {
+			errorPass.innerText = "Mật khẩu chứa ít nhất 6 kí tự, tối đa 100 kí tự, chứa ít nhất 1 chữ in hoa, 1 số, 1 chữ thường và 1 kí tự đặc biệt";
+			errorPass.style.display = 'block';
+			hasError = true;
+		} else {
+			errorPass.style.display = 'none';
+		}
+
+		if (!hasError) {
+			event.target.submit();
+		}
+	}
+</script>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
+

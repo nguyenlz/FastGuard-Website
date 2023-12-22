@@ -1,0 +1,32 @@
+﻿@model PickLocation
+
+@{
+    ViewData["Title"] = "Xóa Điểm Đón";
+}
+
+<h1>Xóa Điểm Đón</h1>
+
+<h3>Bạn có chắc sẽ xóa điểm đón này chứ?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Tên Thành Phố
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Location.LocationName)
+        </dd>
+        <dt class = "col-sm-2">
+            Điểm Đón
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PickLocationName)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="PickLocationId" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-info">Trở Về</a>
+    </form>
+</div>

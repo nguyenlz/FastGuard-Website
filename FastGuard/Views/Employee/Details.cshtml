@@ -1,0 +1,66 @@
+﻿@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+
+
+<div>
+    <dl class="row">
+        <h4>Chi tiết thông tin nhân viên</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Mã số nhân viên
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+            <dt class="col-sm-2">
+                Tên nhân viên
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                Email/Username
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-2">
+                Mật khẩu
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PasswordHash)
+            </dd>
+           
+            <dt class="col-sm-2">
+                Số điện thoại
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+            <dt class="col-sm-2">
+                Lương nhân viên 
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.salary)
+            </dd>
+            <dt class="col-sm-2">
+                Ngày sinh
+            </dt>
+            <dd class="col-sm-10">
+                @{
+                    @if (Model.DateOfBirth != null)
+                    {
+                        @Model.DateOfBirth.ToString("dd-MM-yyyy")
+                    }
+                }
+            </dd>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Sửa</a> |
+    <a asp-action="Index" class="btn btn-info">Trở Về</a>
+</div>

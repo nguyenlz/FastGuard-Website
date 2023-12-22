@@ -1,0 +1,65 @@
+﻿@model IEnumerable<ApplicationUser>
+
+@{
+    ViewData["Title"] = "Danh sách khách hàng";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Danh sách thông tin khách hàng</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+<p>
+	<a asp-action="Create">Thêm mới khách hàng</a>
+</p>
+
+<div style="width: 100%;">
+            <table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Tên khách hàng</th>
+                <th>Email/Username</th>
+                <th>Số điện thoại</th>
+                <th>Ngày sinh</th>
+                <th>Chức năng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (item, index) in Model.Select((value, i) => (value, i)))
+            {
+                <tr>
+                    <td>@(index + 1)</td> 
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+                    <td>
+                        @{
+                            if (item.DateOfBirth != null)
+                            {
+                                @item.DateOfBirth.ToString("dd-MM-yyyy")
+                                ;
+                            }
+                        }
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2" role="group">
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Xóa
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">
+                                <i class="fas fa-edit"></i> Sửa
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">
+                                <i class="fas fa-info-circle"></i> Chi tiết
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+    </div>
+</div>

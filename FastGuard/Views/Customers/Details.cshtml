@@ -1,0 +1,53 @@
+﻿@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Thông Tin Khách Hàng";
+}
+
+<h1>Thông Tin Khách Hàng</h1>
+
+<div>
+    <dl class="row">
+        <h4>Khách hàng</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Mã số khách hàng 
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+            <dt class="col-sm-2">
+                Tên khách hàng
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                Email/Username
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-2">
+                Số điện thoại
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+            <dt class="col-sm-2">
+                Ngày sinh
+            </dt>
+            <dd class="col-sm-10">
+                @{
+                    @if (Model.DateOfBirth != null)
+                    {
+                        @Model.DateOfBirth.ToString("dd-MM-yyyy")
+                    }
+                }
+            </dd>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Sửa</a> |
+    <a asp-action="Index" class="btn btn-info">Trở Về</a>
+</div>

@@ -1,0 +1,140 @@
+﻿
+
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Edit";
+    
+}
+
+
+<h4>Thay Đổi Thông Tin Tài Xế</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Tên tài xế:</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email/Username</label>
+                <input asp-for="Email" id="emailInput" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+          
+            <div class="form-group">
+                <label asp-for="PasswordHash" class="control-label">Mật khẩu:</label>
+                <input asp-for="PasswordHash" id="passwordinput" class="form-control" />
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="salary" class="control-label">Lương tài xế</label>
+                <input asp-for="salary" type="number" class="form-control" />
+                <span asp-validation-for="salary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label">Số điện thoại</label>
+                <input asp-for="PhoneNumber" id="phoneNumberInput" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label">Ngày sinh:</label>
+                <input asp-for="DateOfBirth" class="form-control" id="dob"  type="date"/>
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <script>
+                document.getElementById('dob').addEventListener('change', function () {
+                    const dataValue = this.value;
+                    this.value = dataValue;
+                });
+            </script>
+            <div class="form-group">
+                <input type="submit" value="Lưu" class="btn btn-primary" /> |
+                <a asp-action="Index" class="btn btn-info">Trở Về</a>
+            </div>
+            <script>
+                var emailInput = document.getElementById('emailInput');
+                var emailValidation = document.querySelector("#emailInput + .text-danger");
+                var submitButton = document.getElementById('submitButton');
+
+                emailInput.addEventListener('input', function () {
+                    var email = emailInput.value;
+                    var isValidEmail = validateEmail(email);
+                    if (!isValidEmail) emailValidation.textContent = "Invalid email address.";
+                    else emailValidation.textContent = "";
+                    submitButton.disabled = !isValidEmail;
+                });
+
+                function validateEmail(email) {
+                    var emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+                    return emailRegex.test(email);
+                }
+            </script>
+            <script>
+                var phoneNumberInput = document.getElementById('phoneNumberInput');
+                var submitButton = document.getElementById('submitButton');
+
+                phoneNumberInput.addEventListener('input', function () {
+                    var phoneNumber = phoneNumberInput.value;
+                    var isValidPhoneNumber = validatePhoneNumber(phoneNumber);
+
+                    submitButton.disabled = !isValidPhoneNumber;
+                    var emailValidation = document.querySelector("#phoneNumberInput + .text-danger");
+                    // Hiển thị thông báo nếu số điện thoại không hợp lệ
+
+                    if (!isValidPhoneNumber)
+                        emailValidation.textContent = "Invalid phone number.";
+                    else emailValidation.textContent = "";
+                });
+
+                function validatePhoneNumber(phoneNumber) {
+                    var phoneNumberRegex = /^0\d{9}$/; // Kiểm tra số điện thoại có 10 chữ số và bắt đầu bằng số 0
+                    return phoneNumberRegex.test(phoneNumber);
+                }
+            </script>
+            <script>
+                var passwordInput = document.getElementById('passwordinput');
+                var submitButton = document.getElementById('submitButton');
+                passwordInput.addEventListener('input', function () {
+                    var password = passwordInput.value;
+
+                    // Định nghĩa biểu thức chính quy để kiểm tra mật khẩu
+                    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
+
+                    // Kiểm tra mật khẩu với biểu thức chính quy
+                    var isValid = regex.test(password);
+                    submitButton.disabled = !isValid;
+                    // Hiển thị thông báo lỗi nếu mật khẩu không hợp lệ
+                    var errorElement = document.querySelector("#passwordinput + .text-danger");
+                    if (!isValid)
+                        errorElement.textContent = "Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hoa, 1 chữ thường và 1 kí tự không phải chữ và số.";
+                    else errorElement.textContent = '';
+                });
+            </script>
+            <script>
+                var submitButton = document.getElementById('submitButton');
+                var isEmailExists = @ViewData["EditCodeEdit"].ToString();
+                var emailValidation = document.querySelector("#emailInput + .text-danger");
+
+                // Nếu địa chỉ email đã tồn tại, hiển thị thông báo cảnh báo
+                if (isEmailExists == "0") {
+                    emailValidation.textContent = "Email đã tồn tại";
+                    submitButton.disabled = true;
+                }
+                else {
+                    emailValidation.textContent = "";
+                    submitButton.disabled = false;
+                }
+            </script>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

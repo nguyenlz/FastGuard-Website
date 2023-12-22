@@ -1,0 +1,133 @@
+﻿@model IEnumerable<Route>
+
+@{
+	ViewData["Title"] = "Chọn chuyến thích hợp";
+	// string timeString = startDate.ToString("HH:mm");
+}
+<style>
+	.start-date {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.notfound {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		height: 90vh;
+	}
+	.start-date-icon {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 80%;
+		gap: 10px;
+	}
+
+		.start-date-icon hr {
+			width: 80%;
+			color: black;
+			/* border: 1px dashed black; */
+		}
+
+	.card-price {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.text-violet {
+		color: #4a00e0;
+		font-weight: bold;
+		font-size: 18px;
+		display: flex;
+		gap: 10px;
+		align-items: center;
+	}
+
+	.text-grayy-icon {
+		color: #8c8c8c;
+		font-size: 8px;
+	}
+
+	.text-grayy {
+		color: #8c8c8c;
+	}
+</style>
+@if (Model.Count() != 0)
+{
+	<h1>@ViewData["Title"]</h1>
+}
+
+@* <h3 id="searchResult">@ViewData["route"] (@Model.Count())</h3> *@
+<h3 id="searchResult"></h3>
+
+@if(Model.Count() == 0){
+	<div class="notfound">
+		<i class="fas fa-exclamation-circle fs-2"></i>
+		<h5>Không tìm thấy chuyến thích hợp</h5>
+	</div>
+
+}else{
+@foreach (var item in Model)
+{
+	<div class="card text-center px-2 my-3">
+		<div class="card-body">
+			<div class="start-date">
+				<div>@item.StartDate.ToString("HH:mm")</div>
+				<div class="start-date-icon">
+					<i class="fa-solid fa-circle"></i>
+					<hr>
+					<i class="fa-solid fa-location-dot"></i>
+				</div>
+				<div>@item.EndDate.ToString("HH:mm")</div>
+			</div>
+		</div>
+		<div class="card-footer text-muted">
+			<div class="card-price">
+				<div class="text-violet">
+					<div>@item.Price đ</div>
+					<div class="text-grayy-icon">
+						<i class="fa-solid fa-circle"></i>
+					</div>
+					<div class="text-grayy">Giường</div>
+				</div>
+				<form action="/Tickets/Checkout" method="get">
+					<input type="text" style="display: none;" name="routeid" value="@item.RouteId"/>
+					@* <input type="text" style="display: none;" name="routeStr" value="@ViewData["route"]" /> *@
+@* 						<input type="hidden" name="startid" value="2"/>
+						<input type="hidden" name="endid" value="1" /> *@
+						<input type="text" style="display: none;" name="start" id="startget" />
+						<input type="text" style="display: none;" name="end" id="endget"/>
+					<button class="btn btn-primary"
+							style="background-color: #4a00e0"
+							type="submit">
+						Chọn chuyến
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+}
+}
+<script>
+	// Lấy giá trị của tham số từ URL
+	function getURLParameter(name) {
+		name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+		var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+		var results = regex.exec(window.location.href);
+		return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+	}
+
+	var start = getURLParameter('start');
+	var end = getURLParameter('end');
+
+	document.querySelector('#startget').value = start;
+	document.querySelector('#endget').value = end;
+	document.querySelector('#searchResult').innerText = start + " - " + end + " (" + @Model.Count() + ")";
+
+</script>
+
+

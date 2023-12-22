@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Coach>
+
+@{
+    ViewData["Title"] = "Thông tin xe";
+}
+
+<h1>Thông tin xe</h1>
+
+<p>
+    <a asp-action="Create">Thêm mới xe</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+              Biển số xe 
+            </th>
+            <th>
+               Tên nhà cung cấp 
+            </th>
+            <th>
+               Số lượng khách chở tối đa 
+            </th>
+            <th>
+              Tình trạng 
+            </th>
+            <th>
+               Mô tả xe 
+            </th>
+            <th>
+                Mã tài xế phụ trách 
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CoachNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Supplier)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Capacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CoachId">Sửa</a> |
+                <a asp-action="Details" asp-route-id="@item.CoachId">Chi tiết</a> |
+                <a asp-action="Delete" asp-route-id="@item.CoachId">Xóa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

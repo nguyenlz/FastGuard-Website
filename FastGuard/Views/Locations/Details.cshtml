@@ -1,0 +1,23 @@
+﻿@model Location
+
+@{
+    ViewData["Title"] = "Chi Tiết Địa Điểm";
+}
+
+<h1>Chi Tiết Địa Điểm</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Tên Địa Điểm:
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LocationName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.LocationId" class="btn btn-primary">Sửa</a> |
+    <a asp-action="Index" class="btn btn-info">Trở Về</a>
+</div>
