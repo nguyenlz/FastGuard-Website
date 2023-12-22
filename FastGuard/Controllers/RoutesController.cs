@@ -1,5 +1,6 @@
 ﻿using FastGuard.Data;
 using FastGuard.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace FastGuard.Controllers
 {
-    public class RoutesController : Controller
+	[Authorize(Roles = "Admin, Employee")]
+	public class RoutesController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,10 +30,10 @@ namespace FastGuard.Controllers
 
         // GET: Routes
         public async Task<IActionResult> Index()
-        {
+        {           
            
-                var applicationDbContext = _context.Routes.Include(r => r.Coach).Include(r => r.LocationId1Navigation).Include(r => r.LocationId2Navigation);
-                return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = _context.Routes.Include(r => r.Coach).Include(r => r.LocationId1Navigation).Include(r => r.LocationId2Navigation);
+            return View(await applicationDbContext.ToListAsync());               
            
                 
             
@@ -119,7 +121,7 @@ namespace FastGuard.Controllers
             {
                 return NotFound();
             }
-
+                        
             
             ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
             ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);

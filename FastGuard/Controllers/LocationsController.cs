@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FastGuard.Data;
 using FastGuard.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FastGuard.Controllers
 {
-    public class LocationsController : Controller
+	[Authorize(Roles = "Admin, Employee")]
+
+	public class LocationsController : Controller
     {
         private readonly ApplicationDbContext _context;
 

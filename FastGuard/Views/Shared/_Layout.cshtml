@@ -31,7 +31,12 @@
 	<!-- summernote -->
 	<link rel="stylesheet" href="~/plugins/summernote/summernote-bs4.min.css"> 
 
+
 	<style>
+		.sidebar h1{
+			cursor: pointer;
+			user-select: none;
+		}
 		header {
 			background: radial-gradient(circle, rgba(142,45,226,1) 32%, rgba(74,0,224,1) 100%);
 			width: 100%;
@@ -78,14 +83,13 @@
 	</style>
 </head>
 <body>
-	@* thẻ này bị làm lỗi  *@
-	<div class="NOLUNGTUNG" style="display: flex; overflow: hidden ">
-		<div class="sidebar" id="side_nav" style="position:fixed; height: 100%; overflow: hidden">
-			<div class="header-box px-2 pt-2 pb-4 d-flex justify-content-between" style="align-items: center;">
+	<div style="display: flex; height: 100%;">		
+		<div class="sidebar" id="side_nav">
+			<div class="open-btn header-box px-2 pt-2 pb-4 d-flex justify-content-between" style="align-items: center;">
 				<h1 class="fs-4">
 					<span style="color: white" class="fa-solid fa-bus"></span> <span class="text-white">FastGuard</span>
 				</h1>
-				<button class="btn open-btn pb-1 py-0 text-white" style="font-size: 20px;">
+				<button class="btn  pb-1 py-0 text-white" style="font-size: 20px;">
 					<i class="fa-solid fa-bars"></i>
 				</button>							
 			</div>
@@ -106,24 +110,27 @@
 							<i class="fa-solid fa-gauge NOLUNGTUNG"></i> Dashboard
 						</a>
 					</li>
+					@if ((User.IsInRole("Admin")))
+					{
+						<li class="">
+							<a asp-area="" asp-controller="Employee" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+								<i class="fa-solid fa-user-tie"></i>
+								Nhân viên
+							</a>
+						</li>
+						<li class="">
+							<a asp-area="" asp-controller="Driver" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
+								<i class="fa-solid fa-road"></i>
+								Tài xế
+							</a>
+						</li>
+					}
 					<li class="">
 						<a asp-area="" asp-controller="Customers" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
 							<i class="fa-solid fa-user"></i>
 							Khách hàng
 						</a>
-					</li>
-					<li class="">
-						<a asp-area="" asp-controller="Employee" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-							<i class="fa-solid fa-user-tie"></i>
-							Nhân viên
-						</a>
-					</li>
-					<li class="">
-						<a asp-area="" asp-controller="Driver" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
-							<i class="fa-solid fa-road"></i>
-							Tài xế
-						</a>
-					</li>
+					</li>					
 					<li class="">
 						<a asp-area="" asp-controller="Coaches" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
 							<i class="fa-solid fa-van-shuttle"></i>

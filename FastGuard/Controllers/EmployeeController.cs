@@ -1,5 +1,6 @@
 ﻿using FastGuard.Data;
 using FastGuard.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace FastGuard.Controllers
 {
+	[Authorize(Roles = "Admin")]
 	public class EmployeeController : Controller
 	{
 		private readonly ApplicationDbContext _context;
