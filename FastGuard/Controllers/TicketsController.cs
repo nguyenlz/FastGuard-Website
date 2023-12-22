@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
 
@@ -40,16 +41,16 @@ namespace FastGuard.Controllers
                 bookedTickets = await _context.Tickets
                     .Where(t => t.UserId == user.Id)
                     .Include(p => p.PickLocationId1Navigation)
-					.Include(p => p.Route)
-					.Include(p => p.PickLocationId2Navigation)
+                    .Include(p => p.Route)
+                    .Include(p => p.PickLocationId2Navigation)
                     .ToListAsync();
             }
             else if (await _userManager.IsInRoleAsync(user, "Admin") || await _userManager.IsInRoleAsync(user, "Employee"))
             {
                 // Lấy tất cả danh sách vé cho admin
                 bookedTickets = await _context.Tickets.Include(p => p.User)
-					.Include(p => p.Route)
-					.Include(p => p.PickLocationId1Navigation)
+                    .Include(p => p.Route)
+                    .Include(p => p.PickLocationId1Navigation)
                     .Include(p => p.PickLocationId2Navigation)
                     .ToListAsync();
             }
@@ -66,44 +67,81 @@ namespace FastGuard.Controllers
             }
 
             var ticket = await _context.Tickets.FindAsync(id);
+            var route = await _context.Routes.FindAsync(ticket.RouteId);
+
             if (ticket == null)
             {
                 return NotFound();
             }
-            ViewData["PickLocationName"] = new SelectList(_context.PickLocations, "PickLocationId", "PickLocationName", ticket.PickLocationId1);
+            var seatNos = _context.Seats
+                .Where(s => !_context.Tickets
+                    .Where(t => t.RouteId == ticket.RouteId)
+                    .Any(t => t.SeatNo == s.SeatNo));
+
+            ViewData["SeatNo"] = new SelectList(seatNos, "SeatNo", "SeatNo");
+
+            var pickLocation1 = _context.PickLocations
+                .Where(s => s.LocationId == route.LocationId1)
+                .ToList();
+            ViewData["PickLocationName1"] = new SelectList(pickLocation1, "PickLocationId", "PickLocationName");
+
+            var pickLocation2 = _context.PickLocations
+                .Where(s => s.LocationId == route.LocationId2)
+                .ToList();
+            ViewData["PickLocationName2"] = new SelectList(pickLocation2, "PickLocationId", "PickLocationName");
+
             return View(ticket);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("LocationId,LocationName")] Location location)
-        //{
-        //    if (id != location.LocationId)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Edit(int id, [Bind("InvoiceId,UserId,SeatNo,InvoiceDate,PickLocationId1,PickLocationId2,RouteId,TotalMoney")] Ticket ticket)
+        {
+            if (id != ticket.InvoiceId)
+            {
+                return NotFound();
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(location);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!LocationExists(location.LocationId))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(location);
-        //}
+            if (true)
+            {
+                try
+                {
+                    _context.Update(ticket);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TicketExists(ticket.InvoiceId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(BookedTicket));
+            }
+
+            var route = await _context.Routes.FindAsync(ticket.RouteId);
+            var seatNos = _context.Seats
+                .Where(s => !_context.Tickets
+                    .Where(t => t.RouteId == ticket.RouteId)
+                    .Any(t => t.SeatNo == s.SeatNo));
+
+            ViewData["SeatNo"] = new SelectList(seatNos, "SeatNo", "SeatNo");
+
+            var pickLocation1 = _context.PickLocations
+                .Where(s => s.LocationId == route.LocationId1)
+                .ToList();
+            ViewData["PickLocationName1"] = new SelectList(pickLocation1, "PickLocationId", "PickLocationName");
+
+            var pickLocation2 = _context.PickLocations
+                .Where(s => s.LocationId == route.LocationId2)
+                .ToList();
+            ViewData["PickLocationName2"] = new SelectList(pickLocation2, "PickLocationId", "PickLocationName");
+
+            return View(ticket);
+        }
 
         [Authorize(Roles = "Admin, Employee, Customer")]
         [HttpGet]
@@ -115,7 +153,7 @@ namespace FastGuard.Controllers
             List<Models.Route> list = context.SearchRoute(startid, endid, strStartDate);
             return View(list);
         }
-        
+
         [Authorize(Roles = "Admin, Employee, Customer")]
         public async Task<IActionResult> Checkout(int routeid, string start, string end)
         {
@@ -161,7 +199,7 @@ namespace FastGuard.Controllers
                 .FirstOrDefaultAsync(m => m.RouteId == routeid);
             return View(route);
         }
-        
+
         [Authorize(Roles = "Admin, Employee, Customer")]
         [HttpGet]
         public async Task<IActionResult> PayResult(string cusemail, string cusphone, string cusname, string[] selectedSeats, int startid, int endid, int routeid, float price)
@@ -227,6 +265,74 @@ namespace FastGuard.Controllers
                 .FirstOrDefault(t => t.SeatNo == seatNo && t.RouteId == routeId);
 
             return ticket;
+        }
+        [Authorize(Roles = "Admin, Employee, Customer")]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.Tickets == null)
+            {
+                return NotFound();
+            }
+
+            var ticket = await _context.Tickets
+                .Include(t => t.PickLocationId1Navigation)
+                .Include(t => t.PickLocationId2Navigation)
+                .Include(t => t.Route)
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(m => m.InvoiceId == id);
+            ViewData["start"] = _context.Locations.Where(l => l.LocationId == ticket.Route.LocationId1).Select(l => l.LocationName).FirstOrDefault();
+			ViewData["end"] = _context.Locations.Where(l => l.LocationId == ticket.Route.LocationId2).Select(l => l.LocationName).FirstOrDefault();
+
+			if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            return View(ticket);
+        }
+        [Authorize(Roles = "Admin, Employee, Customer")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Tickets == null)
+            {
+                return NotFound();
+            }
+
+            var ticket = await _context.Tickets
+                .Include(t => t.PickLocationId1Navigation)
+                .Include(t => t.PickLocationId2Navigation)
+                .Include(t => t.Route)
+                .Include(t => t.User)
+                .FirstOrDefaultAsync(m => m.InvoiceId == id);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            return View(ticket);
+        }
+
+        // POST: Tickets/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.Tickets == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Tickets'  is null.");
+            }
+            var ticket = await _context.Tickets.FindAsync(id);
+            if (ticket != null)
+            {
+                _context.Tickets.Remove(ticket);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(BookedTicket));
+        }
+        private bool TicketExists(int id)
+        {
+            return (_context.Tickets?.Any(e => e.InvoiceId == id)).GetValueOrDefault();
         }
     }
 }

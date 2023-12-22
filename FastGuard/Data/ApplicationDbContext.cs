@@ -51,12 +51,13 @@ namespace FastGuard.Data
 			{
 				connection.Open();
 
-				string sql = "insert into tickets(`user_id`, `seat_no`, `pick_location_id1`, `pick_location_id2`, `route_id`, `total_money`) values(@userid,@seat,@pick1,@pick2,@routeid,@total)";
+				string sql = "insert into tickets(`user_id`, `seat_no`, `invoice_date`, `pick_location_id1`, `pick_location_id2`, `route_id`, `total_money`) values(@userid,@seat,@currentdate,@pick1,@pick2,@routeid,@total)";
 				using (MySqlCommand cmd = new MySqlCommand(sql, connection))
 				{
 					cmd.Parameters.AddWithValue("userid", c.UserId);
 					cmd.Parameters.AddWithValue("seat", c.SeatNo);
-					cmd.Parameters.AddWithValue("pick1", c.PickLocationId1);
+                    cmd.Parameters.AddWithValue("currentdate", DateTime.Now);
+                    cmd.Parameters.AddWithValue("pick1", c.PickLocationId1);
 					cmd.Parameters.AddWithValue("pick2", c.PickLocationId2);
 					cmd.Parameters.AddWithValue("routeid", c.RouteId);
 					cmd.Parameters.AddWithValue("total", c.TotalMoney);
@@ -106,13 +107,16 @@ namespace FastGuard.Data
 
 			return list;
 		}
-		public virtual DbSet<ApplicationUser> Users { get; set; } = null!;
+        
+        public virtual DbSet<ApplicationUser> Users { get; set; } = null!;
 		public virtual DbSet<Coach> Coaches { get; set; } = null!;
 		public virtual DbSet<Location> Locations { get; set; } = null!;
 		public virtual DbSet<PickLocation> PickLocations { get; set; } = null!;
 		public virtual DbSet<Models.Route> Routes { get; set; } = null!;
 
         public virtual DbSet<Ticket> Tickets { get; set; } = null!;
+        public virtual DbSet<Seat> Seats { get; set; } = null!;
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -166,9 +170,19 @@ namespace FastGuard.Data
 					.WithMany()
 					.HasForeignKey(d => d.UserId)
 					.HasConstraintName("fk_userid");
-			});			
+			});
+            modelBuilder.Entity<Seat>(entity =>
+            {
+                entity.HasNoKey();
 
-			modelBuilder.Entity<Location>(entity =>
+                entity.ToTable("seats");
+
+                entity.Property(e => e.SeatNo)
+                    .HasMaxLength(10)
+                    .HasColumnName("seatno");
+            });
+
+            modelBuilder.Entity<Location>(entity =>
 			{
 				entity.ToTable("locations");
 

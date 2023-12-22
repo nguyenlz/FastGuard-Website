@@ -12,6 +12,10 @@
 	<link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
 
 	<style>
+		.sidebar h1{
+			cursor: pointer;
+			user-select: none;
+		}
 		header {
 			background: radial-gradient(circle, rgba(142,45,226,1) 32%, rgba(74,0,224,1) 100%);
 			width: 100%;
@@ -57,11 +61,11 @@
 <body>
 	<div style="display: flex; height: 100%;">		
 		<div class="sidebar" id="side_nav">
-			<div class="header-box px-2 pt-2 pb-4 d-flex justify-content-between" style="align-items: center;">
+			<div class="open-btn header-box px-2 pt-2 pb-4 d-flex justify-content-between" style="align-items: center;">
 				<h1 class="fs-4">
 					<span style="color: white" class="fa-solid fa-bus"></span> <span class="text-white">FastGuard</span>
 				</h1>
-				<button class="btn open-btn pb-1 py-0 text-white" style="font-size: 20px;">
+				<button class="btn  pb-1 py-0 text-white" style="font-size: 20px;">
 					<i class="fa-solid fa-bars"></i>
 				</button>							
 			</div>

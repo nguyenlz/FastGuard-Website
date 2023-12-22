@@ -1,0 +1,67 @@
+﻿@model FastGuard.Models.Ticket
+@{
+	string start = ViewData["start"].ToString();
+	string end = ViewData["end"].ToString();
+	string route = start + " - " + end;
+}
+
+<style>
+	.label-bold {
+		font-size: 20px;
+		font-weight: bold;
+	}
+
+	.customer-info, .ticket-info {
+		border: 1px solid #d9d9d9;
+		border-radius: 10px;
+		padding: 10px 10px;
+	}
+
+	input {
+		height: 45px;
+		padding: 0 5px;
+		border-radius: 7px;
+		width: 400px;
+		border: 1px solid #8e2de2;
+		background: #f2f2f2;
+		color: black;
+	}
+
+		input:focus {
+			outline: 2px solid #8e2de2;
+		}
+</style>
+
+<h1>Chi tiết vé</h1>
+
+<div>
+	<hr />
+	<div class="d-flex gap-3">
+		<div class="ticket-info">
+			<div class="label-bold">Thông tin chuyến đi</div>
+			<div>Tuyến</div>
+			<input type="text" value="@route" name="cusname" disabled />
+			<div>Điểm đón</div>
+			<input type="text" value="@Model.PickLocationId1Navigation.PickLocationName" name="cusname" disabled />
+			<div>Điểm trả</div>
+			<input type="text" value="@Model.PickLocationId2Navigation.PickLocationName" name="cusname" disabled />
+			<div>Thời gian khởi hành</div>
+			<input type="text" value="@Model.Route.StartDate.ToString("dd/MM/yyyy HH:mm")" name="cusname" disabled />
+			<div>Số ghế</div>
+			<input type="text" value="@Model.SeatNo" name="cusname" disabled />
+			<div>Giá vé</div>
+		</div>
+		<div class="customer-info">
+			<div class="label-bold">Thông tin khách hàng</div>
+			<div>Họ và tên</div>
+			<input type="text" value="@Model.User.Name"  disabled />
+			<div>Số điện thoại</div>
+			<input type="text" value="@Model.User.PhoneNumber" disabled>
+			<div>Email</div>
+			<input type="text" value="@Model.User.Email"  disabled />
+		</div>
+	</div>
+</div>
+<div>
+	<a asp-action="BookedTicket">Trở về</a>
+</div>
