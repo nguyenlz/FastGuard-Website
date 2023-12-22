@@ -17,6 +17,229 @@ namespace FastGuard.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+
+        public List<object> GetRevenue()
+        {
+            List<object> list = new List<object>();
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT YEAR(invoice_date) AS 'year', MONTH(invoice_date) AS 'month', SUM(total_money) AS 'total_amount' FROM tickets GROUP BY YEAR(invoice_date), MONTH(invoice_date) ORDER BY YEAR(invoice_date), MONTH(invoice_date);";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var ob = new
+                        {
+                            thang = Convert.ToInt32(reader["month"]),
+                            nam = Convert.ToInt32(reader["year"]),
+                            doanhThu = Convert.ToDouble(reader["total_amount"])/100
+                        };
+                        list.Add(ob);
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return list;
+        }
+
+        public bool checkCustomerWithTicket(string CustomerId)
+        {
+            bool check = false;
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT *  FROM aspnetusers a JOIN tickets c ON a.Id=c.user_id where c.user_id=@CUSTOMERID";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("CUSTOMERID", CustomerId);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        check = true;
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return check;
+        }
+        public bool checkDriverWithCoach(string driverId)
+        {
+            bool check = false;
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT *  FROM aspnetusers a JOIN coaches c ON a.Id=c.user_id where c.user_id=@DRIVERID";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("DRIVERID", driverId);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        check = true;
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return check;
+        }
+        public bool checkExistUserEdit(string Id,string email)
+        {
+            bool check = false;
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT *  FROM aspnetusers where (Email=@EMAIL OR UserName=@EMAIL) AND Id!=@ID;";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("EMAIL", email);
+                cmd.Parameters.AddWithValue("ID", Id);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        check = true;
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return check;
+        }
+        public bool checkExistUser (string email)
+        {
+            bool check = false;
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT *  FROM aspnetusers where Email=@EMAIL OR UserName=@EMAIL;";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("EMAIL", email);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows) 
+                    {
+                        check = true;
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return check;
+        }
+        public int countTicket()
+        {
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+            int numberTicket = 0;
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT COUNT(*) as 'countTicket' FROM tickets;";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read()) // Di chuyển đến hàng đầu tiên trong tập kết quả
+                    {
+                        numberTicket = Convert.ToInt32(reader["countTicket"].ToString());
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return numberTicket;
+        }
+        public int countRoutes()
+        {
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+            int numberRoute = 0;
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT COUNT(*) as 'countRoute' FROM routes;";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read()) // Di chuyển đến hàng đầu tiên trong tập kết quả
+                    {
+                        numberRoute = Convert.ToInt32(reader["countRoute"].ToString());
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return numberRoute;
+        }
+        public int countLocation()
+        {
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+            int numberLocation = 0;
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT COUNT(*) as 'countLocation' FROM locations;";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read()) // Di chuyển đến hàng đầu tiên trong tập kết quả
+                    {
+                        numberLocation = Convert.ToInt32(reader["countLocation"].ToString());
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return numberLocation;
+        }
+        public int countPickLocation()
+        {
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+            int numberPickLocation = 0;
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT COUNT(*) as 'countPickLocation' FROM pick_locations;";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read()) // Di chuyển đến hàng đầu tiên trong tập kết quả
+                    {
+                        numberPickLocation = Convert.ToInt32(reader["countPickLocation"].ToString());
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return numberPickLocation;
+        }
+        public int countCoach()
+        {
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+            int numberCoach = 0;
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = "SELECT COUNT(*) as 'countCoach' FROM coaches;";
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read()) // Di chuyển đến hàng đầu tiên trong tập kết quả
+                    {
+                        numberCoach = Convert.ToInt32(reader["countCoach"].ToString());
+                    }
+                    reader.Close();
+                }
+                conn.Close();
+            }
+            return numberCoach;
+        }
         public int CreateCoach(Coach c)
         {
             string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
@@ -70,7 +293,7 @@ namespace FastGuard.Data
 		}
 		public List<Models.Route> SearchRoute(int locationid1, int locationid2, string startdate)
 		{
-			string connectionString = "server=localhost;user id=root;password=root;port=3307;database=fastguard";
+			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
 
 			List < Models.Route > list = new List<Models.Route> ();
 
