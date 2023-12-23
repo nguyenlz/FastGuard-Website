@@ -29,9 +29,21 @@ namespace FastGuard.Controllers
         }
 
         // GET: Routes
-        public async Task<IActionResult> Index()
-        {           
-            var applicationDbContext = _context.Routes.Include(r => r.Coach).Include(r => r.LocationId1Navigation).Include(r => r.LocationId2Navigation);
+        public async Task<IActionResult> Index(string searchbarinput = "")
+        {
+            DateTime searchDate;
+            bool isDate = DateTime.TryParse(searchbarinput, out searchDate);
+
+            //if(searchbarinput == "") { }
+            var applicationDbContext = _context.Routes.Include(r => r.Coach)
+                .Include(r => r.LocationId1Navigation)
+                .Include(r => r.LocationId2Navigation)
+                .Where(r => r.LocationId2Navigation.LocationName.Contains(searchbarinput)
+                    || r.LocationId1Navigation.LocationName.Contains(searchbarinput)
+                    || r.Coach.CoachNo.Contains(searchbarinput)
+                    || r.Price.ToString().Contains(searchbarinput)
+                    || (isDate && r.StartDate.Date == searchDate.Date)
+                    || (isDate && r.EndDate.Date == searchDate.Date));
             return View(await applicationDbContext.ToListAsync());               
         }
 
@@ -82,7 +94,7 @@ namespace FastGuard.Controllers
                     r.LocationId2 == route.LocationId2 &&
                     r.StartDate == route.StartDate &&
                     r.EndDate == route.EndDate &&
-                    r.Price == route.Price);
+                    r.Price == route.Price);                
 
                 if (routeExists)
                 {
@@ -92,7 +104,24 @@ namespace FastGuard.Controllers
                     ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
                     return View(route);
                 }
-                if(route.LocationId1 == route.LocationId2)
+                var route1 = await _context.Routes.FirstOrDefaultAsync(t => t.CoachId == route.CoachId && t.StartDate.Date == route.StartDate.Date);
+                if (route1 != null)
+                {
+                    ModelState.AddModelError("", "Xe đang chọn đã phụ trách chuyến khác");
+                    ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
+                    ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
+                    ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
+                    return View(route);
+                }
+                if (route.EndDate > route.StartDate)
+                {
+                    ModelState.AddModelError("", "Ngày đến không được sớm hơm với ngày khởi hành");
+                    ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
+                    ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
+                    ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
+                    return View(route);
+                }
+                if (route.LocationId1 == route.LocationId2)
                 {
                     ModelState.AddModelError("", "Điểm đón không được trùng với điểm đi");
                     ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
@@ -156,6 +185,23 @@ namespace FastGuard.Controllers
             {
                 try
                 {
+                    var route1 = await _context.Routes.FirstOrDefaultAsync(t => t.CoachId == route.CoachId && t.StartDate.Date == route.StartDate.Date && t.RouteId != route.RouteId);
+                    if (route1 != null)
+                    {
+                        ModelState.AddModelError("", "Xe đang chọn đã phụ trách chuyến khác");
+                        ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
+                        ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
+                        ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
+                        return View(route);
+                    }
+                    if (route.EndDate < route.StartDate)
+                    {
+                        ModelState.AddModelError("", "Ngày đến không được sớm hơm với ngày khởi hành");
+                        ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
+                        ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
+                        ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
+                        return View(route);
+                    }
                     if (route.LocationId1 == route.LocationId2)
                     {
                         ModelState.AddModelError("", "Điểm đón không được trùng với điểm đi");
