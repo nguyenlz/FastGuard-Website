@@ -92,7 +92,22 @@ namespace FastGuard.Controllers
                     ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
                     return View(route);
                 }
-
+                if(route.LocationId1 == route.LocationId2)
+                {
+                    ModelState.AddModelError("", "Điểm đón không được trùng với điểm đi");
+                    ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
+                    ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
+                    ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
+                    return View(route);
+                }
+                if (route.StartDate.ToString("dd/MM/yyyy") == route.EndDate.ToString("dd/MM/yyyy"))
+                {
+                    ModelState.AddModelError("", "Ngày khởi hành không được trùng với ngày đi");
+                    ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
+                    ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
+                    ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
+                    return View(route);
+                }
                 _context.Add(route);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -141,6 +156,22 @@ namespace FastGuard.Controllers
             {
                 try
                 {
+                    if (route.LocationId1 == route.LocationId2)
+                    {
+                        ModelState.AddModelError("", "Điểm đón không được trùng với điểm đi");
+                        ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
+                        ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
+                        ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
+                        return View(route);
+                    }
+                    if (route.StartDate.ToString("dd/MM/yyyy") == route.EndDate.ToString("dd/MM/yyyy"))
+                    {
+                        ModelState.AddModelError("", "Ngày khởi hành không được trùng với ngày đi");
+                        ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
+                        ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
+                        ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
+                        return View(route);
+                    }
                     _context.Update(route);
                     await _context.SaveChangesAsync();
                 }
@@ -191,9 +222,15 @@ namespace FastGuard.Controllers
         {
             if (_context.Routes == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Routes'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Routes'  is null.");                
             }
             var route = await _context.Routes.FindAsync(id);
+            var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.RouteId == id);
+            if (ticket != null)
+            {
+                ViewData["TicketWithRouteExist"] = "Chuyến này đã có người đặt vé, không thể xóa lúc này";
+                return View(route);
+            }
             if (route != null)
             {
                 _context.Routes.Remove(route);

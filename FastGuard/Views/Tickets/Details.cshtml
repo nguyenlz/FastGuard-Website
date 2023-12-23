@@ -32,36 +32,38 @@
 		}
 </style>
 
-<h1>Chi tiết vé</h1>
-
-<div>
-	<hr />
-	<div class="d-flex gap-3">
-		<div class="ticket-info">
-			<div class="label-bold">Thông tin chuyến đi</div>
-			<div>Tuyến</div>
-			<input type="text" value="@route" name="cusname" disabled />
-			<div>Điểm đón</div>
-			<input type="text" value="@Model.PickLocationId1Navigation.PickLocationName" name="cusname" disabled />
-			<div>Điểm trả</div>
-			<input type="text" value="@Model.PickLocationId2Navigation.PickLocationName" name="cusname" disabled />
-			<div>Thời gian khởi hành</div>
-			<input type="text" value="@Model.Route.StartDate.ToString("dd/MM/yyyy HH:mm")" name="cusname" disabled />
-			<div>Số ghế</div>
-			<input type="text" value="@Model.SeatNo" name="cusname" disabled />
-			<div>Giá vé</div>
-		</div>
-		<div class="customer-info">
-			<div class="label-bold">Thông tin khách hàng</div>
-			<div>Họ và tên</div>
-			<input type="text" value="@Model.User.Name"  disabled />
-			<div>Số điện thoại</div>
-			<input type="text" value="@Model.User.PhoneNumber" disabled>
-			<div>Email</div>
-			<input type="text" value="@Model.User.Email"  disabled />
+<div class="container mt-4">
+	<h1>Chi tiết vé</h1>
+	<div>
+		<hr />
+		<div class="d-flex gap-3">
+			<div class="ticket-info">
+				<div class="label-bold">Thông tin chuyến đi</div>
+				<div>Tuyến</div>
+				<input type="text" value="@route" name="cusname" disabled />
+				<div>Điểm đón</div>
+				<input type="text" value="@Model.PickLocationId1Navigation.PickLocationName" name="cusname" disabled />
+				<div>Điểm trả</div>
+				<input type="text" value="@Model.PickLocationId2Navigation.PickLocationName" name="cusname" disabled />
+				<div>Thời gian khởi hành</div>
+				<input type="text" value="@Model.Route.StartDate.ToString("dd/MM/yyyy HH:mm")" name="cusname" disabled />
+				<div>Số ghế</div>
+				<input type="text" value="@Model.SeatNo" name="cusname" disabled />
+				<div>Giá vé</div>
+			</div>
+			<div class="customer-info">
+				<div class="label-bold">Thông tin khách hàng</div>
+				<div>Họ và tên</div>
+				<input type="text" value="@Model.User.Name" disabled />
+				<div>Số điện thoại</div>
+				<input type="text" value="@Model.User.PhoneNumber" disabled>
+				<div>Email</div>
+				<input type="text" value="@Model.User.Email" disabled />
+			</div>
 		</div>
 	</div>
+	<div class="mt-3">
+		<a asp-action="BookedTicket" class="btn btn-info">Trở Về</a>
+	</div>
 </div>
-<div>
-	<a asp-action="BookedTicket">Trở về</a>
-</div>
+

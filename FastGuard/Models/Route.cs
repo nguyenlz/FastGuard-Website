@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace FastGuard.Models
 {
@@ -12,10 +13,25 @@ namespace FastGuard.Models
 
         public int RouteId { get; set; }
         public int? CoachId { get; set; }
+
+        [Required(ErrorMessage = "Điểm đi không được để trống")]
+        [Display(Name = "Điểm đi")]
         public int? LocationId1 { get; set; }
+
+        [Required(ErrorMessage = "Điểm đón không được để trống")]
+        [Display(Name = "Điểm đón")]
         public int? LocationId2 { get; set; }
-        public DateTime StartDate { get; set; }
+
+		[Required(ErrorMessage = "Ngày khởi hành không được để trống")]
+		[Display(Name = "Ngày khởi hành")]
+		public DateTime StartDate { get; set; }
+
+        [Required(ErrorMessage = "Ngày đến không được để trống")]
+        [Display(Name = "Ngày đến")]
         public DateTime EndDate { get; set; }
+
+        [Required(ErrorMessage = "Giá vé không được để trống")]
+        [Display(Name = "Giá vé")]
         public float? Price { get; set; }
 
         public virtual Coach? Coach { get; set; }

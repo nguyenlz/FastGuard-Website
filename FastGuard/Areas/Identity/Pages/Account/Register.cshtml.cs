@@ -111,10 +111,10 @@ namespace FastGuard.Areas.Identity.Pages.Account
 			[Compare("Password", ErrorMessage = "Mật khẩu phải trùng với mật khẩu ở trên")]
 			public string ConfirmPassword { get; set; }
 
-			[Required]
-			public string Role { get; set; }
-			[ValidateNever]
-			public IEnumerable<SelectListItem> RoleList { get; set; }
+			//[Required]
+			//public string Role { get; set; }
+			//[ValidateNever]
+			//public IEnumerable<SelectListItem> RoleList { get; set; }
 		}
 
 
@@ -123,14 +123,14 @@ namespace FastGuard.Areas.Identity.Pages.Account
 			ReturnUrl = returnUrl;
 			ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-			Input = new InputModel()
-			{
-				RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
-				{
-					Text = i,
-					Value = i
-				})
-			};
+			//Input = new InputModel()
+			//{
+			//	RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+			//	{
+			//		Text = i,
+			//		Value = i
+			//	})
+			//};
 		}
 
 		public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -153,7 +153,7 @@ namespace FastGuard.Areas.Identity.Pages.Account
 				{
 					_logger.LogInformation("User created a new account with password.");
 
-					await _userManager.AddToRoleAsync(user, Input.Role);
+					await _userManager.AddToRoleAsync(user, "Customer");
 
 					var userId = await _userManager.GetUserIdAsync(user);
 					var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

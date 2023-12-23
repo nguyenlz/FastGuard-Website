@@ -1,58 +1,61 @@
 ﻿@model FastGuard.Models.Ticket
 
-<h1>Hủy vé</h1>
 
-<h3>Bạn có muốn hủy vé này không?</h3>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Người đặt
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            Số ghế
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SeatNo)
-        </dd>
-        <dt class = "col-sm-2">
-            Ngày mua
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InvoiceDate)
-        </dd>       
-        <dt class = "col-sm-2">
-            Điểm đón
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PickLocationId1Navigation.PickLocationName)
-        </dd>
-        <dt class = "col-sm-2">
-            Điểm trả
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PickLocationId2Navigation.PickLocationName)
-        </dd>
-        <dt class = "col-sm-2">
-            Chuyến
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Route.RouteId)
-        </dd>
-        <dt class="col-sm-2">
-            Giá vé
-        </dt>
-        <dd class="col-sm-10 fw-bold" style="color: #8e2de2;">
-            @Html.DisplayFor(model => model.TotalMoney)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="InvoiceId" />
-        <input type="submit" value="Xóa" class="btn btn-danger" /> |
-        <a asp-action="BookedTicket">Trở về</a>
-    </form>
+<div class="container mt-4">
+    <h1>Hủy vé</h1>
+    <h3>Bạn có muốn hủy vé này không?</h3>
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Người đặt
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.User.Name)
+            </dd>
+            <dt class="col-sm-2">
+                Số ghế
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.SeatNo)
+            </dd>
+            <dt class="col-sm-2">
+                Ngày mua
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.InvoiceDate)
+            </dd>
+            <dt class="col-sm-2">
+                Điểm đón
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PickLocationId1Navigation.PickLocationName)
+            </dd>
+            <dt class="col-sm-2">
+                Điểm trả
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PickLocationId2Navigation.PickLocationName)
+            </dd>
+            <dt class="col-sm-2">
+                Chuyến
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Route.RouteId)
+            </dd>
+            <dt class="col-sm-2">
+                Giá vé
+            </dt>
+            <dd class="col-sm-10 fw-bold" style="color: #8e2de2;">
+                @Html.DisplayFor(model => model.TotalMoney)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="InvoiceId" />
+            <input type="submit" value="Hủy" class="btn btn-danger" />
+            <a asp-action="BookedTicket" class="btn btn-info">Trở Về</a>
+        </form>
+    </div>
 </div>
+
