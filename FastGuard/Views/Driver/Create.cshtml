@@ -1,7 +1,7 @@
 ﻿@model ApplicationUser
 @{
     ViewData["Title"] = "Create";
-   
+
 }
 
 <h4>Thêm mới tài xế</h4>
@@ -16,7 +16,7 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
                 <span class="error" id="EmailError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
-          
+
             <div class="form-group">
                 <label asp-for="PasswordHash" class="control-label">Mật khẩu:</label>
                 <input asp-for="PasswordHash" id="passwordinput" class="form-control" />
