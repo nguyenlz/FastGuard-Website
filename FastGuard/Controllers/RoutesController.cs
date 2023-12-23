@@ -115,7 +115,7 @@ namespace FastGuard.Controllers
                 }
                 if (route.EndDate > route.StartDate)
                 {
-                    ModelState.AddModelError("", "Ngày đến không được sớm hơm với ngày khởi hành");
+                    ModelState.AddModelError("", "Ngày đến không được sớm hơn ngày khởi hành");
                     ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
                     ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
                     ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
@@ -196,7 +196,7 @@ namespace FastGuard.Controllers
                     }
                     if (route.EndDate < route.StartDate)
                     {
-                        ModelState.AddModelError("", "Ngày đến không được sớm hơm với ngày khởi hành");
+                        ModelState.AddModelError("", "Ngày đến không được sớm hơn ngày khởi hành");
                         ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);
                         ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId1);
                         ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
