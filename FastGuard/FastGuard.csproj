@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Views\Customers\Create.cshtml" />
+    <None Include="Views\Customers\Delete.cshtml" />
+    <None Include="Views\Customers\Details.cshtml" />
+    <None Include="Views\Customers\Edit.cshtml" />
+    <None Include="Views\Customers\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.25" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.23" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.25" />

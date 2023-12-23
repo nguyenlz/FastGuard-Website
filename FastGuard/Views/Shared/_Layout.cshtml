@@ -11,10 +11,11 @@
 	<link rel="stylesheet" href="~/FastGuard.styles.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
 	<style>
-		.sidebar h1{
+		.sidebar h1 {
 			cursor: pointer;
 			user-select: none;
 		}
+
 		header {
 			background: radial-gradient(circle, rgba(142,45,226,1) 32%, rgba(74,0,224,1) 100%);
 			width: 100%;
@@ -26,9 +27,9 @@
 			align-items: center;
 		}
 		/* body
-		{
-			background-image: linear-gradient( 109.6deg, rgba(177,173,219,1) 11.2%, rgba(245,226,226,1) 91.1% );
-		} */
+				{
+					background-image: linear-gradient( 109.6deg, rgba(177,173,219,1) 11.2%, rgba(245,226,226,1) 91.1% );
+				} */
 		.sidebar {
 			background: linear-gradient(360deg, rgba(142,45,226,1) 32%, rgba(74,0,224,1) 100%);
 			min-width: 250px;
@@ -49,11 +50,13 @@
 		.sidebar li a {
 			color: white;
 		}
+
 		.sidebar li:hover {
 			/* background-color: #cccccc; */
 			background-color: #7733ff;
 			border-radius: 8px;
 		}
+
 		.sidebar li a:hover {
 			color: #e6e6e6;
 			font-size: 17px;
@@ -61,7 +64,7 @@
 	</style>
 </head>
 <body>
-	<div style="display: flex; height: 100%;">		
+	<div style="display: flex; height: 100%;">
 		<div class="sidebar" id="side_nav">
 			<div class="open-btn header-box px-2 pt-2 pb-4 d-flex justify-content-between" style="align-items: center;">
 				<h1 class="fs-4">
@@ -69,11 +72,12 @@
 				</h1>
 				<button class="btn  pb-1 py-0 text-white" style="font-size: 20px;">
 					<i class="fa-solid fa-bars"></i>
-				</button>							
+				</button>
 			</div>
 
 			<ul class="list-unstyled px-2" style="height: 100%;">
-				@if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin"))){
+				@if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin")))
+				{
 					<li class="">
 						<a asp-area="" asp-controller="AppRoles" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
 							<i class="fa-solid fa-person-circle-plus"></i>
@@ -108,7 +112,7 @@
 							<i class="fa-solid fa-user"></i>
 							Khách hàng
 						</a>
-					</li>					
+					</li>
 					<li class="">
 						<a asp-area="" asp-controller="Coaches" asp-action="Index" class="text-decoration-none px-3 py-2 d-block">
 							<i class="fa-solid fa-van-shuttle"></i>
@@ -141,14 +145,14 @@
 					</a>
 				</li>
 				@if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Employee") || User.IsInRole("Customer")))
-				{					
+				{
 					<li class="">
 						<a asp-area="" asp-controller="Tickets" asp-action="BookedTicket" class="text-decoration-none px-3 py-2 d-block">
 							<i class="fa-solid fa-clock-rotate-left"></i>
 							Vé đã đặt
 						</a>
 					</li>
-				}				
+				}
 			</ul>
 		</div>
 		<div class="content">
@@ -164,7 +168,7 @@
 				<main role="main" class="pb-3">
 					@RenderBody()
 				</main>
-			</div>			
+			</div>
 		</div>
 		<footer class="border-top footer text-muted">
 			<div class="container">
@@ -173,14 +177,14 @@
 		</footer>
 	</div>
 
-	
-	
+
+
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
 	<script>
 		function toggleSidebar() {
-			
+
 		}
 		$(".sidebar ul li").on('click', function () {
 			$(".sidebar ul li.active").removeClass('active');
@@ -197,7 +201,7 @@
 			$('.sidebar').removeClass('active');
 			$('.close-btn').css('visibility', 'hidden');
 		})
-		
+
 	</script>
 	@await RenderSectionAsync("Scripts", required: false)
 
