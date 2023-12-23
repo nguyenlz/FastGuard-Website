@@ -1,17 +1,19 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model IEnumerable<ApplicationUser>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SYF1BU5dBRVbbF1MIJ7jIeb2XFFrgf+N9b2cl" crossorigin="anonymous">
 
 @{
-    ViewData["Title"] = "Nhân Viên";
+    ViewData["Title"] = "Thông tin nhân Viên";
 }
 
+<div class="container mt-4">
 <h1>Thông tin nhân viên</h1>
 <p>
-	<a asp-action="Create">Thêm mới nhân viên</a>
+        <a asp-action="Create" class="btn btn-success">Thêm mới nhân viên</a>
 </p>
 
-<table class="table">
-    <thead>
+    <table id="example1" class="table table-bordered table-striped">
+        <thead>
         <tr>
 			<th>Mã số nhân viên</th>
             <th>Tên nhân viên</th>
@@ -38,13 +40,20 @@
                     }
                 </td>
 				<td>
-					<a asp-action="Delete" asp-route-id="@item.Id">Xóa</a> |
-					<a asp-action="Edit" asp-route-id="@item.Id">Sửa</a> |
-					<a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a>
+                        <div class="d-flex gap-2" role="group">
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Xóa
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">
+                                <i class="fas fa-edit"></i> Sửa
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">
+                                <i class="fas fa-info-circle"></i> Chi tiết
+                            </a>
+                        </div>
 				</td>
             </tr>
         }
     </tbody>
 </table>
-</div>
 </div>
