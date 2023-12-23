@@ -54,6 +54,7 @@ namespace FastGuard.Controllers
         {
             ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
             ViewData["LocationName1"] = new SelectList(_context.Locations, "LocationId", "LocationName");
+            ViewData["ErrorCoach"] = "";
             return View();
             //ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id");
             //int count;
@@ -81,7 +82,14 @@ namespace FastGuard.Controllers
             //}
             //ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", coach.UserId);
             //return View(coach);
-
+            ViewData["ErrorCoach"] = "";
+            var checkCoach = await _context.Coaches
+              .FirstOrDefaultAsync(m => m.CoachNo == coach.CoachNo);
+            if(checkCoach!=null)
+            {
+                ViewData["ErrorCoach"] = "Không thể thêm xe, biển số xe đã bị trùng";
+                return View("Create");
+            }
             _context.Add(coach);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

@@ -1,21 +1,16 @@
 ﻿@model IEnumerable<ApplicationUser>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SYF1BU5dBRVbbF1MIJ7jIeb2XFFrgf+N9b2cl" crossorigin="anonymous">
 
 @{
     ViewData["Title"] = "Danh sách khách hàng";
 }
 
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Danh sách thông tin khách hàng</h3>
-    </div>
-    <!-- /.card-header -->
-    <div class="card-body">
+<div class="container mt-4">
+        <h1 ">Danh sách thông tin khách hàng</h1>
 <p>
-	<a asp-action="Create">Thêm mới khách hàng</a>
+        <a asp-action="Create" class="btn btn-success">Thêm mới khách hàng</a>
 </p>
-
-<div style="width: 100%;">
-            <table id="example1" class="table table-bordered table-striped">
+    <table id="example1" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>#</th>
@@ -61,5 +56,4 @@
         </tbody>
     </table>
 </div>
-    </div>
-</div>
+

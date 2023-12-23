@@ -4,13 +4,13 @@
     ViewData["Title"] = "Thông tin xe";
 }
 
+<div class="container mt-4">
 <h1>Thông tin xe</h1>
-
 <p>
-    <a asp-action="Create">Thêm mới xe</a>
+        <a asp-action="Create" class="btn btn-success">Thêm mới xe</a>
 </p>
-<table class="table">
-    <thead>
+    <table id="example1" class="table table-bordered table-striped">
+        <thead>
         <tr>
             <th>
               Biển số xe 
@@ -55,9 +55,18 @@
                 @Html.DisplayFor(modelItem => item.User.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CoachId">Sửa</a> |
-                <a asp-action="Details" asp-route-id="@item.CoachId">Chi tiết</a> |
-                <a asp-action="Delete" asp-route-id="@item.CoachId">Xóa</a>
+                        <div class="d-flex gap-2" role="group">
+                            <a asp-action="Delete" asp-route-id="@item.CoachId" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Xóa
+
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.CoachId" class="btn btn-primary">
+                                <i class="fas fa-edit"></i> Sửa
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.CoachId" class="btn btn-secondary">
+                                <i class="fas fa-info-circle"></i> Chi tiết
+                            </a>
+                        </div>
             </td>
         </tr>
 }
