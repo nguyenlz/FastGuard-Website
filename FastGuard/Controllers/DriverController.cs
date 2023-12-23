@@ -184,6 +184,7 @@ namespace FastGuard.Controllers
         "Name,salary")] ApplicationUser driver)
         {
             driver.UserName = driver.Email;
+          
             ViewData["EditCodeEdit"] = 1;
 
             bool check = _context.checkExistUserEdit(driver.Id, driver.Email);
