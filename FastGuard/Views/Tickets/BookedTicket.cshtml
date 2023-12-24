@@ -4,7 +4,19 @@
 
 <div class="container mt-4">
     <h1>Vé đã đặt</h1>
-
+    <div class="d-flex gap-3 mb-3">
+        <form asp-action="BookedTicket" method="get">
+            <div style="width: 400px; display:flex;">
+                <input type="search" id="searchbarinput" name="searchbarinput" class="form-control" placeholder="Nhập nội dung tìm kiếm" />
+                <button type="submit" class="btn btn-primary" data-mdb-ripple-init>
+                    <i class="fas fa-search"></i>
+                </button>
+                <a asp-action="BookedTicket" type="submit" class="btn btn-dark mx-3" data-mdb-ripple-init>
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </a>
+            </div>
+        </form>
+    </div>
     <table class="table table-bordered table-striped">
         <thead>
             <tr>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Reflection.Metadata;
 
 namespace FastGuard.Controllers
@@ -29,8 +30,12 @@ namespace FastGuard.Controllers
                           Problem("Entity set 'ApplicationDbContext.Locations'  is null.");
         }
         [Authorize(Roles = "Admin, Employee, Customer")]
-        public async Task<IActionResult> BookedTicket()
+        public async Task<IActionResult> BookedTicket(string searchbarinput = "")
         {
+            DateTime parsedDate;
+            bool isDate = DateTime.TryParse(searchbarinput, out parsedDate);
+            TimeSpan parsedTime;
+            bool isTime = TimeSpan.TryParseExact(searchbarinput, "HH\\:mm", CultureInfo.InvariantCulture, out parsedTime);
             var user = await _userManager.GetUserAsync(User);
 
             List<Ticket> bookedTickets = new List<Ticket>();
@@ -43,6 +48,16 @@ namespace FastGuard.Controllers
                     .Include(p => p.PickLocationId1Navigation)
                     .Include(p => p.Route)
                     .Include(p => p.PickLocationId2Navigation)
+                    .Where(r => r.User.Name.Contains(searchbarinput)
+                    || r.SeatNo.Contains(searchbarinput)
+                    || r.PickLocationId1Navigation.PickLocationName.Contains(searchbarinput)
+                    || r.PickLocationId2Navigation.PickLocationName.Contains(searchbarinput)
+                    || r.TotalMoney.ToString().Contains(searchbarinput)
+                    || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
+                        && r.InvoiceDate.Date == parsedDate.Date)
+                    || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
+                        && r.Route.StartDate == parsedDate.Date)
+                    || (r.Route.StartDate.TimeOfDay == parsedTime))
                     .ToListAsync();
             }
             else if (await _userManager.IsInRoleAsync(user, "Admin") || await _userManager.IsInRoleAsync(user, "Employee"))
@@ -52,6 +67,18 @@ namespace FastGuard.Controllers
                     .Include(p => p.Route)
                     .Include(p => p.PickLocationId1Navigation)
                     .Include(p => p.PickLocationId2Navigation)
+                    .Where(r => r.User.Name.Contains(searchbarinput)
+                    || r.SeatNo.Contains(searchbarinput)
+                    || r.PickLocationId1Navigation.PickLocationName.Contains(searchbarinput)
+                    || r.PickLocationId2Navigation.PickLocationName.Contains(searchbarinput)
+                    || r.TotalMoney.ToString().Contains(searchbarinput)
+                    || r.InvoiceDate.ToString().Contains(searchbarinput)
+                    || r.Route.StartDate.ToString().Contains(searchbarinput)
+                    || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
+                        && r.InvoiceDate.Date == parsedDate.Date)
+                    || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
+                        && r.Route.StartDate.Date == parsedDate.Date)
+                    || (r.Route.StartDate.TimeOfDay == parsedTime))
                     .ToListAsync();
             }
 

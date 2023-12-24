@@ -5,10 +5,31 @@
 	ViewData["Title"] = "Application Roles";
 }
 
-<h1>Danh sách các role</h1>
-<p>
-	<a asp-action="Create" class="btn btn-success">Tạo role mới</a>
-</p>
+<style>
+    .searchbar{
+        width: 400px;
+        display: flex;
+    }
+</style>
+
+<h1>Danh Sách Các Role</h1>
+<div class="d-flex gap-3">
+	<p>
+		<a asp-action="Create" class="btn btn-success">Tạo role mới</a>
+	</p>
+	<form asp-action="Index" method="get">
+		<div class="searchbar">
+			<input type="search" id="searchbarinput" name="searchbarinput" class="form-control" placeholder="Nhập nội dung tìm kiếm" />
+			<button type="submit" class="btn btn-primary" data-mdb-ripple-init>
+				<i class="fas fa-search"></i>
+			</button>
+			<a asp-action="Index" type="submit" class="btn btn-dark mx-3" data-mdb-ripple-init>
+				<i class="fa-solid fa-arrows-rotate"></i>
+			</a>
+		</div>
+
+	</form>
+</div>
 
 <table class="table table-bordered table-striped">
 	<thead>

@@ -19,9 +19,9 @@ namespace FastGuard.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
-        {
-            var roles = _roleManager.Roles;
+		public async Task<IActionResult> Index(string searchbarinput = "")
+		{
+			var roles = _roleManager.Roles.Where(r => r.Name.Contains(searchbarinput));
             return View(roles);
         }
 

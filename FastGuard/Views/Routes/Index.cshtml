@@ -1,79 +1,68 @@
 ﻿@model IEnumerable<Route>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SYF1BU5dBRVbbF1MIJ7jIeb2XFFrgf+N9b2cl" crossorigin="anonymous">
 @{
-    ViewData["Title"] = "Chuyến Xe";
+	ViewData["Title"] = "Chuyến Xe";
 }
 
-<style>
-    .searchbar{
-        width: 400px;
-        display: flex;
-
-    }
-</style>
-
-
 <div class="container mt-4">
-    <h1>Danh Sách Các Chuyến Xe</h1>
-    <div class="d-flex gap-3">
-        <p>
-            <a asp-action="Create" class="btn btn-success">Tạo Chuyến Xe Mới</a>
-        </p>
-        <form asp-action="Index" method="get">
-            <div class="searchbar">
-                <input type="search" id="searchbarinput" name="searchbarinput" class="form-control" placeholder="Nhập nội dung tìm kiếm" />
-                <button type="submit" class="btn btn-primary" data-mdb-ripple-init>
-                    <i class="fas fa-search"></i>
-                </button>    
-                <a asp-action="Index" type="submit" class="btn btn-dark mx-3" data-mdb-ripple-init>
-                    <i class="fa-solid fa-arrows-rotate"></i>
-                </a>
-            </div>
-            
-        </form>
-    </div>
-    
-    
+	<h1>Danh Sách Chuyến Xe</h1>
+	<div class="d-flex gap-3">
+		<p>
+			<a asp-action="Create" class="btn btn-success">Tạo Chuyến Xe Mới</a>
+		</p>
+		<form asp-action="Index" method="get">
+			<div style="width: 400px; display: flex;">
+				<input type="search" id="searchbarinput" name="searchbarinput" class="form-control" placeholder="Nhập nội dung tìm kiếm" />
+				<button type="submit" class="btn btn-primary" data-mdb-ripple-init>
+					<i class="fas fa-search"></i>
+				</button>
+				<a asp-action="Index" type="submit" class="btn btn-dark mx-3" data-mdb-ripple-init>
+					<i class="fa-solid fa-arrows-rotate"></i>
+				</a>
+			</div>
 
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Ngày Khởi Hành</th>
-                <th>Ngày Đến</th>
-                <th>Giá (VNĐ)</th>
-                <th>Biển Số Xe</th>
-                <th>Điểm Đón</th>
-                <th></th>
-                <th>Điểm Đến</th>
-                <th>Thao Tác</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
-                    <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Price) VNĐ</td>
-                    <td>@Html.DisplayFor(modelItem => item.Coach.CoachNo)</td>
-                    <td>@Html.DisplayFor(modelItem => item.LocationId1Navigation.LocationName)</td>
-                    <td><i class="fas fa-arrow-right"></i></td>
-                    <td>@Html.DisplayFor(modelItem => item.LocationId2Navigation.LocationName)</td>
-                    <td>
-                        <div class="d-flex gap-2" role="group">
-                            <a asp-action="Delete" asp-route-id="@item.RouteId" class="btn btn-danger">
-                                <i class="fas fa-trash"></i> Xóa
-                            </a>
-                            <a asp-action="Edit" asp-route-id="@item.RouteId" class="btn btn-primary">
-                                <i class="fas fa-edit"></i> Sửa
-                            </a>
-                            <a asp-action="Details" asp-route-id="@item.RouteId" class="btn btn-secondary">
-                                <i class="fas fa-info-circle"></i> Chi tiết
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+		</form>
+	</div>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Ngày Khởi Hành</th>
+				<th>Ngày Đến</th>
+				<th>Giá (VNĐ)</th>
+				<th>Biển Số Xe</th>
+				<th>Điểm Đón</th>
+				<th></th>
+				<th>Điểm Đến</th>
+				<th>Thao Tác</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@item.StartDate.ToString("dd/MM/yyyy HH:mm")</td>
+					<td>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</td>
+					<td>@Html.DisplayFor(modelItem => item.Price) VNĐ</td>
+					<td>@Html.DisplayFor(modelItem => item.Coach.CoachNo)</td>
+					<td>@Html.DisplayFor(modelItem => item.LocationId1Navigation.LocationName)</td>
+					<td><i class="fas fa-arrow-right"></i></td>
+					<td>@Html.DisplayFor(modelItem => item.LocationId2Navigation.LocationName)</td>
+					<td>
+						<div class="d-flex gap-2" role="group">
+							<a asp-action="Delete" asp-route-id="@item.RouteId" class="btn btn-danger">
+								<i class="fas fa-trash"></i> Xóa
+							</a>
+							<a asp-action="Edit" asp-route-id="@item.RouteId" class="btn btn-primary">
+								<i class="fas fa-edit"></i> Sửa
+							</a>
+							<a asp-action="Details" asp-route-id="@item.RouteId" class="btn btn-secondary">
+								<i class="fas fa-info-circle"></i> Chi tiết
+							</a>
+						</div>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 </div>

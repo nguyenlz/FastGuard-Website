@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FastGuard.Data;
 using FastGuard.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Globalization;
 
 namespace FastGuard.Controllers
 {
@@ -23,11 +24,15 @@ namespace FastGuard.Controllers
         }
 
         // GET: Locations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchbarinput = "")
         {
-              return _context.Locations != null ? 
-                          View(await _context.Locations.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Locations'  is null.");
+            DateTime parsedDate;
+            bool isDate = DateTime.TryParse(searchbarinput, out parsedDate);
+
+            var applicationDbContext = _context.Locations
+                .Where(r => r.LocationName.Contains(searchbarinput));
+
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Locations/Details/5

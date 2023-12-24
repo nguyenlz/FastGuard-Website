@@ -3,12 +3,33 @@
 @{
     ViewData["Title"] = "Thông tin xe";
 }
+<style>
+	.searchbar {
+		width: 400px;
+		display: flex;
+	}
+</style>
 
 <div class="container mt-4">
-<h1>Thông tin xe</h1>
-<p>
-        <a asp-action="Create" class="btn btn-success">Thêm mới xe</a>
-</p>
+<h1>Danh Sách Xe</h1>
+    <div class="d-flex gap-3">
+        <p>
+            <a asp-action="Create" class="btn btn-success">Thêm mới xe</a>
+        </p>
+        <form asp-action="Index" method="get">
+            <div class="searchbar">
+                <input type="search" id="searchbarinput" name="searchbarinput" class="form-control" placeholder="Nhập nội dung tìm kiếm" />
+                <button type="submit" class="btn btn-primary" data-mdb-ripple-init>
+                    <i class="fas fa-search"></i>
+                </button>
+                <a asp-action="Index" type="submit" class="btn btn-dark mx-3" data-mdb-ripple-init>
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </a>
+            </div>
+
+        </form>
+    </div>
+
     <table id="example1" class="table table-bordered table-striped">
         <thead>
         <tr>

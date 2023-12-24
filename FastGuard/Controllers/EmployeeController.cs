@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,11 +29,23 @@ namespace FastGuard.Controllers
 			_context = context;
 		}
 
-    public IActionResult Index()
-    {
-            var users = _userManger.GetUsersInRoleAsync("Employee").Result;
-            return View(users);
-        }
+		public async Task<IActionResult> Index(string searchbarinput = "")
+		{
+			DateTime searchDate;
+			bool isDate = DateTime.TryParse(searchbarinput, out searchDate);
+
+			var users = await _userManger.GetUsersInRoleAsync("Employee");
+			var users2 = users.Where(u => u.Name != null && u.Name.Contains(searchbarinput)
+									|| u.Email != null && u.Email.Contains(searchbarinput)
+									|| u.PhoneNumber != null && u.PhoneNumber.Contains(searchbarinput)
+									|| u.salary != null && u.salary.ToString().Contains(searchbarinput)
+									|| (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate)
+									 && u.DateOfBirth.Date == parsedDate.Date))
+							  .ToList();
+
+			return View(users2);
+
+		}
 
 
 

@@ -6,6 +6,6 @@ namespace FastGuard.Models
     {
         public string? Name { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public float? salary { get; set; }
+        public double? salary { get; set; }
     }
 }

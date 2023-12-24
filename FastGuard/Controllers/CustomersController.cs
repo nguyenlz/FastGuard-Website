@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace FastGuard.Controllers
 {
@@ -35,14 +36,23 @@ namespace FastGuard.Controllers
 
 		}
 
-		public IActionResult Index()
-        {
+		public async Task<IActionResult> Index(string searchbarinput = "")
+		{
+			DateTime searchDate;
+			bool isDate = DateTime.TryParse(searchbarinput, out searchDate);
 
-            var users = _userManger.GetUsersInRoleAsync("Customer").Result;
-            return View(users);
-        }
+			var users = await _userManger.GetUsersInRoleAsync("Customer");
+			var users2 = users.Where(u => u.Name != null && u.Name.Contains(searchbarinput)
+									|| u.Email != null && u.Email.Contains(searchbarinput)
+									|| u.PhoneNumber != null && u.PhoneNumber.Contains(searchbarinput)
+									|| (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate)
+									 && u.DateOfBirth.Date == parsedDate.Date))
+							  .ToList();
 
-        public IActionResult Create()
+			return View(users2);
+		}
+
+		public IActionResult Create()
         {
             ViewData["ErrorCode"] = 1;
             return View();

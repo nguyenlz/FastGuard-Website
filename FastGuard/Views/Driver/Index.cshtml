@@ -3,60 +3,74 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SYF1BU5dBRVbbF1MIJ7jIeb2XFFrgf+N9b2cl" crossorigin="anonymous">
 
 @{
-    ViewData["Title"] = "Thông tin tài xế";
+	ViewData["Title"] = "Thông tin tài xế";
 }
 
 <div class="container mt-4">
-		<h1>Danh sách thông tin tài xế</h1>
-<p>
-		<a asp-action="Create" class="btn btn-success">Thêm mới tài xế</a>
-</p>
+	<h1>Danh Sách Tài Xế</h1>
 
-		<table id="example1" class="table table-bordered table-striped">
-	<thead>
-		<tr>
-			<th>Mã số tài xế</th>
-			<th>Tên tài xế</th>
-			<th>Email/Username</th>
-			<th>Số điện thoại</th>
-			<th>Lương tài xế</th>
-			<th>Ngày sinh</th>
-			<th>Chức năng </th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in  Model)
-		{
+	<div class="d-flex gap-3">
+		<p>
+			<a asp-action="Create" class="btn btn-success">Thêm mới tài xế</a>
+		</p>
+		<form asp-action="Index" method="get">
+			<div style="width: 400px; display: flex;">
+				<input type="search" id="searchbarinput" name="searchbarinput" class="form-control" placeholder="Nhập nội dung tìm kiếm" />
+				<button type="submit" class="btn btn-primary" data-mdb-ripple-init>
+					<i class="fas fa-search"></i>
+				</button>
+				<a asp-action="Index" type="submit" class="btn btn-dark mx-3" data-mdb-ripple-init>
+					<i class="fa-solid fa-arrows-rotate"></i>
+				</a>
+			</div>
+
+		</form>
+	</div>
+	<table id="example1" class="table table-bordered table-striped">
+		<thead>
 			<tr>
-				<td>@Html.DisplayFor(modelItem=>item.Id)</td>
-				<td>@Html.DisplayFor(modelItem=>item.Name)</td>
-				<td>@Html.DisplayFor(modelItem=>item.Email)</td>
-				<td>@Html.DisplayFor(modelItem=>item.PhoneNumber)</td>
-				<td>@Html.DisplayFor(modelItem=>item.salary)</td>
-				<td>
-					@{
-						if (item.DateOfBirth != null)
-							@item.DateOfBirth.ToString("dd-MM-yyyy")
-						;
-					}
-				</td>
-				<td>
+				<th>Mã số tài xế</th>
+				<th>Tên tài xế</th>
+				<th>Email/Username</th>
+				<th>Số điện thoại</th>
+				<th>Lương tài xế</th>
+				<th>Ngày sinh</th>
+				<th>Chức năng </th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@Html.DisplayFor(modelItem=>item.Id)</td>
+					<td>@Html.DisplayFor(modelItem=>item.Name)</td>
+					<td>@Html.DisplayFor(modelItem=>item.Email)</td>
+					<td>@Html.DisplayFor(modelItem=>item.PhoneNumber)</td>
+					<td>@Html.DisplayFor(modelItem=>item.salary)</td>
+					<td>
+						@{
+							if (item.DateOfBirth != null)
+								@item.DateOfBirth.ToString("dd/MM/yyyy")
+							;
+						}
+					</td>
+					<td>
 						<div class="d-flex gap-2" role="group">
-						<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+							<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
 								<i class="fas fa-trash"></i> Xóa
 
-						</a> 
-						<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">
+							</a>
+							<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">
 								<i class="fas fa-edit"></i> Sửa
-						</a> 
-						<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">
+							</a>
+							<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">
 								<i class="fas fa-info-circle"></i> Chi tiết
-						</a>
+							</a>
 						</div>
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>
-	</div>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
 
