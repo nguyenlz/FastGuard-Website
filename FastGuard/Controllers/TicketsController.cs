@@ -178,7 +178,10 @@ namespace FastGuard.Controllers
             ViewData["route"] = start + " - " + end;
             ApplicationDbContext context = HttpContext.RequestServices.GetService(typeof(FastGuard.Data.ApplicationDbContext)) as ApplicationDbContext;
             List<Models.Route> list = context.SearchRoute(startid, endid, strStartDate);
-            return View(list);
+			List<Dictionary<string, object>> routes = context.CountBookedSeat(startid, endid, strStartDate);
+			ViewData["routes"] = routes;
+
+			return View(list);
         }
 
         [Authorize(Roles = "Admin, Employee, Customer")]
@@ -245,7 +248,8 @@ namespace FastGuard.Controllers
                     UserName = cusemail,
                     Email = cusemail,
                     Name = cusname,
-                    PhoneNumber = cusphone
+                    PhoneNumber = cusphone,
+                    DateOfBirth = DateTime.Now,
                 };
 
                 string password = "Customer1.";

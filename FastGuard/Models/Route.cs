@@ -34,7 +34,7 @@ namespace FastGuard.Models
         [Display(Name = "Giá vé")]
         public float? Price { get; set; }
 
-        public virtual Coach? Coach { get; set; }
+		public virtual Coach? Coach { get; set; }
         public virtual Location? LocationId1Navigation { get; set; }
         
         public virtual Location? LocationId2Navigation { get; set; }

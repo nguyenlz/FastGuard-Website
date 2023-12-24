@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using FastGuard.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using MySqlConnector;
@@ -300,8 +301,12 @@ namespace FastGuard.Data
 			using (MySqlConnection conn = new MySqlConnection(connectionString))
 			{
 				conn.Open();
-
-				string str = "SELECT * from routes WHERE location_id1=@locationid1 and location_id2=@locationid2 and DATE(start_date)=@startdate";
+                string str = "SELECT r.route_id, r.coach_id, r.location_id1, r.location_id2, r.start_date, r.end_date, r.price, COUNT(t.seat_no) as SLCL " +
+                    "from routes r " +
+                    "LEFT JOIN tickets t ON r.route_id = t.route_id " +
+					"WHERE location_id1=@locationid1 and location_id2=@locationid2 and DATE(start_date)=@startdate " +
+                    "GROUP BY r.route_id, r.start_date, r.end_date, r.price";
+				//string str = "SELECT * from routes WHERE location_id1=@locationid1 and location_id2=@locationid2 and DATE(start_date)=@startdate";
 				MySqlCommand cmd = new MySqlCommand(str, conn);
 				cmd.Parameters.AddWithValue("locationid1", locationid1);
 				cmd.Parameters.AddWithValue("locationid2", locationid2);
@@ -311,7 +316,7 @@ namespace FastGuard.Data
 				{
 					while (reader.Read())
 					{
-						list.Add(new Models.Route()
+						Models.Route route = new Models.Route()
 						{
 							RouteId = Convert.ToInt32(reader["route_id"]),
 							CoachId = Convert.ToInt32(reader["coach_id"]),
@@ -319,8 +324,9 @@ namespace FastGuard.Data
 							LocationId2 = Convert.ToInt32(reader["location_id2"]),
 							StartDate = Convert.ToDateTime(reader["start_date"]),
 							EndDate = Convert.ToDateTime(reader["end_date"]),
-							Price = Convert.ToSingle(reader["price"])
-					});
+							Price = Convert.ToSingle(reader["price"]),
+						};
+						list.Add(route);
 					}
 					reader.Close();
 				}
@@ -330,8 +336,44 @@ namespace FastGuard.Data
 
 			return list;
 		}
-        
-        public virtual DbSet<ApplicationUser> Users { get; set; } = null!;
+		public List<Dictionary<string, object>> CountBookedSeat(int locationid1, int locationid2, string startdate)
+		{
+			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
+
+			List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
+
+			using (MySqlConnection conn = new MySqlConnection(connectionString))
+			{
+				conn.Open();
+				string str = "SELECT r.route_id, COUNT(t.seat_no) as SLCL " +
+					"from routes r " +
+					"LEFT JOIN tickets t ON r.route_id = t.route_id " +
+					"WHERE location_id1=@locationid1 and location_id2=@locationid2 and DATE(start_date)=@startdate " +
+					"GROUP BY r.route_id";
+				MySqlCommand cmd = new MySqlCommand(str, conn);
+				cmd.Parameters.AddWithValue("locationid1", locationid1);
+				cmd.Parameters.AddWithValue("locationid2", locationid2);
+				cmd.Parameters.AddWithValue("startdate", startdate);
+
+				using (var reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						var dict = new Dictionary<string, object>();
+						dict["RouteId"] = Convert.ToInt32(reader["route_id"]);
+						dict["SLCL"] = Convert.ToInt32(reader["SLCL"]);
+						list.Add(dict);
+					}
+					reader.Close();
+				}
+
+				conn.Close();
+			}
+
+			return list;
+		}
+
+		public virtual DbSet<ApplicationUser> Users { get; set; } = null!;
 		public virtual DbSet<Coach> Coaches { get; set; } = null!;
 		public virtual DbSet<Location> Locations { get; set; } = null!;
 		public virtual DbSet<PickLocation> PickLocations { get; set; } = null!;
