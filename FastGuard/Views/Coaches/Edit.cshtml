@@ -24,7 +24,7 @@
                 <select asp-for="UserId" class="form-control">
                     @foreach (var user in await userManager.GetUsersInRoleAsync("Customer"))
                     {
-                        <option value="@user.Id">@user.Id</option>
+                        <option value="@user.Id">@user.Name</option>
                     }
                 </select>
             </div>
