@@ -33,7 +33,7 @@
 
             <div class="form-group">
                 <label asp-for="salary" class="control-label">Lương tài xế</label>
-                <input asp-for="salary" type="number" class="form-control" id="salaryInput" />
+                <input asp-for="salary" type="number" max="999999999" class="form-control" id="salaryInput" />
                 <span asp-validation-for="salary" class="text-danger"></span>
                 <span class="error" id="salaryError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>

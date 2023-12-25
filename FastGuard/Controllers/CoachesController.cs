@@ -18,9 +18,10 @@ namespace FastGuard.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public CoachesController(ApplicationDbContext context)
+        public CoachesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Coaches
@@ -112,7 +113,9 @@ namespace FastGuard.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", coach.UserId);
+            var drivers = await _userManager.GetUsersInRoleAsync("Driver");
+
+            ViewData["UserId"] = new SelectList(drivers, "Id", "Id", coach.UserId);
             return View(coach);
         }
 
@@ -146,9 +149,12 @@ namespace FastGuard.Controllers
                         throw;
                     }
                 }
+                var drivers = await _userManager.GetUsersInRoleAsync("Driver");
+                ViewData["UserId"] = new SelectList(drivers, "Id", "Id", coach.UserId);
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Set<ApplicationUser>(), "Id", "Id", coach.UserId);
+            
             return View(coach);
         }
 
