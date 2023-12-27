@@ -13,8 +13,9 @@ namespace FastGuard.Models
         public int PickLocationId2 { get; set; }
         public int RouteId { get; set; }
 		public float TotalMoney { get; set; }
+        public int Status { get; set; }
 
-		public Ticket()
+        public Ticket()
         {
             UserId = string.Empty;
             SeatNo = string.Empty;

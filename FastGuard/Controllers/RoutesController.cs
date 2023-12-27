@@ -121,7 +121,7 @@ namespace FastGuard.Controllers
 					ViewData["LocationName2"] = new SelectList(_context.Locations, "LocationId", "LocationName", route.LocationId2);
 					return View(route);
 				}
-				if (route.EndDate > route.StartDate)
+				if (route.EndDate < route.StartDate)
 				{
 					ModelState.AddModelError("", "Ngày đến không được sớm hơn ngày khởi hành");
 					ViewData["CoachNo"] = new SelectList(_context.Coaches, "CoachId", "CoachNo", route.CoachId);

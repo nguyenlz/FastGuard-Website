@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<ApplicationUser> signInManager;
 
-<div class="container mt-4">
+<div class="container mt-4">    
     <h1>Vé đã đặt</h1>
     <div class="d-flex gap-3 mb-3">
         <form asp-action="BookedTicket" method="get">
@@ -27,6 +27,7 @@
                 <th>Điểm đón</th>
                 <th>Điểm trả</th>
                 <th>Giá vé</th>
+                <th>Trạng thái</th>
                 <th>Chức năng</th>
             </tr>
         </thead>
@@ -41,11 +42,23 @@
                     <td>@Html.DisplayFor(modelItem => item.PickLocationId1Navigation.PickLocationName)</td>
                     <td>@Html.DisplayFor(modelItem => item.PickLocationId2Navigation.PickLocationName)</td>
                     <td>@Html.DisplayFor(modelItem => item.TotalMoney)</td>
+                    @if(item.Status == 0)
+                    {
+                        <td style="color: green">Chưa khởi hành</td>
+                    }
+                    else
+                    {
+                        <td style="color: gray">Đã khởi hành</td>
+                    }
                     <td>
                         <div class="d-flex gap-2" role="group">
-                            <a asp-action="Delete" asp-route-id="@item.InvoiceId" class="btn btn-danger">
-                                <i class="fas fa-trash"></i> Hủy vé
-                            </a>
+                            @if (item.Status == 0)
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.InvoiceId" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> Hủy vé
+                                </a>
+                            }
+                            
                             @if (signInManager.IsSignedIn(User) && ((User.IsInRole("Admin")) || (User.IsInRole("Employee"))))
                             {
                                 <a asp-action="Edit" asp-route-id="@item.InvoiceId" class="btn btn-primary">

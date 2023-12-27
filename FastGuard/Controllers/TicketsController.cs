@@ -32,6 +32,8 @@ namespace FastGuard.Controllers
         [Authorize(Roles = "Admin, Employee, Customer")]
         public async Task<IActionResult> BookedTicket(string searchbarinput = "")
         {
+            updateTicketStatus();
+
             DateTime parsedDate;
             bool isDate = DateTime.TryParse(searchbarinput, out parsedDate);
             TimeSpan parsedTime;
@@ -335,6 +337,12 @@ namespace FastGuard.Controllers
                 .Include(t => t.Route)
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.InvoiceId == id);
+            if (ticket.Status == 1)
+            {
+                ViewData["status"] = "Chuyến đi này không thể hủy vì nó đã khởi hành";
+                return View(ticket);
+            }
+
             if (ticket == null)
             {
                 return NotFound();
@@ -364,6 +372,24 @@ namespace FastGuard.Controllers
         private bool TicketExists(int id)
         {
             return (_context.Tickets?.Any(e => e.InvoiceId == id)).GetValueOrDefault();
+        }
+        public void updateTicketStatus()
+        {
+            var tickets = _context.Tickets.Where(t => t.Status == 0).ToList();
+            foreach (var ticket in tickets)
+            {
+                var route = _context.Routes.FirstOrDefault(t => t.RouteId == ticket.RouteId);
+                if (route != null)
+                {
+                    if(route.StartDate < DateTime.Now)
+                    {
+                        ticket.Status = 1;
+                        _context.Update(ticket);
+                    }
+                }
+            }
+            _context.SaveChangesAsync();
+
         }
     }
 }
