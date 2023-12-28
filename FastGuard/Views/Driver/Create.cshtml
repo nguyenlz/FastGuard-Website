@@ -11,7 +11,7 @@
         <form asp-action="Create" onsubmit="return validateDriverForm()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label">Email:</label>
+                <label asp-for="Email" class="control-label">Email/Username:</label>
                 <input asp-for="Email" id="emailInput" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
                 <span class="error" id="EmailError" style="color: red; display: none;">Nhập dữ liệu</span>
@@ -32,13 +32,13 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="salary" class="control-label">Lương tài xế</label>
+                <label asp-for="salary" class="control-label">Lương tài xế:</label>
                 <input asp-for="salary" type="number" max="999999999" class="form-control" id="salaryInput" />
                 <span asp-validation-for="salary" class="text-danger"></span>
                 <span class="error" id="salaryError" style="color: red; display: none;">Nhập dữ liệu</span>
             </div>
             <div class="form-group">
-                <label asp-for="DateOfBirth" class="control-label">Ngày sinh</label>
+                <label asp-for="DateOfBirth" class="control-label">Ngày sinh:</label>
                 <input asp-for="DateOfBirth" class="form-control" id="dob" type="date" />
                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                 <span class="error" id="DobError" style="color: red; display: none;">Nhập dữ liệu</span>
@@ -134,16 +134,18 @@
             var password = passwordInput.value;
 
             // Định nghĩa biểu thức chính quy để kiểm tra mật khẩu
-            var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
+            var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{6,}$/;
 
             // Kiểm tra mật khẩu với biểu thức chính quy
             var isValid = regex.test(password);
             submitButton.disabled = !isValid;
+
             // Hiển thị thông báo lỗi nếu mật khẩu không hợp lệ
             var errorElement = document.querySelector("#passwordinput + .text-danger");
             if (!isValid)
-                errorElement.textContent = "Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hoa, 1 chữ thường và 1 kí tự không phải chữ và số.";
-            else errorElement.textContent = '';
+                errorElement.textContent = "Mật khẩu phải có ít nhất 6 kí tự và bao gồm ít nhất 1 chữ hoa, 1 chữ thường, 1 chữ số và 1 kí tự không phải chữ và số.";
+            else
+                errorElement.textContent = '';
         });
     </script>
     <script>
