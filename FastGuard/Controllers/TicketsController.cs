@@ -130,25 +130,21 @@ namespace FastGuard.Controllers
                 return NotFound();
             }
 
-            if (true)
+            try
             {
-                try
+                _context.Update(ticket);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TicketExists(ticket.InvoiceId))
                 {
-                    _context.Update(ticket);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!TicketExists(ticket.InvoiceId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(BookedTicket));
             }
 
             var route = await _context.Routes.FindAsync(ticket.RouteId);
@@ -276,7 +272,7 @@ namespace FastGuard.Controllers
             {
                 if (FindTicketBySeatNoAndRouteId(seat, routeid) == null)
                 {
-                    Ticket ticket = new Ticket(user.Id, seat, startid, endid, routeid, price);
+                    Ticket ticket = new Ticket(user.Id, seat, startid, endid, routeid, price, 0);
                     int count = _context.CreateTicket(ticket);
                     if (count <= 0)
                     {

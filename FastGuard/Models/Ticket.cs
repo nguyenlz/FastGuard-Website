@@ -24,8 +24,9 @@ namespace FastGuard.Models
             PickLocationId2 = 0;
             RouteId = 0;
             TotalMoney = 0;
-		}
-		public Ticket(string userid, string seatno, int pick1, int pick2, int routeid, float total)
+            Status = 0;
+        }
+        public Ticket(string userid, string seatno, int pick1, int pick2, int routeid, float total, int status)
 		{
 			UserId = userid;
 			SeatNo = seatno;
@@ -33,8 +34,9 @@ namespace FastGuard.Models
 			PickLocationId2 = pick2;
 			RouteId = routeid;
 			TotalMoney = total;
-		}
-		public virtual PickLocation PickLocationId1Navigation { get; set; }
+            Status = status;
+        }
+        public virtual PickLocation PickLocationId1Navigation { get; set; }
         public virtual PickLocation PickLocationId2Navigation { get; set; }
         public virtual Route Route { get; set; }
         public virtual ApplicationUser User { get; set; }

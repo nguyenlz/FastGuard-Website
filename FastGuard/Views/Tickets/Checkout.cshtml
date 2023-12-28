@@ -539,6 +539,7 @@
 		options2 = wrapper2.querySelector(".options");
 
 	var countries = @Html.Raw(JsonConvert.SerializeObject(picklocations1));
+
 	// console.log('pick', countries);
 	// Tạo mảng startlocations từ dữ liệu Model
 	// let countries = modelData.map(item => ({ id: item.LocationId, name: item.LocationName }));
@@ -582,12 +583,12 @@
 		searchInp = wrapper.querySelector(".custom-content input"),
 		options = wrapper.querySelector(".options");
 
-	var countries = @Html.Raw(JsonConvert.SerializeObject(picklocations2));
+	var countries2 = @Html.Raw(JsonConvert.SerializeObject(picklocations2));
 
 
 	function addCountry(selectedCountry) {
 		options.innerHTML = "";
-		countries.forEach(country => {
+		countries2.forEach(country => {
 			let isSelected = country.Text == selectedCountry ? "selected" : "";
 			let li = `<li onclick="updateName(this)" class="${isSelected}" id="${country.Value}">${country.Text}</li>`;
 			options.insertAdjacentHTML("beforeend", li);
@@ -606,7 +607,7 @@
 	searchInp.addEventListener("keyup", () => {
 		let arr = [];
 		let searchWord = searchInp.value.toLowerCase();
-		arr = countries.filter(data => {
+		arr = countries2.filter(data => {
 			return data.Text.toLowerCase().includes(searchWord);
 		}).map(data => {
 			let isSelected = data.Text == selectBtn.firstElementChild.innerText ? "selected" : "";

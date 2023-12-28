@@ -22,7 +22,7 @@ namespace FastGuard.Data
         public List<object> GetRevenue()
         {
             List<object> list = new List<object>();
-            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
@@ -50,7 +50,7 @@ namespace FastGuard.Data
         public bool checkCustomerWithTicket(string CustomerId)
         {
             bool check = false;
-            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
@@ -72,7 +72,7 @@ namespace FastGuard.Data
         public bool checkDriverWithCoach(string driverId)
         {
             bool check = false;
-            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
@@ -94,7 +94,7 @@ namespace FastGuard.Data
         public bool checkExistUserEdit(string Id,string email)
         {
             bool check = false;
-            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
@@ -117,7 +117,7 @@ namespace FastGuard.Data
         public bool checkExistUser (string email)
         {
             bool check = false;
-            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
@@ -138,7 +138,7 @@ namespace FastGuard.Data
         }
         public int countTicket()
         {
-            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             int numberTicket = 0;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -159,7 +159,7 @@ namespace FastGuard.Data
         }
         public int countRoutes()
         {
-            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             int numberRoute = 0;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -180,7 +180,7 @@ namespace FastGuard.Data
         }
         public int countLocation()
         {
-            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             int numberLocation = 0;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -201,7 +201,7 @@ namespace FastGuard.Data
         }
         public int countPickLocation()
         {
-            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             int numberPickLocation = 0;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -222,7 +222,7 @@ namespace FastGuard.Data
         }
         public int countCoach()
         {
-            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             int numberCoach = 0;
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -243,7 +243,7 @@ namespace FastGuard.Data
         }
         public int CreateCoach(Coach c)
         {
-            string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+            string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
             int rowsAffected = 0;
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -268,14 +268,14 @@ namespace FastGuard.Data
         }
 		public int CreateTicket(Ticket c)
 		{
-			string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
 			int rowsAffected = 0;
 
 			using (MySqlConnection connection = new MySqlConnection(connectionString))
 			{
 				connection.Open();
 
-				string sql = "insert into tickets(`user_id`, `seat_no`, `invoice_date`, `pick_location_id1`, `pick_location_id2`, `route_id`, `total_money`) values(@userid,@seat,@currentdate,@pick1,@pick2,@routeid,@total)";
+				string sql = "insert into tickets(`user_id`, `seat_no`, `invoice_date`, `pick_location_id1`, `pick_location_id2`, `route_id`, `total_money`, `ticket_status`) values(@userid,@seat,@currentdate,@pick1,@pick2,@routeid,@total, 0)";
 				using (MySqlCommand cmd = new MySqlCommand(sql, connection))
 				{
 					cmd.Parameters.AddWithValue("userid", c.UserId);
@@ -294,7 +294,7 @@ namespace FastGuard.Data
 		}
 		public List<Models.Route> SearchRoute(int locationid1, int locationid2, string startdate)
 		{
-			string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
 
 			List < Models.Route > list = new List<Models.Route> ();
 
@@ -338,7 +338,7 @@ namespace FastGuard.Data
 		}
 		public List<Dictionary<string, object>> CountBookedSeat(int locationid1, int locationid2, string startdate)
 		{
-			string connectionString = "server=localhost;user id=root;port=3306;database=fastguard";
+			string connectionString = "server=localhost;user id=root;port=3307;database=fastguard";
 
 			List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
 
@@ -389,7 +389,7 @@ namespace FastGuard.Data
 			if (!optionsBuilder.IsConfigured)
 			{
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-				optionsBuilder.UseMySql("server=localhost;user id=root;port=3306;database=fastguard", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
+				optionsBuilder.UseMySql("server=localhost;user id=root;port=3307;database=fastguard", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.28-mariadb"));
 			}
 		}
 
@@ -573,6 +573,10 @@ namespace FastGuard.Data
                 entity.Property(e => e.RouteId)
                     .HasColumnType("int(11)")
                     .HasColumnName("route_id");
+
+                entity.Property(e => e.Status)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("ticket_status");
 
                 entity.Property(e => e.SeatNo)
 					.HasMaxLength(20)
