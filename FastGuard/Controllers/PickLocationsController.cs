@@ -35,11 +35,16 @@ namespace FastGuard.Controllers
             DateTime parsedDate;
             bool isDate = DateTime.TryParse(searchbarinput, out parsedDate);
 
-            var applicationDbContext = _context.PickLocations.Include(p => p.Location)
-                .Where(r => r.PickLocationName.Contains(searchbarinput)
-                        || r.Location.LocationName.Contains(searchbarinput));
+            var applicationDbContext = _context.PickLocations.Include(p => p.Location);
+                
+            var picks = applicationDbContext
+				.Where(r => r.PickLocationName.Contains(searchbarinput)
+						|| r.Location.LocationName.Contains(searchbarinput));
 
-            return View(await applicationDbContext.ToListAsync());
+            if(searchbarinput == null)
+			    return View(await applicationDbContext.ToListAsync());
+            else
+                return View(picks);
         }
         // GET: PickLocations/Details/5
         public async Task<IActionResult> Details(int? id)

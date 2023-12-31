@@ -37,9 +37,10 @@ namespace FastGuard.Controllers
             TimeSpan parsedTime;
             bool isTime = TimeSpan.TryParseExact(searchbarinput, "HH\\:mm", CultureInfo.InvariantCulture, out parsedTime);
 
-            var applicationDbContext = _context.Routes.Include(r => r.Coach)
+			var applicationDbContext = _context.Routes.Include(r => r.Coach)
 				.Include(r => r.LocationId1Navigation)
-				.Include(r => r.LocationId2Navigation)
+				.Include(r => r.LocationId2Navigation);
+			var routes = applicationDbContext
 				.Where(r => r.LocationId2Navigation.LocationName.Contains(searchbarinput)
 					|| r.LocationId1Navigation.LocationName.Contains(searchbarinput)
 					|| r.Coach.CoachNo.Contains(searchbarinput)
@@ -53,7 +54,10 @@ namespace FastGuard.Controllers
 					|| (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
 						&& r.EndDate.Date == parsedDate.Date));
 
-			return View(await applicationDbContext.ToListAsync());
+			if(searchbarinput == null)
+				return View(await applicationDbContext.ToListAsync());
+			else
+				return View(routes);
 		}
 		// GET: Routes/Details/5
 		public async Task<IActionResult> Details(int? id)

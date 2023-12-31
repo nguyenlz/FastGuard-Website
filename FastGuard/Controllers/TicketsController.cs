@@ -45,44 +45,59 @@ namespace FastGuard.Controllers
             if (await _userManager.IsInRoleAsync(user, "Customer"))
             {
                 // Lấy danh sách vé đã đặt của khách hàng
-                bookedTickets = await _context.Tickets
-                    .Where(t => t.UserId == user.Id)
-                    .Include(p => p.PickLocationId1Navigation)
-                    .Include(p => p.Route)
-                    .Include(p => p.PickLocationId2Navigation)
-                    .Where(r => r.User.Name.Contains(searchbarinput)
-                    || r.SeatNo.Contains(searchbarinput)
-                    || r.PickLocationId1Navigation.PickLocationName.Contains(searchbarinput)
-                    || r.PickLocationId2Navigation.PickLocationName.Contains(searchbarinput)
-                    || r.TotalMoney.ToString().Contains(searchbarinput)
-                    || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
-                        && r.InvoiceDate.Date == parsedDate.Date)
-                    || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
-                        && r.Route.StartDate == parsedDate.Date)
-                    || (r.Route.StartDate.TimeOfDay == parsedTime))
-                    .ToListAsync();
-            }
+                if(searchbarinput != null)
+                    bookedTickets = await _context.Tickets
+                        .Where(t => t.UserId == user.Id)
+                        .Include(p => p.PickLocationId1Navigation)
+                        .Include(p => p.Route)
+                        .Include(p => p.PickLocationId2Navigation)
+                        .Where(r => r.User.Name.Contains(searchbarinput)
+                        || r.SeatNo.Contains(searchbarinput)
+                        || r.PickLocationId1Navigation.PickLocationName.Contains(searchbarinput)
+                        || r.PickLocationId2Navigation.PickLocationName.Contains(searchbarinput)
+                        || r.TotalMoney.ToString().Contains(searchbarinput)
+                        || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
+                            && r.InvoiceDate.Date == parsedDate.Date)
+                        || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
+                            && r.Route.StartDate == parsedDate.Date)
+                        || (r.Route.StartDate.TimeOfDay == parsedTime))
+                        .ToListAsync();
+                else
+					bookedTickets = await _context.Tickets
+						.Where(t => t.UserId == user.Id)
+						.Include(p => p.PickLocationId1Navigation)
+						.Include(p => p.Route)
+						.Include(p => p.PickLocationId2Navigation)
+						.ToListAsync();
+			}
             else if (await _userManager.IsInRoleAsync(user, "Admin") || await _userManager.IsInRoleAsync(user, "Employee"))
             {
-                // Lấy tất cả danh sách vé cho admin
-                bookedTickets = await _context.Tickets.Include(p => p.User)
-                    .Include(p => p.Route)
-                    .Include(p => p.PickLocationId1Navigation)
-                    .Include(p => p.PickLocationId2Navigation)
-                    .Where(r => r.User.Name.Contains(searchbarinput)
-                    || r.SeatNo.Contains(searchbarinput)
-                    || r.PickLocationId1Navigation.PickLocationName.Contains(searchbarinput)
-                    || r.PickLocationId2Navigation.PickLocationName.Contains(searchbarinput)
-                    || r.TotalMoney.ToString().Contains(searchbarinput)
-                    || r.InvoiceDate.ToString().Contains(searchbarinput)
-                    || r.Route.StartDate.ToString().Contains(searchbarinput)
-                    || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
-                        && r.InvoiceDate.Date == parsedDate.Date)
-                    || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
-                        && r.Route.StartDate.Date == parsedDate.Date)
-                    || (r.Route.StartDate.TimeOfDay == parsedTime))
-                    .ToListAsync();
-            }
+				// Lấy tất cả danh sách vé cho admin
+				if (searchbarinput != null)
+					bookedTickets = await _context.Tickets.Include(p => p.User)
+                        .Include(p => p.Route)
+                        .Include(p => p.PickLocationId1Navigation)
+                        .Include(p => p.PickLocationId2Navigation)
+                        .Where(r => r.User.Name.Contains(searchbarinput)
+                        || r.SeatNo.Contains(searchbarinput)
+                        || r.PickLocationId1Navigation.PickLocationName.Contains(searchbarinput)
+                        || r.PickLocationId2Navigation.PickLocationName.Contains(searchbarinput)
+                        || r.TotalMoney.ToString().Contains(searchbarinput)
+                        || r.InvoiceDate.ToString().Contains(searchbarinput)
+                        || r.Route.StartDate.ToString().Contains(searchbarinput)
+                        || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
+                            && r.InvoiceDate.Date == parsedDate.Date)
+                        || (DateTime.TryParseExact(searchbarinput, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate)
+                            && r.Route.StartDate.Date == parsedDate.Date)
+                        || (r.Route.StartDate.TimeOfDay == parsedTime))
+                        .ToListAsync();
+                else
+					bookedTickets = await _context.Tickets.Include(p => p.User)
+						.Include(p => p.Route)
+						.Include(p => p.PickLocationId1Navigation)
+						.Include(p => p.PickLocationId2Navigation)
+						.ToListAsync();
+			}
 
             return View(bookedTickets);
         }

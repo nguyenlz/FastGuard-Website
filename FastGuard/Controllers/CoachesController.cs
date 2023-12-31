@@ -27,12 +27,18 @@ namespace FastGuard.Controllers
         // GET: Coaches
         public async Task<IActionResult> Index(string searchbarinput = "")
         {
-            var applicationDbContext = _context.Coaches.Include(c => c.User)
-                .Where(c => c.CoachNo.Contains(searchbarinput)
+            var applicationDbContext = _context.Coaches.Include(c => c.User);
+
+            var coaches = applicationDbContext
+				.Where(c => c.CoachNo.Contains(searchbarinput)
                 || c.Supplier.Contains(searchbarinput)
                 || c.Capacity.ToString().Contains(searchbarinput)
                 || c.User.Name.Contains(searchbarinput));
-            return View(await applicationDbContext.ToListAsync());
+
+            if(searchbarinput == null)
+                return View(await applicationDbContext.ToListAsync());
+            else
+                return View(coaches);
         }
 
         // GET: Coaches/Details/5
