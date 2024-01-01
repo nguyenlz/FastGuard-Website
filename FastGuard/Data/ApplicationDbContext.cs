@@ -36,7 +36,7 @@ namespace FastGuard.Data
                         {
                             thang = Convert.ToInt32(reader["month"]),
                             nam = Convert.ToInt32(reader["year"]),
-                            doanhThu = Convert.ToDouble(reader["total_amount"])/100
+                            doanhThu = Convert.ToDouble(reader["total_amount"])
                         };
                         list.Add(ob);
                     }

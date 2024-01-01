@@ -289,7 +289,7 @@
 	@foreach (var item in Model)
 	{
 		var x = (int)@item.GetType().GetProperty("thang").GetValue(@item, null) - 1;
-		var doanhThu = (double)@item.GetType().GetProperty("doanhThu").GetValue(@item, null);
+		var doanhThu = (double)@item.GetType().GetProperty("doanhThu").GetValue(@item, null)/1000000;
 		var nam = @item.GetType().GetProperty("nam").GetValue(@item, null).ToString();
 		if (@nam == "2021")
 		{
@@ -346,7 +346,7 @@
 					},
 					scaleLabel: {
 						display: true,
-						labelString: 'Doanh thu (Chục triệu đồng)' // Tên trục dọc
+						labelString: 'Doanh thu (triệu đồng)' // Tên trục dọc
 					}
 				}]
 			}
